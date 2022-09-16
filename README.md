@@ -21,8 +21,8 @@
 -   [Flowbite](https://flowbite.com/docs)
 
 ## Development
-
--   [Vercel](https://vercel.com/)
+### Using [Netlify](https://www.netlify.com/)
+-   [Hasil Development](https://frontend-ppl.netlify.app/)
 
 ## Instalasi
 
@@ -52,7 +52,7 @@
     ```
        git push origin nama-branch
     ```
-5. Buat pull request ke branch `main`
+5. Buat pull request ke branch `master`
 6. Tunggu pull request disetujui
 
 ## Struktur Folder
