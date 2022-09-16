@@ -36,6 +36,25 @@
 3. Jalankan perintah `npm install`
 4. Jalankan perintah `npm start`
 
+## Cara Development
+
+1. Buat branch baru dengan nama sesuai dengan fitur yang akan dikerjakan
+    ```
+       git checkout -b nama-branch
+    ```
+2. Kerjakan fitur yang telah ditentukan
+3. Commit perubahan yang telah dilakukan
+    ```
+       git add .
+       git commit -m "pesan commit"
+    ```
+4. Push perubahan ke branch yang telah dibuat
+    ```
+       git push origin nama-branch
+    ```
+5. Buat pull request ke branch `main`
+6. Tunggu pull request disetujui
+
 ## Struktur Folder
 
 -   `src` - Folder untuk menyimpan source code
