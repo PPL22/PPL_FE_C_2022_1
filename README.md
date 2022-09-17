@@ -14,14 +14,25 @@
 -   [React Hook Form](https://react-hook-form.com/)
 -   [React Icons](https://react-icons.github.io/react-icons/)
 -   [Prettier](https://prettier.io/)
+-   [Axios](https://axios-http.com/)
 
 ## Framework CSS
 
 -   [Tailwind CSS](https://tailwindcss.com/)
 -   [Flowbite](https://flowbite.com/docs)
 
+## Tools Pendukung
+
+-   [HTML to JSX](https://magic.reactjs.net/htmltojsx.htm) - Bisa digunakan ketika copas source code dari [Flowbite](https://flowbite.com/docs)
+    dan ingin mengubahnya menjadi JSX
+-   [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) - Autocomplete untuk Tailwind CSS
+-   [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) - Format code otomatis
+-   [ES7 + React/Redux/GraphQL/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets) - Snippet untuk React
+
 ## Development
+
 ### Using [Netlify](https://www.netlify.com/)
+
 -   [Hasil Development](https://frontend-ppl.netlify.app/)
 
 ## Instalasi
