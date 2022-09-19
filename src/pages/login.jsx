@@ -1,6 +1,6 @@
 import React from 'react';
 import pic from './logo_undip.png';
-
+// test
 const Login = () => {
   return (
     <section className="h-screen flex flex-row">
