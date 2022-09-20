@@ -2,7 +2,12 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'acintya-prasada': "url('/src/assets/images/gedung_ap.png')",
+        background: "url('/src/assets/images/background.png')",
+      },
+    },
   },
   plugins: [],
 };
