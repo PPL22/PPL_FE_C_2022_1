@@ -52,7 +52,7 @@ const Login = () => {
           <div className="flex justify-center">
             <img alt="logo undip" className="mt-10 h-28" src={pic}></img>
           </div>
-          <h1 className="mt-8 text-center font-medium">Aris App Beta 2.1</h1>
+          <h1 className="mt-8 text-center font-medium">G-SIAP 2.5</h1>
           <p className="mt-2 mb-4 text-center text-gray-400">
             Login to your account
           </p>
