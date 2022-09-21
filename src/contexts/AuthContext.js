@@ -13,20 +13,36 @@ export const useAuth = () => {
 };
 
 function useAuthProvider() {
-  const [token, setToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
+  const [role, setRole] = useState(null);
 
   // login
-  const login = (tokenUser) => {
-    localStorage.setItem('token', tokenUser);
-    setToken(tokenUser);
+  const login = (data) => {
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    setAccessToken(data.accessToken);
+    setRole(data.role);
+    setRefreshToken(data.refreshToken);
+    window.location.href = '/dashboard';
   };
 
   // logout
   const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    window.location.reload();
+    console.log('logout');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('role');
+    setAccessToken(null);
+    setRefreshToken(null);
+    setRole(null);
+    window.location.href = '/';
   };
 
-  return { token, setToken, login, logout };
+  // update role
+  const updateRole = (role) => {
+    setRole(role);
+  };
+
+  return { accessToken, refreshToken, role, login, logout, updateRole };
 }

@@ -1,46 +1,53 @@
 import React from 'react';
-import axios from 'axios';
-import config from './configs/config.json';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext.js';
 import { Home, Login } from './pages/pages.js';
+import jwt_decode from 'jwt-decode';
+import { Spinner } from './components/components';
 
 function App() {
   const auth = useAuth();
   const [loading, setLoading] = React.useState(true);
 
   // verify token
-  // React.useEffect(() => {
-  //   const verifyToken = async () => {
-  //     try {
-  //       const tokenUser = localStorage.getItem('token');
-  //       if (tokenUser) {
-  //         await axios.get(`${config.API_URL}/verify`, {
-  //           headers: {
-  //             'x-access-token': tokenUser,
-  //           },
-  //         });
-  //         auth.setToken(tokenUser);
-  //       }
-  //     } catch (error) {
-  //       if (error.response.status === 401) {
-  //         auth.logout();
-  //       }
-  //       throw error;
-  //     }
-  //   };
-  //   verifyToken();
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 500);
-  // }, [auth, auth.token]);
+  React.useEffect(() => {
+    const verifyToken = () => {
+      const token = localStorage.getItem('accessToken');
+      const pathname = window.location.pathname;
+      if (!token) {
+        if (pathname !== '/') {
+          auth.logout();
+        }
+      } else {
+        const decoded = jwt_decode(token);
+        if (decoded) {
+          auth.updateRole(decoded.role);
+          if (pathname === '/') {
+            window.location.href = '/dashboard';
+          }
+        } else {
+          auth.logout();
+        }
+      }
+    };
+    verifyToken();
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, [auth]);
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Home />} />
-      </Routes>
+      {loading ? (
+        <div className="h-screen flex justify-center items-center">
+          <Spinner />
+        </div>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Home />} />
+        </Routes>
+      )}
     </BrowserRouter>
   );
 }
