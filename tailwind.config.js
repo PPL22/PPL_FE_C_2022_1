@@ -8,7 +8,7 @@ module.exports = {
         background: "url('/src/assets/images/background.png')",
       },
       scale: {
-        1000: '8',
+        300: '3',
       },
     },
   },

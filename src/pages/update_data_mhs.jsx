@@ -1,12 +1,12 @@
 import React from 'react';
 import pic from '../assets/images/logo_undip.png';
+import profile from '../assets/images/default_profile.png';
 import { useState, useEffect } from 'react';
+
 const UpdateDataMhs = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
-  var isImageExist = false;
 
-  // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -265,13 +265,16 @@ const UpdateDataMhs = () => {
                   />
                 </div>
 
-                {/* Image profile defaultnya apa?  */}
                 <div className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 ">
                   <div className="">
                     {selectedFile ? (
                       <img className="mx-auto" width="200" src={preview} />
                     ) : (
-                      <img className="mx-auto" width="200" src={pic} />
+                      <img
+                        className="mx-auto rounded"
+                        width="200"
+                        src={profile}
+                      />
                       /* Ceritanya profile image default */
                     )}
                     <div className="w-60">
