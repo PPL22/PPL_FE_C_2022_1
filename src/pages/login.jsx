@@ -15,7 +15,6 @@ const Login = () => {
   // const { login } = useAuth();
 
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
     setError(null);
     try {
