@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext.js';
-import { Home, Login, Dashboard } from './pages/pages.js';
+import { Home, Login, Dashboard, DashboardMhs } from './pages/pages.js';
 import jwt_decode from 'jwt-decode';
 import { Spinner } from './components/components';
 
@@ -46,6 +46,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard-mhs" element={<DashboardMhs />} />
         </Routes>
       )}
     </BrowserRouter>
