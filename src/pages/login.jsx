@@ -6,6 +6,7 @@ import { FaEnvelope, FaKey } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { DangerAlert } from '../components/components';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const auth = useAuth();
@@ -25,7 +26,7 @@ const Login = () => {
         auth.login(data);
       }
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error);
       setError(error.response.data.message);
       throw error;
     } finally {
@@ -34,7 +35,12 @@ const Login = () => {
   };
 
   return (
-    <section className="h-screen grid grid-cols-12">
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="h-screen grid grid-cols-12"
+    >
       <div className="hidden md:block md:col-span-7 bg-acintya-prasada bg-no-repeat bg-cover"></div>
       <div className="col-span-12 md:col-span-5 bg-background flex justify-center items-center">
         <div className="">
@@ -128,7 +134,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

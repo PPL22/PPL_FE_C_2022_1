@@ -1,6 +1,8 @@
 import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 function Sidebar() {
+  const auth = useAuth();
   return (
     <div className="fixed left-0 top-0 bottom-0 bg-acintya-prasada bg-cover px-4 mx-auto max-w-[285px]">
       <div className="flex items-center flex-col bg-background h-full py-8 text-center">
@@ -10,7 +12,7 @@ function Sidebar() {
             alt="foto profil"
             className="rounded-full w-20 h-20 object-cover"
           />
-          <h2 className="text-lg font-bold mt-2">John Doe</h2>
+          <h2 className="text-lg font-bold mt-2">{auth.name}</h2>
           <h2 className=" mt-1">Fakultas Sains dan Matematika</h2>
           <h2 className=" ">Informatika</h2>
         </section>
@@ -42,6 +44,7 @@ function Sidebar() {
           </button>
           <button
             type="button"
+            onClick={auth.logout}
             className="text-red-700 hover:underline focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center gap-x-2"
           >
             {' '}

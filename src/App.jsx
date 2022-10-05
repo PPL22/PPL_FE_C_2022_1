@@ -1,43 +1,48 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext.js';
-import { Home, Login, Dashboard } from './pages/pages.js';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import { Login, Dashboard } from './pages/pages';
 import jwt_decode from 'jwt-decode';
-import { Spinner } from './components/components';
+import { Spinner, Toast } from './components/components';
+import { useToast } from './contexts/ToastContext';
 
 function App() {
   const auth = useAuth();
+  const toast = useToast();
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
 
   // verify token
-  // React.useEffect(() => {
-  //   const verifyToken = () => {
-  //     const token = localStorage.getItem('accessToken');
-  //     const pathname = window.location.pathname;
-  //     if (!token) {
-  //       if (pathname !== '/') {
-  //         auth.logout();
-  //       }
-  //     } else {
-  //       const decoded = jwt_decode(token);
-  //       if (decoded) {
-  //         auth.updateRole(decoded.role);
-  //         if (pathname === '/') {
-  //           window.location.href = '/dashboard';
-  //         }
-  //       } else {
-  //         auth.logout();
-  //       }
-  //     }
-  //   };
-  //   verifyToken();
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 500);
-  // }, [auth]);
+  React.useEffect(() => {
+    const verifyToken = () => {
+      const token = localStorage.getItem('accessToken');
+      const pathname = window.location.pathname;
+      if (!token) {
+        if (pathname !== '/') {
+          auth.logout();
+        }
+      } else {
+        const decoded = jwt_decode(token);
+        if (decoded) {
+          auth.updateRole(decoded.role);
+          if (pathname === '/') {
+            navigate('/dashboard');
+          }
+        } else {
+          auth.logout();
+        }
+      }
+    };
+    verifyToken();
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  console.log(toast);
 
   return (
-    <BrowserRouter>
+    <>
       {loading ? (
         <div className="h-screen flex justify-center items-center">
           <Spinner />
@@ -48,7 +53,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       )}
-    </BrowserRouter>
+      {toast?.message && <Toast message={toast.message} type={toast.type} />}
+    </>
   );
 }
 

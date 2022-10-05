@@ -1,4 +1,5 @@
 import { useState, createContext, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -16,15 +17,28 @@ function useAuthProvider() {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [role, setRole] = useState(null);
+  const [id, setId] = useState(null);
+  const [name, setName] = useState(null);
+  const navigate = useNavigate();
 
   // login
   const login = (data) => {
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+    localStorage.setItem('id', data.id);
+    localStorage.setItem('name', data.nama);
     setAccessToken(data.accessToken);
-    setRole(data.role);
     setRefreshToken(data.refreshToken);
-    window.location.href = '/dashboard';
+    setId(data.id);
+    setName(data.nama);
+    let role;
+    if (Array.isArray(data.role)) {
+      role = data.role.join(' ');
+    } else {
+      role = data.role;
+    }
+    setRole(role);
+    navigate('/dashboard');
   };
 
   // logout
@@ -32,17 +46,30 @@ function useAuthProvider() {
     console.log('logout');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('role');
     setAccessToken(null);
     setRefreshToken(null);
     setRole(null);
-    window.location.href = '/';
+    navigate('/');
   };
 
   // update role
   const updateRole = (role) => {
+    if (Array.isArray(role)) {
+      role = role.join(' ');
+    }
     setRole(role);
+    setId(localStorage.getItem('id'));
+    setName(localStorage.getItem('name'));
   };
 
-  return { accessToken, refreshToken, role, login, logout, updateRole };
+  return {
+    accessToken,
+    refreshToken,
+    role,
+    name,
+    id,
+    login,
+    logout,
+    updateRole,
+  };
 }
