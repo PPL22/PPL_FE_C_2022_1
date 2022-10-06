@@ -1,12 +1,14 @@
 import React from 'react';
 import { Charts, EntryData, Header, Sidebar } from '../components/components';
+import EntryDataMhs from '../components/EntryDataMhs';
 
 function DashboardMhs() {
   const [modal, setModal] = React.useState(false);
+  const [entryState, setEntryState] = React.useState('none');
 
-  function showModal() {
+  function showModal(entry) {
     setModal(true);
-    console.log(modal);
+    setEntryState(entry);
   }
 
   const data = {
@@ -102,32 +104,57 @@ function DashboardMhs() {
                     Prestasi Akademik
                   </h1>
                 </div>
-                <div className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center">
+                <button
+                  className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center
+                "
+                  type="button"
+                  onClick={() => showModal('irs')}
+                >
                   <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                    Status
+                    Entry IRS
                   </h1>
-                </div>
-                <div className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center">
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showModal('khs')}
+                  className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+                >
                   <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                    Status
+                    Entry KHS
                   </h1>
-                </div>
-                <div className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center">
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showModal('pkl')}
+                  className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+                >
                   <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                    Status
+                    Entry PKL
                   </h1>
-                </div>
-                <div className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center">
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showModal('skripsi')}
+                  className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+                >
                   <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                    Status
+                    Entry Skripsi
                   </h1>
-                </div>
+                </button>
               </div>
             </div>
           </div>
         </section>
       </div>
-      {modal && <EntryData setModal={setModal} modal={modal} />}
+      {}
+      {modal && (
+        <EntryDataMhs
+          setModal={setModal}
+          modal={modal}
+          setEntryState={setEntryState}
+          entryState={entryState}
+        />
+      )}
     </section>
   );
 }
