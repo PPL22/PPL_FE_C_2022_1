@@ -1,9 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext.js';
-import { Home, Login, Dashboard, DashboardMhs } from './pages/pages.js';
+import {
+  Home,
+  Login,
+  Dashboard,
+  DashboardMhs,
+  StatusMahasiswa,
+  UpdateDataMhs,
+} from './pages/pages.js';
 import jwt_decode from 'jwt-decode';
-import { Spinner } from './components/components';
+import { Header, Sidebar, Spinner } from './components/components';
 
 function App() {
   const auth = useAuth();
@@ -43,11 +50,21 @@ function App() {
           <Spinner />
         </div>
       ) : (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard-mhs" element={<DashboardMhs />} />
-        </Routes>
+        <section className="grid grid-cols-12">
+          <div className="col-span-2 relative">
+            <Sidebar />
+          </div>
+          <div className="col-span-10 min-h-screen bg-background ml-[32px]">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/register" element={<UpdateDataMhs />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard-mhs" element={<DashboardMhs />} />
+              <Route path="/dashboard/status" element={<StatusMahasiswa />} />
+            </Routes>
+          </div>
+        </section>
       )}
     </BrowserRouter>
   );

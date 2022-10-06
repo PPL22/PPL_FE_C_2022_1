@@ -1,5 +1,6 @@
 import React from 'react';
 import { Charts, EntryData, Header, Sidebar } from '../components/components';
+import Dosen from './dosen';
 
 function Dashboard() {
   const [modal, setModal] = React.useState(false);
@@ -17,13 +18,9 @@ function Dashboard() {
   };
 
   return (
-    <section className="grid grid-cols-12 h-screen overflow-hidden">
-      <div className="col-span-2 relative">
-        <Sidebar />
-      </div>
-      <div className="col-span-10 h-full bg-background ml-[32px]">
-        <Header />
-        <section className="flex mt-10 justify-center">
+    <>
+      <Dosen />
+      {/* <section className="flex mt-10 justify-center">
           <div className="p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
             <div className="div flex justify-between">
               <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
@@ -42,10 +39,9 @@ function Dashboard() {
               </button>
             </div>
           </div>
-        </section>
-      </div>
-      {modal && <EntryData setModal={setModal} modal={modal} />}
-    </section>
+        </section> */}
+      {/* {modal && <EntryData setModal={setModal} modal={modal} />} */}
+    </>
   );
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 function Charts({ data }) {
   ChartJS.register(ArcElement, Tooltip, Legend);
   const showData = {
@@ -17,7 +17,21 @@ function Charts({ data }) {
       },
     ],
   };
-  return <Doughnut data={showData} />;
+
+  const options = {
+    plugins: {
+      datalabels: {
+        color: '#fff',
+        font: {
+          weight: 'bold',
+          size: 20,
+        },
+      },
+    },
+  };
+  return (
+    <Doughnut data={showData} plugins={[ChartDataLabels]} options={options} />
+  );
 }
 
 export default Charts;

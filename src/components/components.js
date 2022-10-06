@@ -9,3 +9,4 @@ export { default as Dropdown } from './Dropdown';
 export { default as DropdownSearch } from './DropdownSearch';
 export { default as Button } from './Button';
 export { default as OutlinedButton } from './OutlinedButton';
+export { default as Table } from './Table';
