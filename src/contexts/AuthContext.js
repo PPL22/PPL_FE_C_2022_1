@@ -14,11 +14,11 @@ export const useAuth = () => {
 };
 
 function useAuthProvider() {
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
   const [role, setRole] = useState(null);
+  const [firstTime, setFirstTime] = useState();
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
+  const [foto, setFoto] = useState(null);
   const navigate = useNavigate();
 
   // login
@@ -26,9 +26,10 @@ function useAuthProvider() {
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     localStorage.setItem('id', data.id);
+    localStorage.setItem('firstTime', data.firstTime);
     localStorage.setItem('name', data.nama);
-    setAccessToken(data.accessToken);
-    setRefreshToken(data.refreshToken);
+    localStorage.setItem('foto', data.image);
+    console.log(data);
     setId(data.id);
     setName(data.nama);
     let role;
@@ -38,7 +39,12 @@ function useAuthProvider() {
       role = data.role;
     }
     setRole(role);
-    navigate('/dashboard');
+    if (role === 'Mahasiswa' && data.firstTime) {
+      setFirstTime(data.firstTime);
+      navigate('/register');
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   // logout
@@ -46,28 +52,37 @@ function useAuthProvider() {
     console.log('logout');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    setAccessToken(null);
-    setRefreshToken(null);
+    localStorage.removeItem('id');
+    localStorage.removeItem('firstTime');
+    localStorage.removeItem('name');
+    localStorage.removeItem('foto');
     setRole(null);
     navigate('/');
   };
 
   // update role
-  const updateRole = (role) => {
-    if (Array.isArray(role)) {
+  const updateRole = (data) => {
+    let role = data.role;
+    const firstTime = localStorage.getItem('firstTime');
+    if (Array.isArray(data.role)) {
       role = role.join(' ');
     }
     setRole(role);
+    setFoto(localStorage.getItem('foto'));
     setId(localStorage.getItem('id'));
     setName(localStorage.getItem('name'));
+    setFirstTime(firstTime);
+    if (role === 'Mahasiswa' && firstTime === 'true') {
+      navigate('/register');
+    }
   };
 
   return {
-    accessToken,
-    refreshToken,
     role,
     name,
+    firstTime,
     id,
+    foto,
     login,
     logout,
     updateRole,
