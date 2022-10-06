@@ -49,8 +49,12 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
           className="p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
-      <div className="relative -top-4 left-0 right-0">
-        <ul className="bg-blue-50 rounded-lg">
+      <div className="absolute top-20 left-0 right-0 z-10">
+        <ul
+          className={`bg-blue-50 rounded-lg ${
+            filteredOptions.length > 0 && 'h-48'
+          } overflow-y-auto`}
+        >
           {filteredOptions.map((option, index) => {
             return (
               <li

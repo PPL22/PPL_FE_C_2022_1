@@ -1,6 +1,8 @@
 import React from 'react';
+import configs from '../configs/config.json';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import profile from '../assets/images/default_profile.png';
 
 function Sidebar() {
   const auth = useAuth();
@@ -9,7 +11,11 @@ function Sidebar() {
       <div className="flex items-center flex-col bg-background h-full py-8 text-center">
         <section className="profile flex flex-col items-center px-2">
           <img
-            src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?cs=srgb&dl=pexels-italo-melo-2379005.jpg&fm=jpg"
+            src={
+              auth.foto !== 'undefined'
+                ? `${configs.API_IMAGE_URL}/foto_mhs/${auth.foto}`
+                : profile
+            }
             alt="foto profil"
             className="rounded-full w-20 h-20 object-cover"
           />
@@ -44,55 +50,57 @@ function Sidebar() {
               </svg>
               Dashboard
             </Link>
-            <div>
-              <div className="text-gray-900  border border-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center gap-x-2">
-                <svg
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M22 3H16C14.9391 3 13.9217 3.42143 13.1716 4.17157C12.4214 4.92172 12 5.93913 12 7V21C12 20.2044 12.3161 19.4413 12.8787 18.8787C13.4413 18.3161 14.2044 18 15 18H22V3Z"
-                    stroke="black"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M2 3H8C9.06087 3 10.0783 3.42143 10.8284 4.17157C11.5786 4.92172 12 5.93913 12 7V21C12 20.2044 11.6839 19.4413 11.1213 18.8787C10.5587 18.3161 9.79565 18 9 18H2V3Z"
-                    stroke="black"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Status Mahasiswa
+            {auth.role.includes('Dosen') && (
+              <div>
+                <div className="text-gray-900  border border-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center gap-x-2">
+                  <svg
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M22 3H16C14.9391 3 13.9217 3.42143 13.1716 4.17157C12.4214 4.92172 12 5.93913 12 7V21C12 20.2044 12.3161 19.4413 12.8787 18.8787C13.4413 18.3161 14.2044 18 15 18H22V3Z"
+                      stroke="black"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M2 3H8C9.06087 3 10.0783 3.42143 10.8284 4.17157C11.5786 4.92172 12 5.93913 12 7V21C12 20.2044 11.6839 19.4413 11.1213 18.8787C10.5587 18.3161 9.79565 18 9 18H2V3Z"
+                      stroke="black"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Status Mahasiswa
+                </div>
+                <ul className="flex flex-col items-start ml-4 gap-y-2">
+                  <Link to="/dashboard/status" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      IRS
+                    </li>
+                  </Link>
+                  <Link to="/dashboard/status" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      KHS
+                    </li>
+                  </Link>
+                  <Link to="/dashboard/status" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      PKL
+                    </li>
+                  </Link>
+                  <Link to="/dashboard/status" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      Skripsi
+                    </li>
+                  </Link>
+                </ul>
               </div>
-              <ul className="flex flex-col items-start ml-4 gap-y-2">
-                <Link to="/dashboard/status" className="w-full">
-                  <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
-                    IRS
-                  </li>
-                </Link>
-                <Link to="/dashboard/status" className="w-full">
-                  <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
-                    KHS
-                  </li>
-                </Link>
-                <Link to="/dashboard/status" className="w-full">
-                  <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
-                    PKL
-                  </li>
-                </Link>
-                <Link to="/dashboard/status" className="w-full">
-                  <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
-                    Skripsi
-                  </li>
-                </Link>
-              </ul>
-            </div>
+            )}
           </div>
           <button
             type="button"
