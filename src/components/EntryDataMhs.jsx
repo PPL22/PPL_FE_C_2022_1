@@ -9,13 +9,13 @@ function EntryDataMhs({ modal, setModal, entryState, setEntryState }) {
     setEntryState('none');
     console.log(modal);
   }
-  if (entryState == 'irs') {
+  if (entryState === 'irs') {
     return <Irs closeModal={closeModal} />;
-  } else if (entryState == 'khs') {
+  } else if (entryState === 'khs') {
     return <Khs closeModal={closeModal} />;
-  } else if (entryState == 'skripsi') {
+  } else if (entryState === 'skripsi') {
     return <Skripsi closeModal={closeModal} />;
-  } else if (entryState == 'pkl') {
+  } else if (entryState === 'pkl') {
     return <Pkl closeModal={closeModal} />;
   }
 }

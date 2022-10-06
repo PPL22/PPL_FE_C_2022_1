@@ -1,9 +1,49 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Input from './Input';
-import { Dropdown, DropdownSearch, OutlinedButton, Button } from './components';
+import { Dropdown, OutlinedButton, Button, DangerAlert } from './components';
+import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
+import axios from 'axios';
+import config from '../configs/config.json';
 
 function Pkl({ closeModal }) {
+  const auth = useAuth();
+  const toast = useToast();
+  const semester = React.useRef();
+  const status = React.useRef();
+  const nilaiPkl = React.useRef();
+  const filePkl = React.useRef();
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const formSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('nim', auth.id);
+    formData.append('semester', semester.current.value);
+    formData.append('status', status.current.value);
+    formData.append('nilai', nilaiPkl.current.value);
+    formData.append('dokumen', filePkl.current.files[0]);
+
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      const token = localStorage.getItem('accessToken');
+      await axios.post(`${config.API_URL}/mahasiswa/entry-pkl`, formData, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
+      closeModal();
+      toast.setToast('Entry Progress PKL Berhasil', 'success');
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -47,35 +87,54 @@ function Pkl({ closeModal }) {
             </button>
           </div>
           <div className="pt-3 pb-6 px-4">
-            <form className="space-y-6" action="#">
+            <form className="space-y-6" onSubmit={(e) => formSubmit(e)}>
               <Dropdown
                 label="Status"
                 id="status"
                 options={[
                   {
-                    value: 'aktif',
-                    label: 'Aktif',
+                    value: 'Sedang Ambil',
+                    label: 'Sedang Ambil',
                   },
                   {
-                    value: 'tidak-aktif',
-                    label: 'Tidak Aktif',
+                    value: 'Lulus',
+                    label: 'Lulus',
                   },
                   {
-                    value: 'selsai',
-                    label: 'Selesai',
+                    value: 'Belum Lulus',
+                    label: 'Belum Lulus',
                   },
                 ]}
+                innerRef={status}
               />
-              <Input label="Nilai PKL" id="nilai-pkl" type="number" />
               <Input
-                label="Upload Progress PKL"
+                label="Semester"
+                id="semester"
+                type="number"
+                innerRef={semester}
+              />
+              <Input
+                label="Nilai Pkl"
+                id="nilai-pkl"
+                type="number"
+                innerRef={nilaiPkl}
+              />
+              <Input
+                label="Upload Berita Seminar Pkl"
                 id="file-pkl"
                 type="file"
                 accept="application/pdf"
+                innerRef={filePkl}
               />
+              {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
                 <OutlinedButton child="Cancel" onClick={closeModal} />
-                <Button type="submit" child="Submit" />
+                <Button
+                  type="submit"
+                  child="Submit"
+                  loadingState="Loading..."
+                  loading={loading}
+                />
               </div>
             </form>
           </div>
