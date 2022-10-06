@@ -1,50 +1,54 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext.js';
 import {
-  Home,
   Login,
   Dashboard,
   DashboardMhs,
   StatusMahasiswa,
   UpdateDataMhs,
-} from './pages/pages.js';
+} from './pages/pages';
 import jwt_decode from 'jwt-decode';
-import { Header, Sidebar, Spinner } from './components/components';
+import { Header, Sidebar, Spinner, Toast } from './components/components';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import { useToast } from './contexts/ToastContext';
 
 function App() {
   const auth = useAuth();
+  const toast = useToast();
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
 
   // verify token
-  // React.useEffect(() => {
-  //   const verifyToken = () => {
-  //     const token = localStorage.getItem('accessToken');
-  //     const pathname = window.location.pathname;
-  //     if (!token) {
-  //       if (pathname !== '/') {
-  //         auth.logout();
-  //       }
-  //     } else {
-  //       const decoded = jwt_decode(token);
-  //       if (decoded) {
-  //         auth.updateRole(decoded.role);
-  //         if (pathname === '/') {
-  //           window.location.href = '/dashboard';
-  //         }
-  //       } else {
-  //         auth.logout();
-  //       }
-  //     }
-  //   };
-  //   verifyToken();
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 500);
-  // }, [auth]);
+  React.useEffect(() => {
+    const verifyToken = () => {
+      const token = localStorage.getItem('accessToken');
+      const pathname = window.location.pathname;
+      if (!token) {
+        if (pathname !== '/') {
+          auth.logout();
+        }
+      } else {
+        const decoded = jwt_decode(token);
+        if (decoded) {
+          auth.updateRole(decoded.role);
+          if (pathname === '/') {
+            navigate('/dashboard');
+          }
+        } else {
+          auth.logout();
+        }
+      }
+    };
+    verifyToken();
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  console.log(toast);
 
   return (
-    <BrowserRouter>
+    <>
       {loading ? (
         <div className="h-screen flex justify-center items-center">
           <Spinner />
@@ -66,7 +70,8 @@ function App() {
           </div>
         </section>
       )}
-    </BrowserRouter>
+      {toast?.message && <Toast message={toast.message} type={toast.type} />}
+    </>
   );
 }
 
