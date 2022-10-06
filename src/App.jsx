@@ -22,6 +22,7 @@ function App() {
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
+      setLoading(true);
       const token = localStorage.getItem('accessToken');
       const pathname = window.location.pathname;
       if (!token) {
@@ -39,11 +40,9 @@ function App() {
           auth.logout();
         }
       }
+      setLoading(false);
     };
     verifyToken();
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
   }, []);
 
   return (
@@ -69,7 +68,6 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/dashboard-mhs" element={<DashboardMhs />} />
               {(auth.role?.includes('Dosen') ||
                 auth.role?.includes('Departemen')) && (
                 <Route path="/dashboard/status" element={<StatusMahasiswa />} />

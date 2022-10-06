@@ -29,7 +29,6 @@ function useAuthProvider() {
     localStorage.setItem('firstTime', data.firstTime);
     localStorage.setItem('name', data.nama);
     localStorage.setItem('foto', data.image);
-    console.log(data);
     setId(data.id);
     setName(data.nama);
     let role;
@@ -40,9 +39,10 @@ function useAuthProvider() {
     }
     setRole(role);
     if (role === 'Mahasiswa' && data.firstTime) {
-      setFirstTime(data.firstTime);
+      setFirstTime('true');
       navigate('/register');
     } else {
+      setFirstTime('false');
       navigate('/dashboard');
     }
   };
