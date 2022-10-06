@@ -1,9 +1,53 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Input from './Input';
-import { Dropdown, DropdownSearch, OutlinedButton, Button } from './components';
-
+import { Dropdown, OutlinedButton, Button, DangerAlert } from './components';
+import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
+import axios from 'axios';
+import config from '../configs/config.json';
 function Khs({ closeModal }) {
+  const auth = useAuth();
+  const toast = useToast();
+  const semester = React.useRef();
+  const jumlahSks = React.useRef();
+  const jumlahSksKumulatif = React.useRef();
+  const ipSemester = React.useRef();
+  const ipKumulatif = React.useRef();
+  const status = React.useRef();
+  const fileKhs = React.useRef();
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const formSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('nim', auth.id);
+    formData.append('semester', semester.current.value);
+    formData.append('jumlahSksSemester', jumlahSks.current.value);
+    formData.append('jumlahSksKumulatif', jumlahSksKumulatif.current.value);
+    formData.append('ips', ipSemester.current.value);
+    formData.append('ipk', ipKumulatif.current.value);
+    formData.append('status', status.current.value);
+    formData.append('dokumen', fileKhs.current.files[0]);
+
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      const token = localStorage.getItem('accessToken');
+      await axios.post(`${config.API_URL}/mahasiswa/entry-khs`, formData, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
+      closeModal();
+      toast.setToast('Entry IRS Berhasil', 'success');
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -47,21 +91,68 @@ function Khs({ closeModal }) {
             </button>
           </div>
           <div className="pt-3 pb-6 px-4">
-            <form className="space-y-6" action="#">
-              <Input label="Sememster" id="semester" type="number" />
-              <Input label="Jumlah KHS" id="sks" type="number" />
-              <Input label="Jumlah SKS Kumulatif" id="sksk" type="number" />
-              <Input label="IP Sememster" id="ips" type="number" />
-              <Input label="IP Sememster Kumulatif" id="ipk" type="number" />
+            <form className="space-y-6" onSubmit={(e) => formSubmit(e)}>
+              <Dropdown
+                label="Status"
+                id="status"
+                innerRef={status}
+                options={[
+                  {
+                    value: 'Aktif',
+                    label: 'Aktif',
+                  },
+                  {
+                    value: 'Cuti',
+                    label: 'Cuti',
+                  },
+                ]}
+              />
+              <Input
+                label="Semester"
+                id="semester"
+                type="number"
+                innerRef={semester}
+              />
+              <Input
+                label="Jumlah SKS"
+                id="sks"
+                type="number"
+                innerRef={jumlahSks}
+              />
+              <Input
+                label="Jumlah SKS Kumulatif"
+                id="sksk"
+                type="number"
+                innerRef={jumlahSksKumulatif}
+              />
+              <Input
+                label="IP Semester"
+                id="ips"
+                type="text"
+                innerRef={ipSemester}
+              />
+              <Input
+                label="IP Semester Kumulatif"
+                id="ipk"
+                type="text"
+                innerRef={ipKumulatif}
+              />
               <Input
                 label="File KHS"
                 id="file-khs"
                 type="file"
                 accept="application/pdf"
+                innerRef={fileKhs}
               />
+              {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
                 <OutlinedButton child="Cancel" onClick={closeModal} />
-                <Button type="submit" child="Submit" />
+                <Button
+                  type="submit"
+                  child="Submit"
+                  loadingState="Loading..."
+                  loading={loading}
+                />
               </div>
             </form>
           </div>

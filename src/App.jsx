@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Login,
   Dashboard,
-  DashboardMhs,
   StatusMahasiswa,
   UpdateDataMhs,
 } from './pages/pages';
