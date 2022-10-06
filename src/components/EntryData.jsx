@@ -1,13 +1,65 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Input from './Input';
-import { Dropdown, DropdownSearch, OutlinedButton, Button } from './components';
+import axios from 'axios';
+import config from '../configs/config.json';
+import {
+  Dropdown,
+  DropdownSearch,
+  OutlinedButton,
+  Button,
+  InputGenerate,
+  DangerAlert,
+} from './components';
+import { useToast } from '../contexts/ToastContext';
 
-function EntryData({ modal, setModal }) {
-  function closeModal() {
-    setModal(false);
-    console.log(modal);
-  }
+function EntryData({ onClick, dataDosen }) {
+  const toast = useToast();
+  const generateCharacter = () => {
+    return Math.random().toString(36).substring(2);
+  };
+  const [username, setUsername] = React.useState(generateCharacter());
+  const [password, setPassword] = React.useState(generateCharacter());
+  const namaLengkap = React.useRef('');
+  const nim = React.useRef('');
+  const angkatan = React.useRef('');
+  const status = React.useRef('');
+  const jalurMasuk = React.useRef('');
+  const dosenWali = React.useRef('');
+
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  const formSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      username,
+      namaLengkap: namaLengkap.current.value,
+      password,
+      nim: nim.current.value,
+      angkatan: parseInt(angkatan.current.value),
+      status: status.current.value,
+      jalurMasuk: jalurMasuk.current.value,
+      dosenWali: dosenWali.current.value,
+    };
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      const token = localStorage.getItem('accessToken');
+      await axios.post(`${config.API_URL}/operator/add-mahasiswa`, data, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
+
+      onClick();
+      toast.setToast('Data mahasiswa berhasil ditambahkan', 'success');
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <motion.div
@@ -20,7 +72,7 @@ function EntryData({ modal, setModal }) {
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full inset-0 h-full flex justify-center"
     >
       <div
-        onClick={closeModal}
+        onClick={onClick}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
       <div className="relative p-4 w-full max-w-md h-full md:h-auto z-10">
@@ -33,7 +85,7 @@ function EntryData({ modal, setModal }) {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm"
               data-modal-toggle="entry-modal-modal"
-              onClick={closeModal}
+              onClick={onClick}
             >
               <svg
                 aria-hidden="true"
@@ -52,46 +104,80 @@ function EntryData({ modal, setModal }) {
             </button>
           </div>
           <div className="pt-3 pb-6 px-4">
-            <form className="space-y-6" action="#">
-              <Input label="Nama Lengkap" id="nama-lengkap" type="text" />
-              <Input label="NIM" id="nim" type="number" />
-              <Input label="Password" id="password" type="password" />
+            <form className="space-y-6" onSubmit={(e) => formSubmit(e)}>
+              <InputGenerate
+                label="Username"
+                id="username"
+                type="text"
+                name={username}
+                onClick={() => setUsername(generateCharacter())}
+              />
+              <Input
+                label="Nama Lengkap"
+                id="nama-lengkap"
+                type="text"
+                innerRef={namaLengkap}
+              />
+              <Input label="NIM" id="nim" type="number" innerRef={nim} />
+              <Input
+                label="Angkatan"
+                id="angkatan"
+                type="number"
+                innerRef={angkatan}
+              />
+              <InputGenerate
+                label="Password"
+                id="password"
+                type="text"
+                name={password}
+                onClick={() => setPassword(generateCharacter())}
+              />
               <Dropdown
                 label="Status"
                 id="status"
+                innerRef={status}
                 options={[
                   {
-                    value: 'aktif',
+                    value: 'Aktif',
                     label: 'Aktif',
                   },
                   {
-                    value: 'tidak-aktif',
-                    label: 'Tidak Aktif',
+                    value: 'Cuti',
+                    label: 'Cuti',
                   },
                   {
-                    value: 'drop-out',
+                    value: 'Mangkir',
+                    label: 'Mangkir',
+                  },
+                  {
+                    value: 'DO',
                     label: 'Drop Out',
                   },
                   {
-                    value: 'mengundurkan-diri',
-                    label: 'Mengundurkan Diri',
+                    value: 'Lulus',
+                    label: 'Lulus',
+                  },
+                  {
+                    value: 'MeninggalDunia',
+                    label: 'Meninggal Dunia',
                   },
                 ]}
               />
               <Dropdown
                 label="Jalur Masuk"
                 id="jalur-masuk"
+                innerRef={jalurMasuk}
                 options={[
                   {
-                    value: 'snmptn',
+                    value: 'SNMPTN',
                     label: 'SNMPTN',
                   },
                   {
-                    value: 'sbpmtn',
+                    value: 'SBMPTN',
                     label: 'SBMPTN',
                   },
                   {
-                    value: 'mandiri',
+                    value: 'Mandiri',
                     label: 'Mandiri',
                   },
                   {
@@ -104,11 +190,18 @@ function EntryData({ modal, setModal }) {
                 id="dosen-wali"
                 label="Dosen Wali"
                 type="text"
-                options={['Aris Pudji', 'Retno Kusuma', 'Dinar Mutiara']}
+                options={dataDosen}
+                innerRef={dosenWali}
               />
+              {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
-                <OutlinedButton child="Cancel" onClick={closeModal} />
-                <Button type="submit" child="Submit" />
+                <OutlinedButton child="Cancel" onClick={onClick} />
+                <Button
+                  type="submit"
+                  child="Submit"
+                  loadingState="Loading..."
+                  loading={loading}
+                />
               </div>
             </form>
           </div>

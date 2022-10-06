@@ -1,15 +1,17 @@
 import React from 'react';
 
-function Dropdown({ label, id, options }) {
+function Dropdown({ label, id, options, innerRef }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium text-gray-900">
         {label}
       </label>
       <select
+        ref={innerRef}
         id={id}
         name={id}
         defaultValue=""
+        required
         className="block w-full p-4 text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
       >
         <option className="p-4 text-gray-400" value="" disabled>
