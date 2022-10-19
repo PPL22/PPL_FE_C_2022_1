@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Table({ data }) {
+function TableStatusMahasiswa({ data }) {
   return (
     <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
       <table className="w-full text-sm text-gray-500 text-center">
@@ -45,4 +45,4 @@ function Table({ data }) {
   );
 }
 
-export default Table;
+export default TableStatusMahasiswa;

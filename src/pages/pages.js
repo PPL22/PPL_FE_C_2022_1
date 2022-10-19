@@ -5,3 +5,5 @@ export { default as Dashboard } from './dashboard';
 export { default as DashboardMhs } from './mahasiswa';
 export { default as Dosen } from './dosen';
 export { default as StatusMahasiswa } from './status_mhs';
+export { default as Table } from './table';
+export { default as DataMhs } from './data_mhs';
