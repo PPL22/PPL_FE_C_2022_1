@@ -4,6 +4,7 @@ import {
   Dashboard,
   StatusIRSMahasiswa,
   UpdateDataMhs,
+  DataMhs,
 } from './pages/pages';
 import jwt_decode from 'jwt-decode';
 import { Header, Sidebar, Spinner, Toast } from './components/components';
@@ -68,6 +69,7 @@ function App() {
             {auth.role && auth.firstTime === 'false' && <Header />}
             <Routes>
               <Route path="/" element={<Login />} />
+              {/* <Route path="/" element={<DataMhs />} /> */}
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
               {auth.role?.includes('Dosen') && (

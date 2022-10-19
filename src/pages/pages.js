@@ -5,3 +5,5 @@ export { default as Dashboard } from './dashboard';
 export { default as Dosen } from './dosen';
 export { default as Mahasiswa } from './mahasiswa';
 export { default as StatusIRSMahasiswa } from './status_mahasiswa/irs';
+export { default as Table } from './table';
+export { default as DataMhs } from './data_mhs';
