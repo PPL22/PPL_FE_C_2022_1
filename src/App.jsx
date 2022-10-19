@@ -5,6 +5,7 @@ import {
   DashboardMhs,
   StatusMahasiswa,
   UpdateDataMhs,
+  Table,
 } from './pages/pages';
 import jwt_decode from 'jwt-decode';
 import { Header, Sidebar, Spinner, Toast } from './components/components';
@@ -20,31 +21,31 @@ function App() {
   const firstTime = localStorage.getItem('firstTime');
 
   // verify token
-  React.useEffect(() => {
-    const verifyToken = () => {
-      const token = localStorage.getItem('accessToken');
-      const pathname = window.location.pathname;
-      if (!token) {
-        if (pathname !== '/') {
-          auth.logout();
-        }
-      } else {
-        const decoded = jwt_decode(token);
-        if (decoded) {
-          auth.updateRole(decoded);
-          if (pathname !== '/dashboard' && firstTime === 'false') {
-            navigate('/dashboard');
-          }
-        } else {
-          auth.logout();
-        }
-      }
-    };
-    verifyToken();
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+  // React.useEffect(() => {
+  //   const verifyToken = () => {
+  //     const token = localStorage.getItem('accessToken');
+  //     const pathname = window.location.pathname;
+  //     if (!token) {
+  //       if (pathname !== '/') {
+  //         auth.logout();
+  //       }
+  //     } else {
+  //       const decoded = jwt_decode(token);
+  //       if (decoded) {
+  //         auth.updateRole(decoded);
+  //         if (pathname !== '/dashboard' && firstTime === 'false') {
+  //           navigate('/dashboard');
+  //         }
+  //       } else {
+  //         auth.logout();
+  //       }
+  //     }
+  //   };
+  //   verifyToken();
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 1000);
+  // }, []);
 
   return (
     <>
@@ -66,7 +67,7 @@ function App() {
           >
             {auth.role && auth.firstTime === 'false' && <Header />}
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Table />} />
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/dashboard-mhs" element={<DashboardMhs />} />

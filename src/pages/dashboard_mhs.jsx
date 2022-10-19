@@ -1,5 +1,5 @@
 import React from 'react';
-import { Charts, EntryData, Header, Sidebar } from '../components/components';
+import { Header, Sidebar } from '../components/components';
 import EntryDataMhs from '../components/EntryDataMhs';
 
 function DashboardMhs() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '../components/components';
+import { TableStatusMahasiswa } from '../components/components';
 
 function StatusMahasiswa() {
   const data = {
@@ -36,7 +36,7 @@ function StatusMahasiswa() {
   return (
     <section className="mt-10 px-8">
       <h2 className="text-3xl font-bold">Status IRS Mahasiswa</h2>
-      <Table data={data} />
+      <TableStatusMahasiswa data={data} />
     </section>
   );
 }
