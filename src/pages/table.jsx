@@ -1,7 +1,7 @@
 import React from 'react';
-import { TableStatusMahasiswa } from '../components/components';
+import { TableRekapMahasiswa } from '../components/components';
 
-function StatusMahasiswa() {
+export default function Table() {
   const data = {
     thead: [
       'Nama Mahasiswa',
@@ -32,13 +32,9 @@ function StatusMahasiswa() {
       },
     ],
   };
-
   return (
-    <section className="mt-10 px-8">
-      <h2 className="text-3xl font-bold">Status IRS Mahasiswa</h2>
-      <TableStatusMahasiswa data={data} />
+    <section>
+      <TableRekapMahasiswa />
     </section>
   );
 }
-
-export default StatusMahasiswa;
