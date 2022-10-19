@@ -13,3 +13,5 @@ export { default as OutlinedButton } from './OutlinedButton';
 export { default as TableStatusMahasiswa } from './TableStatusMahasiswa';
 export { default as TableRekapMahasiswa } from './TableRekapMahasiswa';
 export { default as Toast } from './Toast';
+export { default as BtnSemester } from './BtnSemester';
+export { default as Keterangan } from './Keterangan';
