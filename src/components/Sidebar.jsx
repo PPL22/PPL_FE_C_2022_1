@@ -6,7 +6,6 @@ import profile from '../assets/images/default_profile.png';
 
 function Sidebar() {
   const auth = useAuth();
-  console.log(auth);
   return (
     <div className="fixed left-0 top-0 bottom-0 bg-acintya-prasada bg-cover px-4 mx-auto max-w-[285px]">
       <div className="flex items-center flex-col bg-background h-full py-8 text-center">
@@ -14,7 +13,9 @@ function Sidebar() {
           <img
             src={
               auth.foto !== null && auth.foto !== 'undefined'
-                ? `${configs.API_IMAGE_URL}/foto_mhs/${auth.foto}`
+                ? auth.foto.includes('http')
+                  ? auth.foto
+                  : `${configs.API_IMAGE_URL}/foto_mhs/${auth.foto}`
                 : profile
             }
             alt="foto profil"
@@ -79,22 +80,22 @@ function Sidebar() {
                   Status Mahasiswa
                 </div>
                 <ul className="flex flex-col items-start ml-4 gap-y-2">
-                  <Link to="/dashboard/status" className="w-full">
+                  <Link to="/dashboard/status/irs" className="w-full">
                     <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
                       IRS
                     </li>
                   </Link>
-                  <Link to="/dashboard/status" className="w-full">
+                  <Link to="/dashboard/status/khs" className="w-full">
                     <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
                       KHS
                     </li>
                   </Link>
-                  <Link to="/dashboard/status" className="w-full">
+                  <Link to="/dashboard/status/pkl" className="w-full">
                     <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
                       PKL
                     </li>
                   </Link>
-                  <Link to="/dashboard/status" className="w-full">
+                  <Link to="/dashboard/status/skripsi" className="w-full">
                     <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
                       Skripsi
                     </li>

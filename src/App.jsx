@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Login,
   Dashboard,
-  StatusMahasiswa,
+  StatusIRSMahasiswa,
   UpdateDataMhs,
 } from './pages/pages';
 import jwt_decode from 'jwt-decode';
@@ -21,7 +21,6 @@ function App() {
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
-      setLoading(true);
       const token = localStorage.getItem('accessToken');
       const pathname = window.location.pathname;
       if (!token) {
@@ -32,16 +31,20 @@ function App() {
         const decoded = jwt_decode(token);
         if (decoded) {
           auth.updateRole(decoded);
-          if (pathname !== '/dashboard' && firstTime === 'false') {
+          if (
+            (pathname === '/register' || pathname === '/') &&
+            firstTime === 'false'
+          ) {
             navigate('/dashboard');
           }
         } else {
           auth.logout();
         }
       }
-      setLoading(false);
     };
+    setLoading(true);
     verifyToken();
+    setLoading(false);
   }, []);
 
   return (
@@ -67,9 +70,11 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              {(auth.role?.includes('Dosen') ||
-                auth.role?.includes('Departemen')) && (
-                <Route path="/dashboard/status" element={<StatusMahasiswa />} />
+              {auth.role?.includes('Dosen') && (
+                <Route
+                  path="/dashboard/status/irs"
+                  element={<StatusIRSMahasiswa />}
+                />
               )}
               <Route path="*" element={<Dashboard />} />
             </Routes>

@@ -6,9 +6,9 @@ function Table({ data }) {
       <table className="w-full text-sm text-gray-500 text-center">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
-            {data.thead.map((item) => {
+            {data.thead.map((item, index) => {
               return (
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-6" key={index}>
                   {item}
                 </th>
               );

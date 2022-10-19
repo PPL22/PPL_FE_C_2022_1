@@ -16,7 +16,7 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
           setValue(getNama[0].value);
         } else {
           const filter = options.filter((option) => {
-            // regex like startsWith
+            // regex keywords start with option
             const regex = new RegExp(`^${keyword}`, 'gi');
             return option.nama.match(regex);
           });

@@ -31,6 +31,7 @@ function useAuthProvider() {
     localStorage.setItem('foto', data.image);
     setId(data.id);
     setName(data.nama);
+    setFoto(data.image);
     let role;
     if (Array.isArray(data.role)) {
       role = data.role.join(' ');
