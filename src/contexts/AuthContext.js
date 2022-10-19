@@ -57,6 +57,7 @@ function useAuthProvider() {
     localStorage.removeItem('name');
     localStorage.removeItem('foto');
     setRole(null);
+    setFoto(null);
     navigate('/');
   };
 
