@@ -77,7 +77,6 @@ const UpdateDataMhs = () => {
           'x-access-token': token,
         },
       });
-      console.log(response);
       setKabupaten([...response.data]);
     } catch (error) {
       throw error;
@@ -112,13 +111,14 @@ const UpdateDataMhs = () => {
     try {
       setIsSubmitted(true);
       const url = `${apiUrl}/mahasiswa/update-data`;
-      await axios.post(url, formData, {
+      const response = await axios.post(url, formData, {
         headers: {
           'x-access-token': token,
         },
       });
       localStorage.setItem('firstTime', false);
-      navigate('/dashboard');
+      localStorage.setItem('foto', response.data.foto);
+      window.location.href = '/dashboard';
     } catch (error) {
       setErrorMessage(error.response.data.message);
       throw error;
