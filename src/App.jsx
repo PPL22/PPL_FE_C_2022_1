@@ -113,7 +113,7 @@ function App() {
                     element={<RekapSkripsiMahasiswa />}
                   />
                   <Route
-                    path="/dashboard/data mahasiswa"
+                    path="/dashboard/data-mahasiswa"
                     element={<DataMhs />}
                   />
                 </>

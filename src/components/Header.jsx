@@ -8,7 +8,7 @@ function Header() {
   const path = location.pathname.split('/').slice(1);
   const data = path.map((item) => {
     return {
-      name: item,
+      name: item.includes('-') ? item.split('-').join(' ') : item,
       link: location.pathname.split(item)[0] + item,
     };
   });

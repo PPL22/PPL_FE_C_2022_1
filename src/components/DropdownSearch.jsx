@@ -60,7 +60,7 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
               <li
                 onClick={() => clickOption(option)}
                 key={index}
-                className="p-4 text-gray-900 hover:bg-gray-100 text-sm"
+                className="p-4 text-gray-900 hover:bg-gray-100 text-sm cursor-pointer"
               >
                 {option.nama}
               </li>

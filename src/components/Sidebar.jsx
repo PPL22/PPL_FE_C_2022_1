@@ -27,7 +27,7 @@ function Sidebar() {
           <h2 className=" mt-1">Fakultas Sains dan Matematika</h2>
           <h2 className=" ">Informatika</h2>
         </section>
-        <nav className="mt-5 flex flex-col justify-between h-full">
+        <nav className="mt-5 flex flex-col gap-y-10 h-full">
           <div className="flex flex-col gap-y-4">
             <Link
               to="/dashboard"
@@ -150,37 +150,37 @@ function Sidebar() {
                     </li>
                   </Link>
                 </ul>
+                <Link to="/dashboard/data-mahasiswa" className="w-full">
+                  <div className="text-sm flex gap-x-2 border py-2 border-transparent rounded hover:border-blue-500 px-2 hover:cursor-pointer text-gray-900 font-medium mt-4">
+                    <svg
+                      width={20}
+                      height={20}
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="9.80541"
+                        cy="9.80589"
+                        r="7.49047"
+                        stroke="#130F26"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M15.0151 15.4043L17.9518 18.3334"
+                        stroke="#130F26"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Pencarian Mahasiswa
+                  </div>
+                </Link>
               </div>
             )}
-            <Link to="/dashboard/data mahasiswa" className="w-full">
-              <div className="text-sm flex gap-x-2 border py-2 border-transparent rounded hover:border-blue-500 px-2 hover:cursor-pointer text-gray-900 font-medium">
-                <svg
-                  width={20}
-                  height={20}
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="9.80541"
-                    cy="9.80589"
-                    r="7.49047"
-                    stroke="#130F26"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M15.0151 15.4043L17.9518 18.3334"
-                    stroke="#130F26"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Pencarian Mahasiswa
-              </div>
-            </Link>
           </div>
           <button
             type="button"
