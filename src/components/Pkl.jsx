@@ -11,7 +11,6 @@ function Pkl({ closeModal }) {
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
-  const status = React.useRef();
   const nilaiPkl = React.useRef();
   const filePkl = React.useRef();
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -22,7 +21,6 @@ function Pkl({ closeModal }) {
     const formData = new FormData();
     formData.append('nim', auth.id);
     formData.append('semester', semester.current.value);
-    formData.append('status', status.current.value);
     formData.append('nilai', nilaiPkl.current.value);
     formData.append('dokumen', filePkl.current.files[0]);
 
@@ -88,25 +86,6 @@ function Pkl({ closeModal }) {
           </div>
           <div className="pt-3 pb-6 px-4">
             <form className="space-y-6" onSubmit={(e) => formSubmit(e)}>
-              <Dropdown
-                label="Status"
-                id="status"
-                options={[
-                  {
-                    value: 'Sedang Ambil',
-                    label: 'Sedang Ambil',
-                  },
-                  {
-                    value: 'Lulus',
-                    label: 'Lulus',
-                  },
-                  {
-                    value: 'Belum Lulus',
-                    label: 'Belum Lulus',
-                  },
-                ]}
-                innerRef={status}
-              />
               <Input
                 label="Semester"
                 id="semester"

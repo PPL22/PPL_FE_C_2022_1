@@ -48,11 +48,10 @@ const UpdateDataMhs = () => {
 
   const getDataMahasiswa = async () => {
     const apiUrl = config.API_URL;
-    const id = localStorage.getItem('id');
     const token = localStorage.getItem('accessToken');
     try {
       setLoading(true);
-      const url = `${apiUrl}/mahasiswa/register/${id}`;
+      const url = `${apiUrl}/mahasiswa/register`;
       const response = await axios.get(url, {
         headers: {
           'x-access-token': token,
@@ -249,7 +248,6 @@ const UpdateDataMhs = () => {
                         type="password"
                         id="password"
                         className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        defaultValue={data.password}
                         ref={password}
                         required
                       />

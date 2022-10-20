@@ -4,6 +4,12 @@ import {
   Dashboard,
   StatusIRSMahasiswa,
   UpdateDataMhs,
+  StatusKHSMahasiswa,
+  StatusSkripsiMahasiswa,
+  StatusPKLMahasiswa,
+  RekapPKLMahasiswa,
+  RekapSkripsiMahasiswa,
+  RekapStatusMahasiswa,
   DataMhs,
 } from './pages/pages';
 import jwt_decode from 'jwt-decode';
@@ -69,14 +75,48 @@ function App() {
             {auth.role && auth.firstTime === 'false' && <Header />}
             <Routes>
               <Route path="/" element={<Login />} />
-              {/* <Route path="/" element={<DataMhs />} /> */}
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
               {auth.role?.includes('Dosen') && (
-                <Route
-                  path="/dashboard/status/irs"
-                  element={<StatusIRSMahasiswa />}
-                />
+                <>
+                  <Route
+                    path="/dashboard/status/irs"
+                    element={<StatusIRSMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/status/khs"
+                    element={<StatusKHSMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/status/skripsi"
+                    element={<StatusSkripsiMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/status/pkl"
+                    element={<StatusPKLMahasiswa />}
+                  />
+                </>
+              )}
+              {(auth.role?.includes('Dosen') ||
+                auth.role?.includes('Departemen')) && (
+                <>
+                  <Route
+                    path="/dashboard/rekap/status"
+                    element={<RekapStatusMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/rekap/pkl"
+                    element={<RekapPKLMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/rekap/skripsi"
+                    element={<RekapSkripsiMahasiswa />}
+                  />
+                  <Route
+                    path="/dashboard/data mahasiswa"
+                    element={<DataMhs />}
+                  />
+                </>
               )}
               <Route path="*" element={<Dashboard />} />
             </Routes>

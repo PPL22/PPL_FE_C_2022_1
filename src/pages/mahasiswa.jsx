@@ -21,7 +21,7 @@ function Mahasiswa() {
               </h1>
             </div>
             <div className="flex justify-between">
-              <div className="w-40 bg-gradient-to-tr w-30 py-2 from-blue-700 to-purple-600 rounded">
+              <div className="w-40 bg-gradient-to-tr w-30 py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   IPK
                 </h1>
@@ -29,7 +29,7 @@ function Mahasiswa() {
                   3.89
                 </h1>
               </div>
-              <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded">
+              <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   SKSks
                 </h1>
@@ -60,7 +60,7 @@ function Mahasiswa() {
               </div>
             </div>
             <div className="mt-4 flex justify-between">
-              <div className="w-40 bg-gradient-to-tr w-30 py-2 from-blue-700 to-purple-600 rounded">
+              <div className="w-40 bg-gradient-to-tr w-30 py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   Semester
                 </h1>
@@ -68,12 +68,12 @@ function Mahasiswa() {
                   5
                 </h1>
               </div>
-              <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded">
+              <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   Status
                 </h1>
-                <div className="mx-6 bg-green-500  rounded">
-                  <h1 className="mb-2 text-center text-3xl font-bold tracking-tight text-slate-100">
+                <div className="mx-6 bg-green-500 py-2 rounded-lg">
+                  <h1 className="text-center text-xl font-bold tracking-tight text-slate-100">
                     Aktif
                   </h1>
                 </div>
@@ -91,7 +91,7 @@ function Mahasiswa() {
               </h1>
             </div>
             <button
-              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center
+              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg flex justify-center items-center
                 "
               type="button"
               onClick={() => showModal('irs')}
@@ -103,7 +103,7 @@ function Mahasiswa() {
             <button
               type="button"
               onClick={() => showModal('khs')}
-              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg flex justify-center items-center"
             >
               <h1 className="text-xl font-bold tracking-tight text-gray-900">
                 Entry KHS
@@ -112,7 +112,7 @@ function Mahasiswa() {
             <button
               type="button"
               onClick={() => showModal('pkl')}
-              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg flex justify-center items-center"
             >
               <h1 className="text-xl font-bold tracking-tight text-gray-900">
                 Entry PKL
@@ -121,7 +121,7 @@ function Mahasiswa() {
             <button
               type="button"
               onClick={() => showModal('skripsi')}
-              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded flex justify-center items-center"
+              className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg flex justify-center items-center"
             >
               <h1 className="text-xl font-bold tracking-tight text-gray-900">
                 Entry Skripsi

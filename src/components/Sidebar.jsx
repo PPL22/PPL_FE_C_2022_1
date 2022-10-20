@@ -7,12 +7,14 @@ import profile from '../assets/images/default_profile.png';
 function Sidebar() {
   const auth = useAuth();
   return (
-    <div className="fixed left-0 top-0 bottom-0 bg-acintya-prasada bg-cover px-4 mx-auto max-w-[285px]">
+    <div className="bg-acintya-prasada bg-cover px-4 mx-auto max-w-[285px] h-full">
       <div className="flex items-center flex-col bg-background h-full py-8 text-center">
         <section className="profile flex flex-col items-center px-2">
           <img
             src={
-              auth.foto !== null && auth.foto !== 'undefined'
+              auth.foto !== null &&
+              auth.foto !== 'undefined' &&
+              auth.foto !== 'null'
                 ? auth.foto.includes('http')
                   ? auth.foto
                   : `${configs.API_IMAGE_URL}/foto_mhs/${auth.foto}`
@@ -25,7 +27,7 @@ function Sidebar() {
           <h2 className=" mt-1">Fakultas Sains dan Matematika</h2>
           <h2 className=" ">Informatika</h2>
         </section>
-        <nav className="mt-16 flex flex-col justify-between h-full">
+        <nav className="mt-5 flex flex-col justify-between h-full">
           <div className="flex flex-col gap-y-4">
             <Link
               to="/dashboard"
@@ -103,11 +105,87 @@ function Sidebar() {
                 </ul>
               </div>
             )}
+            {(auth.role?.includes('Dosen') ||
+              auth.role?.includes('Departemen')) && (
+              <div>
+                <div className="text-gray-900  border border-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center gap-x-2">
+                  <svg
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M22 3H16C14.9391 3 13.9217 3.42143 13.1716 4.17157C12.4214 4.92172 12 5.93913 12 7V21C12 20.2044 12.3161 19.4413 12.8787 18.8787C13.4413 18.3161 14.2044 18 15 18H22V3Z"
+                      stroke="black"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M2 3H8C9.06087 3 10.0783 3.42143 10.8284 4.17157C11.5786 4.92172 12 5.93913 12 7V21C12 20.2044 11.6839 19.4413 11.1213 18.8787C10.5587 18.3161 9.79565 18 9 18H2V3Z"
+                      stroke="black"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Rekap Mahasiswa
+                </div>
+                <ul className="flex flex-col items-start ml-4 gap-y-2">
+                  <Link to="/dashboard/rekap/status" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      Status
+                    </li>
+                  </Link>
+                  <Link to="/dashboard/rekap/pkl" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      PKL
+                    </li>
+                  </Link>
+                  <Link to="/dashboard/rekap/skripsi" className="w-full">
+                    <li className="border border-transparent rounded hover:border-blue-500 w-full text-left px-2 hover:cursor-pointer">
+                      Skripsi
+                    </li>
+                  </Link>
+                </ul>
+              </div>
+            )}
+            <Link to="/dashboard/data mahasiswa" className="w-full">
+              <div className="text-sm flex gap-x-2 border py-2 border-transparent rounded hover:border-blue-500 px-2 hover:cursor-pointer text-gray-900 font-medium">
+                <svg
+                  width={20}
+                  height={20}
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="9.80541"
+                    cy="9.80589"
+                    r="7.49047"
+                    stroke="#130F26"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M15.0151 15.4043L17.9518 18.3334"
+                    stroke="#130F26"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Pencarian Mahasiswa
+              </div>
+            </Link>
           </div>
           <button
             type="button"
             onClick={auth.logout}
-            className="text-red-700 hover:underline focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center gap-x-2"
+            className="mt-4 text-red-700  hover:underline focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center gap-x-2"
           >
             {' '}
             <svg

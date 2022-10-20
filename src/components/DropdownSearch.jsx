@@ -16,9 +16,7 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
           setValue(getNama[0].value);
         } else {
           const filter = options.filter((option) => {
-            // regex keywords start with option
-            const regex = new RegExp(`^${keyword}`, 'gi');
-            return option.nama.match(regex);
+            return option.nama.toLowerCase().includes(keyword.toLowerCase());
           });
           setFilteredOptions(filter);
         }
@@ -31,6 +29,8 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
     setName(data.nama);
     setFilteredOptions([]);
   };
+
+  console.log(filteredOptions);
 
   return (
     <div className="relative">
@@ -52,7 +52,7 @@ function DropdownSearch({ id, label, type, options, innerRef }) {
       <div className="absolute top-20 left-0 right-0 z-10">
         <ul
           className={`bg-blue-50 rounded-lg ${
-            filteredOptions.length > 0 && 'h-48'
+            filteredOptions.length > 0 && 'max-h-48'
           } overflow-y-auto`}
         >
           {filteredOptions.map((option, index) => {

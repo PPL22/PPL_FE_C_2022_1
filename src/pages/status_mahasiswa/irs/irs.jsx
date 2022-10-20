@@ -1,7 +1,8 @@
 import React from 'react';
-import { Table } from '../../components/components';
-import config from '../../configs/config.json';
+import { Spinner } from '../../../components/components';
+import config from '../../../configs/config.json';
 import axios from 'axios';
+import TableStatusIRSMahasiswa from './TableStatusIRSMahasiswa';
 
 function StatusIRSMahasiswa() {
   const [dataIRS, setDataIRS] = React.useState({
@@ -17,6 +18,7 @@ function StatusIRSMahasiswa() {
     ],
     tbody: [],
   });
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const getDataIRS = async () => {
     const apiUrl = config.API_URL;
@@ -28,10 +30,23 @@ function StatusIRSMahasiswa() {
           'x-access-token': token,
         },
       });
-      console.log(response);
+      const result = response.data.data.map((item) => {
+        return {
+          data: [
+            item.nama,
+            item.nim,
+            item.angkatan,
+            item.semester,
+            item.jumlahSks,
+            item.status,
+          ],
+          statusValidasi: item.statusValidasi,
+          document: config.API_DOCUMENT_URL + '/irs/' + item.fileIrs,
+        };
+      });
       setDataIRS({
         ...dataIRS,
-        tbody: response.data.data,
+        tbody: result,
       });
     } catch (error) {
       throw error;
@@ -39,13 +54,17 @@ function StatusIRSMahasiswa() {
   };
 
   React.useEffect(() => {
+    setIsLoading(true);
     getDataIRS();
+    setIsLoading(false);
   }, []);
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <section className="mt-10 px-8">
       <h2 className="text-3xl font-bold">Status IRS Mahasiswa</h2>
-      <Table data={dataIRS} />
+      <TableStatusIRSMahasiswa data={dataIRS} refreshData={getDataIRS} />
     </section>
   );
 }

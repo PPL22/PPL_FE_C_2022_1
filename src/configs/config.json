@@ -1,4 +1,5 @@
 {
   "API_URL": "http://localhost:5000",
-  "API_IMAGE_URL": "http://localhost:5000/images"
+  "API_IMAGE_URL": "http://localhost:5000/images",
+  "API_DOCUMENT_URL": "http://localhost:5000/documents"
 }
