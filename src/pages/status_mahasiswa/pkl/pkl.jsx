@@ -54,7 +54,9 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
   }, []);
 
   return isLoading ? (
-    <Spinner />
+    <div className="h-full flex justify-center items-center">
+      <Spinner />
+    </div>
   ) : (
     <section className="mt-10 px-8">
       <h2 className="text-xl font-bold">Daftar Status PKL Mahasiswa</h2>

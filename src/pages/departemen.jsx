@@ -3,9 +3,8 @@ import Charts from '../components/Charts';
 import config from '../configs/config.json';
 import axios from 'axios';
 import Spinner from '../components/Spinner';
-import { Link } from 'react-router-dom';
 
-function Dosen() {
+function Departemen() {
   const [dataIRS, setDataIRS] = React.useState({
     labels: ['Sudah Verifikasi', 'Belum Validasi', 'Belum Entry'],
     colors: ['#5570F1', '#FFCC91', '#CC5F5F'],
@@ -36,7 +35,7 @@ function Dosen() {
     const apiUrl = config.API_URL;
     const token = localStorage.getItem('accessToken');
     try {
-      const url = `${apiUrl}/dosen/dashboard`;
+      const url = `${apiUrl}/departemen/dashboard`;
       const response = await axios.get(url, {
         headers: {
           'x-access-token': token,
@@ -91,19 +90,6 @@ function Dosen() {
           </h5>
         </div>
         <Charts data={dataIRS} />
-        <div className="flex justify-center">
-          {dataIRS.elements[1] > 0 && (
-            <Link to="/status/irs">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
       </div>
       <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
         <div className="div flex justify-between">
@@ -112,19 +98,6 @@ function Dosen() {
           </h5>
         </div>
         <Charts data={dataPKL} />
-        <div className="flex justify-center">
-          {dataPKL.elements[1] > 0 && (
-            <Link to="/status/pkl">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
       </div>
       <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
         <div className="div flex justify-between">
@@ -133,19 +106,6 @@ function Dosen() {
           </h5>
         </div>
         <Charts data={dataKHS} />
-        <div className="flex justify-center">
-          {dataKHS.elements[1] > 0 && (
-            <Link to="/status/khs">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
       </div>
       <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
         <div className="div flex justify-between">
@@ -154,22 +114,9 @@ function Dosen() {
           </h5>
         </div>
         <Charts data={dataSkripsi} />
-        <div className="flex justify-center">
-          {dataSkripsi.elements[1] > 0 && (
-            <Link to="/status/skripsi">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
       </div>
     </section>
   );
 }
 
-export default Dosen;
+export default Departemen;

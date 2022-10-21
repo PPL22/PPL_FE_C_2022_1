@@ -1,20 +1,54 @@
 import React from 'react';
 import EntryDataMhs from '../components/EntryDataMhs';
+import config from '../configs/config.json';
+import axios from 'axios';
+import Spinner from '../components/Spinner';
+import { statusAktifColor } from '../utils/statusAktifColor';
 
 function Mahasiswa() {
   const [modal, setModal] = React.useState(false);
   const [entryState, setEntryState] = React.useState('none');
+  const [data, setData] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   function showModal(entry) {
     setModal(true);
     setEntryState(entry);
   }
 
-  return (
+  const getDashboard = async () => {
+    const apiUrl = config.API_URL;
+    const token = localStorage.getItem('accessToken');
+    try {
+      setIsLoading(true);
+      const url = `${apiUrl}/mahasiswa/dashboard`;
+      const response = await axios.get(url, {
+        headers: {
+          'x-access-token': token,
+        },
+      });
+      const result = response.data;
+      setData(result);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    getDashboard();
+  }, []);
+
+  return isLoading || !data ? (
+    <div className="h-full flex justify-center items-center">
+      <Spinner />
+    </div>
+  ) : (
     <section className="grid grid-cols-12 mt-10">
       <div className="col-span-8 flex justify-center">
         <div className="space-y-6">
-          <div className="p-6 w-96 bg-white rounded-lg border border-gray-200 shadow-md">
+          <div className="p-6 max-w-md bg-white rounded-lg border border-gray-200 shadow-md">
             <div className="flex justify-center">
               <h1 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
                 Prestasi Akademik
@@ -26,7 +60,7 @@ function Mahasiswa() {
                   IPK
                 </h1>
                 <h1 className="mb-2 text-center text-3xl font-bold tracking-tight text-gray-900">
-                  3.89
+                  {data.ipkNow}
                 </h1>
               </div>
               <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded-lg">
@@ -34,48 +68,49 @@ function Mahasiswa() {
                   SKSks
                 </h1>
                 <h1 className="mb-2 text-center text-3xl font-bold tracking-tight text-gray-900">
-                  121
+                  {data.sksNow}
                 </h1>
               </div>
             </div>
           </div>
-          <div className="p-6 w-96 bg-white rounded-lg border border-gray-200 shadow-md">
-            <div className="flex justify-center">
+          <div className="p-6 max-w-md bg-white rounded-lg border border-gray-200 shadow-md">
+            <div className="flex justify-center mb-4">
               <h1 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
                 Status Akademik
               </h1>
             </div>
-            <div className="grid grid-cols-6 ">
-              <div className="col-span-2 flex m-auto">
-                <img
-                  src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?cs=srgb&dl=pexels-italo-melo-2379005.jpg&fm=jpg"
-                  alt="foto profil"
-                  className="rounded-full w-20 h-20 object-cover"
-                />
-              </div>
-              <div className="col-span-4 ">
-                <h2 className="text-lg font-bold mt-2">John Doe</h2>
-                <h2 className=" mt-1">Fakultas Sains dan Matematika</h2>
-                <h2 className=" ">Informatika</h2>
+            <div className="flex justify-center gap-x-4 mb-4">
+              <img
+                src={data.fotoDoswal}
+                alt="foto profil"
+                className="rounded-full w-20 h-20 object-cover"
+              />
+              <div>
+                <h2 className="text-lg font-bold mt-2">
+                  Dosen Wali : {data.namaDoswal}
+                </h2>
+                <h2 className="mt-1">NIP : {data.nipDoswal}</h2>
               </div>
             </div>
-            <div className="mt-4 flex justify-between">
+            <div className="flex justify-center gap-x-10">
               <div className="w-40 bg-gradient-to-tr w-30 py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   Semester
                 </h1>
                 <h1 className="mb-2 text-center text-3xl font-bold tracking-tight text-gray-900">
-                  5
+                  {data.semester}
                 </h1>
               </div>
               <div className="w-40 bg-gradient-to-tr py-2 from-blue-700 to-purple-600 rounded-lg">
                 <h1 className="mb-2 text-center text-xl font-bold tracking-tight text-gray-900">
                   Status
                 </h1>
-                <div className="mx-6 bg-green-500 py-2 rounded-lg">
-                  <h1 className="text-center text-xl font-bold tracking-tight text-slate-100">
-                    Aktif
-                  </h1>
+                <div
+                  className={`${statusAktifColor(
+                    data.statusAktif
+                  )} text-center py-2 text-lg`}
+                >
+                  {data.statusAktif}
                 </div>
               </div>
             </div>
@@ -92,7 +127,7 @@ function Mahasiswa() {
             </div>
             <button
               className="row-span-2 w-40 bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg flex justify-center items-center
-                "
+              "
               type="button"
               onClick={() => showModal('irs')}
             >

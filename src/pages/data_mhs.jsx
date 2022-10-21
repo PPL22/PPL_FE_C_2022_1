@@ -142,13 +142,17 @@ export default function DataMhs() {
                 />
               </div>
               <div className="col-span-4">
-                <p className="text-lg font-bold mt-2">Nama: {mahasiswa.nama}</p>
-                <p className="text-lg font-bold mt-2">Nim : {mahasiswa.nim}</p>
-                <p className="text-lg font-bold mt-2">
-                  Angkatan : {mahasiswa.angkatan}
+                <p className="text-lg mt-2">
+                  <strong>Nama :</strong> {mahasiswa.nama}
                 </p>
-                <p className="text-lg font-bold mt-2">
-                  Dosen Wali : {mahasiswa.namaDoswal}
+                <p className="text-lg mt-2">
+                  <strong>Nim :</strong> {mahasiswa.nim}
+                </p>
+                <p className="text-lg mt-2">
+                  <strong>Angkatan :</strong> {mahasiswa.angkatan}
+                </p>
+                <p className="text-lg mt-2">
+                  <strong>Dosen Wali :</strong> {mahasiswa.namaDoswal}
                 </p>
               </div>
             </div>

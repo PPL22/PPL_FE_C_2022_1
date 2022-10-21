@@ -11,6 +11,7 @@ import {
   RekapSkripsiMahasiswa,
   RekapStatusMahasiswa,
   DataMhs,
+  Profile,
 } from './pages/pages';
 import jwt_decode from 'jwt-decode';
 import { Header, Sidebar, Spinner, Toast } from './components/components';
@@ -28,6 +29,7 @@ function App() {
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
+      setLoading(true);
       const token = localStorage.getItem('accessToken');
       const pathname = window.location.pathname;
       if (!token) {
@@ -48,10 +50,9 @@ function App() {
           auth.logout();
         }
       }
+      setLoading(false);
     };
-    setLoading(true);
     verifyToken();
-    setLoading(false);
   }, []);
 
   return (
@@ -77,7 +78,10 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/register" element={<UpdateDataMhs />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              {auth.role?.includes('Dosen') && (
+              {auth.role && (
+                <Route path="/dashboard/profile" element={<Profile />} />
+              )}
+              {auth.role && auth.role.includes('Dosen') && (
                 <>
                   <Route
                     path="/dashboard/status/irs"
@@ -97,8 +101,8 @@ function App() {
                   />
                 </>
               )}
-              {(auth.role?.includes('Dosen') ||
-                auth.role?.includes('Departemen')) && (
+              {((auth.role && auth.role.includes('Dosen')) ||
+                (auth.role && auth.role.includes('Departemen'))) && (
                 <>
                   <Route
                     path="/dashboard/rekap/status"

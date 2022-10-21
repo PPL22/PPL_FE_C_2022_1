@@ -114,11 +114,13 @@ function RekapStatusMahasiswa() {
   return (
     <div className="overflow-x-auto relative my-10">
       <h1 className="text-center font-bold text-xl mb-8">
-        Rekap Progress Status Mahasiswa Informatika Fakultas Sains dan
-        Matematika UNDIP SEMARANG
+        Rekap Status Mahasiswa Informatika Fakultas Sains dan Matematika UNDIP
+        SEMARANG
       </h1>
       {isLoading ? (
-        <Spinner />
+        <div className="h-full flex justify-center items-center">
+          <Spinner />
+        </div>
       ) : (
         <div className="px-4">
           <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">

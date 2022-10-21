@@ -48,7 +48,9 @@ function RekapSkripsiMahasiswa() {
         Matematika UNDIP SEMARANG
       </h1>
       {isLoading ? (
-        <Spinner />
+        <div className="h-full flex justify-center items-center">
+          <Spinner />
+        </div>
       ) : (
         <table className="w-full text-sm text-gray-500 dark:text-gray-400 px-4 text-center">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
