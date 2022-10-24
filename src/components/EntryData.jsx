@@ -40,7 +40,7 @@ function EntryData({ onClick, dataDosen }) {
       angkatan: parseInt(angkatan.current.value),
       status: status.current.value,
       jalurMasuk: jalurMasuk.current.value,
-      dosenWali: dosenWali.current.value,
+      dosenWali: dosenWali.current.props.value.value,
     };
     try {
       setLoading(true);
@@ -181,7 +181,7 @@ function EntryData({ onClick, dataDosen }) {
                     label: 'Mandiri',
                   },
                   {
-                    value: 'lainnya',
+                    value: 'Lainnya',
                     label: 'Lainnya',
                   },
                 ]}

@@ -88,18 +88,15 @@ function TableStatusIRSMahasiswa({ data, refreshData }) {
                     </td>
                   );
                 })}
-                {body.statusValidasi === false ? (
-                  <td className="flex justify-center items-center py-4 px-6 space-x-3">
-                    <button
-                      className="font-medium text-white bg-blue-500 hover:bg-blue-800 p-2 rounded"
-                      onClick={() => handleValidation(index)}
-                    >
-                      Validasi
-                    </button>
-                  </td>
-                ) : (
-                  <td></td>
-                )}
+
+                <td className="flex justify-center items-center py-4 px-6 space-x-3">
+                  <button
+                    className="font-medium text-white bg-blue-500 hover:bg-blue-800 p-2 rounded"
+                    onClick={() => handleValidation(index)}
+                  >
+                    {body.statusValidasi === false ? 'Validasi' : 'Edit'}
+                  </button>
+                </td>
                 <td key={index} className="py-4 px-6">
                   <div
                     className={`${

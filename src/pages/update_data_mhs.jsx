@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import config from '../configs/config.json';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Spinner, DangerAlert } from '../components/components';
+import { Spinner, DangerAlert, DropdownSearch } from '../components/components';
 import { useNavigate } from 'react-router-dom';
 
 const UpdateDataMhs = () => {
@@ -15,7 +15,6 @@ const UpdateDataMhs = () => {
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [kabupaten, setKabupaten] = useState([]);
-  const [namaKabupaten, setNamaKabupaten] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const email = useRef();
@@ -66,30 +65,30 @@ const UpdateDataMhs = () => {
   };
 
   const getDataKabupaten = async (keyword) => {
-    setNamaKabupaten(keyword);
     const apiUrl = config.API_URL;
     const token = localStorage.getItem('accessToken');
     try {
-      const url = `${apiUrl}/mahasiswa/kota?keyword=${namaKabupaten}`;
+      const url = `${apiUrl}/mahasiswa/kota?keyword=${keyword ?? ''}`;
       const response = await axios.get(url, {
         headers: {
           'x-access-token': token,
         },
       });
-      setKabupaten([...response.data]);
+      const data = response.data.map((item) => {
+        return {
+          value: item.kodeKab,
+          label: item.namaKab,
+        };
+      });
+      setKabupaten(data);
     } catch (error) {
       throw error;
     }
   };
 
-  const clickOption = (data) => {
-    kodeKab.current.value = data.kodeKab;
-    setNamaKabupaten(data.namaKab);
-    setKabupaten([]);
-  };
-
   useEffect(() => {
     getDataMahasiswa();
+    getDataKabupaten();
   }, []);
 
   const formSubmit = async (e) => {
@@ -103,7 +102,7 @@ const UpdateDataMhs = () => {
     formData.append('password', password.current.value);
     formData.append('nim', data.nim);
     formData.append('alamat', alamat.current.value);
-    formData.append('kodeKab', kodeKab.current.value);
+    formData.append('kodeKab', kodeKab.current.props.value.value);
     formData.append('noHP', noHP.current.value);
     formData.append('foto', selectedFile);
 
@@ -271,45 +270,17 @@ const UpdateDataMhs = () => {
                       />
                     </div>
 
-                    <div className="relative">
-                      <div className="w-full h-24">
-                        <label
-                          htmlFor="kabupaten"
-                          className="text-sm font-medium text-gray-900"
-                        >
-                          Kabupaten/Kota
-                        </label>
-                        <input type="hidden" ref={kodeKab} />
-                        <input
-                          type="text"
-                          id="kabupaten"
-                          autoComplete="off"
-                          placeholder="Kabupaten/Kota"
-                          onChange={(e) => getDataKabupaten(e.target.value)}
-                          value={namaKabupaten}
-                          className="p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      <div className="absolute top-20 left-0 right-0 z-10">
-                        <ul
-                          className={`bg-blue-50 rounded-lg ${
-                            kabupaten.length > 0 && 'h-48'
-                          } overflow-y-auto`}
-                        >
-                          {kabupaten.map((option, index) => {
-                            return (
-                              <li
-                                onClick={() => clickOption(option)}
-                                key={index}
-                                className="p-4 text-gray-900 hover:bg-gray-100 text-sm"
-                              >
-                                {option.namaKab}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </div>
+                    <DropdownSearch
+                      id="kabupaten"
+                      label="Kabupaten/Kota"
+                      innerRef={kodeKab}
+                      options={kabupaten}
+                      onChange={(inputValue) => {
+                        setTimeout(() => {
+                          getDataKabupaten(inputValue);
+                        }, 500);
+                      }}
+                    />
 
                     <div className="relative">
                       <label

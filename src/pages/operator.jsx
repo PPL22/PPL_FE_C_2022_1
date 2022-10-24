@@ -25,7 +25,13 @@ function Operator() {
           'x-access-token': token,
         },
       });
-      setDataDosen(response.data);
+      const data = response.data.map((item) => {
+        return {
+          value: item.nip,
+          label: item.nama,
+        };
+      });
+      setDataDosen(data);
     } catch (error) {
       throw error;
     }

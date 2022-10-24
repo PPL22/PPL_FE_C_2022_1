@@ -1,6 +1,10 @@
 import React from 'react';
 import { Card, Button } from 'flowbite-react';
-import { Keterangan, BtnSemester } from '../components/components';
+import {
+  Keterangan,
+  BtnSemester,
+  DropdownSearch,
+} from '../components/components';
 import axios from 'axios';
 import config from '../configs/config.json';
 import { useAuth } from '../contexts/AuthContext';
@@ -14,8 +18,7 @@ export default function DataMhs() {
   const [dataSemester, setDataSemester] = React.useState([]);
   const [progress, setProgress] = React.useState(null);
 
-  const handleChange = (e) => {
-    const keyword = e.target.value;
+  const handleChange = (keyword) => {
     if (keyword.length > 0) {
       getDataMahasiswaByKeyword(keyword);
     } else {
@@ -23,13 +26,7 @@ export default function DataMhs() {
     }
   };
 
-  const handleClickOption = (nim) => {
-    getDataMahasiswaByNim(nim);
-    setDataMahasiswa([]);
-  };
-
   const handleSemester = (semester) => {
-    console.log(semester);
     setProgress(semester);
   };
 
@@ -46,7 +43,13 @@ export default function DataMhs() {
         },
       });
       const result = response.data.data;
-      setDataMahasiswa([...result]);
+      const data = result.map((item) => {
+        return {
+          value: item.nim,
+          label: `${item.nim} - ${item.nama}`,
+        };
+      });
+      setDataMahasiswa(data);
     } catch (error) {
       throw error;
     }
@@ -98,35 +101,19 @@ export default function DataMhs() {
 
   return (
     <div className="mt-4 flex justify-center flex-col px-4">
-      <div className="relative w-full">
-        <input
-          className="w-full rounded"
-          type="text"
-          placeholder="Cari Nama atau NIM Mahasiswa"
-          onChange={(e) => handleChange(e)}
-        ></input>
-        <div className="absolute top-11 left-0 right-0 z-10">
-          <ul
-            className={`bg-blue-50 rounded-lg ${
-              dataMahasiswa.length > 0 && 'max-h-48'
-            } overflow-y-auto`}
-          >
-            {dataMahasiswa.map((option, index) => {
-              return (
-                <li
-                  onClick={() => handleClickOption(option.nim)}
-                  key={index}
-                  className="p-4 text-gray-900 hover:bg-gray-100 text-sm flex items-center gap-x-1 cursor-pointer"
-                >
-                  <strong className="">{option.nama}</strong>
-                  {' - '}
-                  <small>{option.nim}</small>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      <DropdownSearch
+        id="data-mahasiswa"
+        placeholder="Cari Mahasiswa"
+        onChange={(inputValue) => {
+          setTimeout(() => {
+            handleChange(inputValue);
+          }, 500);
+        }}
+        options={dataMahasiswa}
+        onSelect={(data) => {
+          getDataMahasiswaByNim(data.value);
+        }}
+      />
       {mahasiswa && (
         <>
           <h1 className="text-2xl font-bold mt-4 text-center">
