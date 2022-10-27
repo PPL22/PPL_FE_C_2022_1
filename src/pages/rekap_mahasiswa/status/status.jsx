@@ -1,34 +1,34 @@
-import React from 'react';
-import { Spinner } from '../../../components/components';
-import config from '../../../configs/config.json';
-import axios from 'axios';
-import { useAuth } from '../../../contexts/AuthContext';
-import { statusAktifColor } from '../../../utils/statusAktifColor';
+import React from "react";
+import { Spinner } from "../../../components/components";
+import config from "../../../configs/config.json";
+import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext";
+import { statusAktifColor } from "../../../utils/statusAktifColor";
 
 function RekapStatusMahasiswa() {
   const auth = useAuth();
   const [rekapStatus, setRekapStatus] = React.useState({
     thead: [
-      'Angkatan',
-      'Aktif',
-      'Mangkir',
-      'Cuti',
-      'Dropout',
-      'Undur Diri',
-      'Lulus',
-      'Meninggal Dunia',
+      "Angkatan",
+      "Aktif",
+      "Mangkir",
+      "Cuti",
+      "Dropout",
+      "Undur Diri",
+      "Lulus",
+      "Meninggal Dunia",
     ],
     tbody: [],
   });
   const [daftarStatus, setDaftarStatus] = React.useState({
     thead: [
-      'No',
-      'Nama Mahasiswa',
-      'NIM',
-      'Angkatan',
-      'IP Kumulatif',
-      'SKS Kumulatif',
-      'Status Mahasiswa',
+      "No",
+      "Nama Mahasiswa",
+      "NIM",
+      "Angkatan",
+      "IP Kumulatif",
+      "SKS Kumulatif",
+      "Status Mahasiswa",
     ],
     tbody: [],
   });
@@ -37,14 +37,14 @@ function RekapStatusMahasiswa() {
 
   const getRekapStatus = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes('Dosen') ? 'dosen' : 'departemen'
+        auth?.role.includes("Departemen") ? "departemen" : "dosen"
       }/rekap/status`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data.map((item) => {
@@ -72,14 +72,14 @@ function RekapStatusMahasiswa() {
 
   const getDaftarStatus = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes('Dosen') ? 'dosen' : 'departemen'
+        auth?.role.includes("Departemen") ? "departemen" : "dosen"
       }/daftar-status`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data.map((item, index) => {
@@ -124,7 +124,7 @@ function RekapStatusMahasiswa() {
       ) : (
         <div className="px-4">
           <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
-            <table className="w-full text-sm text-gray-500 text-center">
+            <table className="w-full text-sm text-gray-500 text-center table-fixed">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   {rekapStatus.thead.map((item, index) => {
@@ -155,6 +155,9 @@ function RekapStatusMahasiswa() {
             </table>
           </div>
           <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
+            <h2 className="text-xl font-bold mb-6">
+              Daftar Status Aktif Mahasiswa
+            </h2>
             <table className="w-full text-sm text-gray-500 text-center">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>

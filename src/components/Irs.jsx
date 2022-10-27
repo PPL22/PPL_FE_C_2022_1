@@ -8,7 +8,7 @@ import { useToast } from "../contexts/ToastContext";
 import axios from "axios";
 import config from "../configs/config.json";
 
-function Irs({ closeModal }) {
+function Irs({ closeModal, currentSemester }) {
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
@@ -46,10 +46,7 @@ function Irs({ closeModal }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
+    <div
       id="entry-data-modal"
       tabIndex="-1"
       aria-hidden="true"
@@ -59,7 +56,12 @@ function Irs({ closeModal }) {
         onClick={closeModal}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
-      <div className="relative p-4 w-full max-w-md h-full md:h-auto z-10">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative p-4 w-full max-w-md h-full md:h-auto z-10"
+      >
         <div className="relative bg-background rounded-lg shadow">
           <div className="flex justify-between items-center pt-6 px-4">
             <h3 className="text-xl font-semibold text-gray-900">
@@ -109,6 +111,8 @@ function Irs({ closeModal }) {
                 id="semester"
                 type="number"
                 innerRef={semester}
+                defaultValue={currentSemester}
+                disabled={true}
               />
               <Input
                 label="Jumlah Sks"
@@ -140,8 +144,8 @@ function Irs({ closeModal }) {
             </form>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

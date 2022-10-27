@@ -11,7 +11,7 @@ function ProgressBarSemester({
       onClick={onClick}
       className={`border p-2 rounded-lg ${
         isActive ? "border-purple-500" : "border-transparent"
-      }`}
+      } `}
     >
       <p
         className={`text-base text-left font-medium ${

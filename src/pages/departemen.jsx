@@ -60,13 +60,17 @@ function Departemen() {
       });
       setDataPKL({
         ...dataPKL,
-        elements: [result.pkl.lulus, result.notValidated, result.pkl.blmLulus],
+        elements: [
+          result.pkl.lulus,
+          result.pkl.notValidated,
+          result.pkl.blmLulus,
+        ],
       });
       setDataSkripsi({
         ...dataSkripsi,
         elements: [
           result.skripsi.lulus,
-          result.notValidated,
+          result.skripsi.notValidated,
           result.skripsi.blmLulus,
         ],
       });
@@ -87,36 +91,28 @@ function Departemen() {
     </div>
   ) : (
     <section className="flex flex-wrap justify-evenly my-10 gap-10 items-center lg:px-20">
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status IRS Mahasiswa
-          </h5>
-        </div>
+      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status IRS Mahasiswa
+        </h5>
         <Charts data={dataIRS} />
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status PKL Mahasiswa
-          </h5>
-        </div>
+      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status PKL Mahasiswa
+        </h5>
         <Charts data={dataPKL} />
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status KHS Mahasiswa
-          </h5>
-        </div>
+      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status KHS Mahasiswa
+        </h5>
         <Charts data={dataKHS} />
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status Skripsi Mahasiswa
-          </h5>
-        </div>
+      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status Skripsi Mahasiswa
+        </h5>
         <Charts data={dataSkripsi} />
       </div>
     </section>

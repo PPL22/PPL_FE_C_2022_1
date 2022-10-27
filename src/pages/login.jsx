@@ -1,12 +1,12 @@
-import React from 'react';
-import axios from 'axios';
-import config from '../configs/config.json';
-import pic from '../assets/images/logo_undip.png';
-import { FaEnvelope, FaKey } from 'react-icons/fa';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '../contexts/AuthContext';
-import { DangerAlert } from '../components/components';
-import { motion } from 'framer-motion';
+import React from "react";
+import axios from "axios";
+import config from "../configs/config.json";
+import pic from "../assets/images/logo_undip.png";
+import { FaEnvelope, FaKey } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../contexts/AuthContext";
+import { DangerAlert } from "../components/components";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const auth = useAuth();
@@ -26,7 +26,6 @@ const Login = () => {
         auth.login(data);
       }
     } catch (error) {
-      console.log(error);
       setError(error.response.data.message);
       throw error;
     } finally {
@@ -75,7 +74,7 @@ const Login = () => {
                 className="block p-4 pl-10 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Username"
                 required
-                {...register('username', { required: true })}
+                {...register("username", { required: true })}
               />
             </div>
             <label
@@ -94,13 +93,13 @@ const Login = () => {
                 className="block p-4 pl-10 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Password"
                 required
-                {...register('password', { required: true })}
+                {...register("password", { required: true })}
               />
             </div>
             <div className="pt-4 flex justify-center">
               <button
                 className={`bg-blue-500 w-1/2 text-gray-100 py-3 rounded hover:bg-slate-600 ${
-                  loading && 'bg-slate-600 cursor-progress'
+                  loading && "bg-slate-600 cursor-progress"
                 }`}
                 type="submit"
                 disabled={loading ? true : false}
@@ -127,7 +126,7 @@ const Login = () => {
                     Loading...
                   </div>
                 ) : (
-                  'Login'
+                  "Login"
                 )}
               </button>
             </div>

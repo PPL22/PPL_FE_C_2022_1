@@ -133,7 +133,6 @@ function Operator() {
       toast.setToast(response.data.message, "success");
       refreshData();
     } catch (error) {
-      console.log(error);
       setErrorMessage(error.response.data.message);
       throw error;
     } finally {

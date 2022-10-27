@@ -1,40 +1,40 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Input from './Input';
-import { Dropdown, OutlinedButton, Button, DangerAlert } from './components';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../contexts/ToastContext';
-import axios from 'axios';
-import config from '../configs/config.json';
+import React from "react";
+import { motion } from "framer-motion";
+import Input from "./Input";
+import { Dropdown, OutlinedButton, Button, DangerAlert } from "./components";
+import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
+import axios from "axios";
+import config from "../configs/config.json";
 
-function Pkl({ closeModal }) {
+function Pkl({ closeModal, currentSemester }) {
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
   const nilaiPkl = React.useRef();
   const filePkl = React.useRef();
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const formSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('nim', auth.id);
-    formData.append('semester', semester.current.value);
-    formData.append('nilai', nilaiPkl.current.value);
-    formData.append('dokumen', filePkl.current.files[0]);
+    formData.append("nim", auth.id);
+    formData.append("semester", semester.current.value);
+    formData.append("nilai", nilaiPkl.current.value);
+    formData.append("dokumen", filePkl.current.files[0]);
 
     try {
       setLoading(true);
-      setErrorMessage('');
-      const token = localStorage.getItem('accessToken');
+      setErrorMessage("");
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-pkl`, formData, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       closeModal();
-      toast.setToast('Entry Progress PKL Berhasil', 'success');
+      toast.setToast("Entry Progress PKL Berhasil", "success");
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -43,10 +43,7 @@ function Pkl({ closeModal }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
+    <div
       id="entry-data-modal"
       tabIndex="-1"
       aria-hidden="true"
@@ -56,7 +53,12 @@ function Pkl({ closeModal }) {
         onClick={closeModal}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
-      <div className="relative p-4 w-full max-w-md h-full md:h-auto z-10">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative p-4 w-full max-w-md h-full md:h-auto z-10"
+      >
         <div className="relative bg-background rounded-lg shadow">
           <div className="flex justify-between items-center pt-6 px-4">
             <h3 className="text-xl font-semibold text-gray-900">
@@ -91,6 +93,8 @@ function Pkl({ closeModal }) {
                 id="semester"
                 type="number"
                 innerRef={semester}
+                defaultValue={currentSemester}
+                disabled={true}
               />
               <Input
                 label="Nilai Pkl"
@@ -118,8 +122,8 @@ function Pkl({ closeModal }) {
             </form>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

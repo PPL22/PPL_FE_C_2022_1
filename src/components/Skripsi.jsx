@@ -7,7 +7,7 @@ import { useToast } from "../contexts/ToastContext";
 import axios from "axios";
 import config from "../configs/config.json";
 
-function Skripsi({ closeModal }) {
+function Skripsi({ closeModal, currentSemester }) {
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
@@ -46,10 +46,7 @@ function Skripsi({ closeModal }) {
     }
   };
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
+    <div
       id="entry-data-modal"
       tabIndex="-1"
       aria-hidden="true"
@@ -59,7 +56,12 @@ function Skripsi({ closeModal }) {
         onClick={closeModal}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
-      <div className="relative p-4 w-full max-w-md h-full md:h-auto z-10">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative p-4 w-full max-w-md h-full md:h-auto z-10"
+      >
         <div className="relative bg-background rounded-lg shadow">
           <div className="flex justify-between items-center pt-6 px-4">
             <h3 className="text-xl font-semibold text-gray-900">
@@ -94,6 +96,34 @@ function Skripsi({ closeModal }) {
                 id="semester"
                 type="number"
                 innerRef={semester}
+                defaultValue={currentSemester}
+                disabled={true}
+              />
+              <Input
+                label="Nilai Skripsi"
+                id="nilai-skripsi"
+                type="number"
+                innerRef={nilaiSkripsi}
+                moreProps={{
+                  min: 0,
+                  max: 100,
+                }}
+              />
+              <Input
+                label="Tanggal Lulus Sidang"
+                id="tanggal-sidang"
+                type="date"
+                innerRef={tanggalLulusSidang}
+              />
+              <Input
+                label="Lama Studi Semester"
+                id="lama-studi-semester"
+                type="number"
+                innerRef={lamaStudi}
+                moreProps={{
+                  min: 7,
+                  max: 14,
+                }}
               />
               <Input
                 label="Upload Seminar Sidang Skripsi"
@@ -115,8 +145,8 @@ function Skripsi({ closeModal }) {
             </form>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

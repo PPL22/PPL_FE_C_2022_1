@@ -37,16 +37,18 @@ function App() {
           auth.logout();
         }
       } else {
-        const decoded = jwt_decode(token);
-        if (decoded) {
-          auth.updateRole(decoded);
-          if (
-            (pathname === "/register" || pathname === "/") &&
-            firstTime === "false"
-          ) {
-            navigate("/dashboard");
+        try {
+          const decoded = jwt_decode(token);
+          if (decoded) {
+            auth.updateRole(decoded);
+            if (
+              (pathname === "/register" || pathname === "/") &&
+              firstTime === "false"
+            ) {
+              navigate("/dashboard");
+            }
           }
-        } else {
+        } catch (error) {
           auth.logout();
         }
       }
@@ -55,33 +57,38 @@ function App() {
     verifyToken();
   }, []);
 
+  console.log(auth.role);
+
   return (
     <>
       {loading ? (
         <div className="h-screen flex justify-center items-center">
           <Spinner />
         </div>
+      ) : auth.role === null ? (
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
       ) : (
         <section className="grid grid-cols-12">
           <div className={`${auth.role && "col-span-2"} relative`}>
-            {auth.role && auth.firstTime === "false" && <Sidebar />}
+            {auth.firstTime === "false" && <Sidebar />}
           </div>
           <div
             className={`${
-              auth.role && auth.firstTime === "false"
+              auth.firstTime === "false"
                 ? "col-span-10 ml-[32px]"
                 : "col-span-12"
             } min-h-screen bg-background`}
           >
-            {auth.role && auth.firstTime === "false" && <Header />}
+            {auth.firstTime === "false" && <Header />}
             <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<UpdateDataMhs />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              {auth.role && (
+              <>
+                <Route path="/register" element={<UpdateDataMhs />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
-              )}
-              {auth.role && auth.role.includes("Dosen") && (
+              </>
+              {auth.role.includes("Dosen") && (
                 <>
                   <Route
                     path="/dashboard/status/irs"
@@ -101,8 +108,8 @@ function App() {
                   />
                 </>
               )}
-              {((auth.role && auth.role.includes("Dosen")) ||
-                (auth.role && auth.role.includes("Departemen"))) && (
+              {(auth.role.includes("Dosen") ||
+                auth.role.includes("Departemen")) && (
                 <>
                   <Route
                     path="/dashboard/rekap/status"

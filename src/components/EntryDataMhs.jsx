@@ -1,22 +1,30 @@
-import Khs from './Khs';
-import Irs from './Irs';
-import Pkl from './Pkl';
-import Skripsi from './Skripsi';
+import Khs from "./Khs";
+import Irs from "./Irs";
+import Pkl from "./Pkl";
+import Skripsi from "./Skripsi";
 
-function EntryDataMhs({ modal, setModal, entryState, setEntryState }) {
+function EntryDataMhs({
+  modal,
+  setModal,
+  refreshData,
+  entryState,
+  setEntryState,
+  currentSemester,
+}) {
   function closeModal() {
     setModal(false);
-    setEntryState('none');
-    console.log(modal);
+    setEntryState("none");
   }
-  if (entryState === 'irs') {
-    return <Irs closeModal={closeModal} />;
-  } else if (entryState === 'khs') {
-    return <Khs closeModal={closeModal} />;
-  } else if (entryState === 'skripsi') {
-    return <Skripsi closeModal={closeModal} />;
-  } else if (entryState === 'pkl') {
-    return <Pkl closeModal={closeModal} />;
+  if (entryState === "irs") {
+    return <Irs currentSemester={currentSemester} closeModal={closeModal} />;
+  } else if (entryState === "khs") {
+    return <Khs currentSemester={currentSemester} closeModal={closeModal} />;
+  } else if (entryState === "skripsi") {
+    return (
+      <Skripsi currentSemester={currentSemester} closeModal={closeModal} />
+    );
+  } else if (entryState === "pkl") {
+    return <Pkl currentSemester={currentSemester} closeModal={closeModal} />;
   }
 }
 

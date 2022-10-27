@@ -43,7 +43,6 @@ function Dosen() {
         },
       });
       const result = response.data.data;
-      console.log(result);
       setDataIRS({
         ...dataIRS,
         elements: [
@@ -62,13 +61,17 @@ function Dosen() {
       });
       setDataPKL({
         ...dataPKL,
-        elements: [result.pkl.lulus, result.notValidated, result.pkl.blmLulus],
+        elements: [
+          result.pkl.lulus,
+          result.pkl.notValidated,
+          result.pkl.blmLulus,
+        ],
       });
       setDataSkripsi({
         ...dataSkripsi,
         elements: [
           result.skripsi.lulus,
-          result.notValidated,
+          result.skripsi.notValidated,
           result.skripsi.blmLulus,
         ],
       });
@@ -89,12 +92,10 @@ function Dosen() {
     </div>
   ) : (
     <section className="flex flex-wrap justify-evenly my-10 gap-10 items-center lg:px-20">
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status IRS Mahasiswa
-          </h5>
-        </div>
+      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status IRS Mahasiswa
+        </h5>
         <Charts data={dataIRS} />
         <div className="flex justify-center">
           {dataIRS.elements[1] > 0 && (
@@ -110,12 +111,10 @@ function Dosen() {
           )}
         </div>
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status PKL Mahasiswa
-          </h5>
-        </div>
+      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status PKL Mahasiswa
+        </h5>
         <Charts data={dataPKL} />
         <div className="flex justify-center">
           {dataPKL.elements[1] > 0 && (
@@ -131,12 +130,10 @@ function Dosen() {
           )}
         </div>
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status KHS Mahasiswa
-          </h5>
-        </div>
+      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status KHS Mahasiswa
+        </h5>
         <Charts data={dataKHS} />
         <div className="flex justify-center">
           {dataKHS.elements[1] > 0 && (
@@ -152,12 +149,10 @@ function Dosen() {
           )}
         </div>
       </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <div className="div flex justify-between">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-            Status Skripsi Mahasiswa
-          </h5>
-        </div>
+      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+          Status Skripsi Mahasiswa
+        </h5>
         <Charts data={dataSkripsi} />
         <div className="flex justify-center">
           {dataSkripsi.elements[1] > 0 && (

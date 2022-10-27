@@ -368,9 +368,9 @@ const UpdateDataMhs = () => {
                           />
                           /* Ceritanya profile image default */
                         )}
-                        <div className="w-60">
+                        <div className="px-4">
                           <input
-                            className="mt-4"
+                            className="mt-4 max-w-xs"
                             type="file"
                             onChange={onSelectFile}
                             required

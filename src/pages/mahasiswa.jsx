@@ -11,13 +11,15 @@ import Spinner from "../components/Spinner";
 import { statusAktifColor } from "../utils/statusAktifColor";
 import { Button } from "flowbite-react";
 import { motion } from "framer-motion";
+import { convertTimestampToDDMonthYYYY } from "../utils/time";
+import profile from "../assets/images/default_profile.png";
 
 function Mahasiswa() {
   const [modal, setModal] = React.useState(false);
   const [entryState, setEntryState] = React.useState("none");
   const [data, setData] = React.useState(null);
   const [dataSemester, setDataSemester] = React.useState([]);
-  const [currentSemester, setCurrentSemester] = React.useState(1);
+  const [currentSemester, setCurrentSemester] = React.useState(0);
   const [currentData, setCurrentData] = React.useState(null);
   const [statusDocument, setStatusDocument] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -53,17 +55,41 @@ function Mahasiswa() {
         isAvailable: item.available,
       };
     });
-
-    if (document.length <= 2) {
-      document.push({
-        type: "PKL",
-        isAvailable: false,
-      });
-      document.push({
-        type: "Skripsi",
-        isAvailable: false,
-      });
+    if (document.length < 4 && semester > 5) {
+      if (document.find((item) => item.type === "PKL")) {
+        document.push({
+          type: "Skripsi",
+          isAvailable: false,
+        });
+      } else if (document.find((item) => item.type === "skripsi")) {
+        document.push({
+          type: "PKL",
+          isAvailable: false,
+        });
+      } else {
+        document.push({
+          type: "PKL",
+          isAvailable: false,
+        });
+        if (semester > 6) {
+          document.push({
+            type: "Skripsi",
+            isAvailable: false,
+          });
+        }
+      }
     }
+
+    // sort by type
+    document.sort((a, b) => {
+      if (a.type < b.type) {
+        return -1;
+      }
+      if (a.type > b.type) {
+        return 1;
+      }
+      return 0;
+    });
 
     setStatusDocument(document);
   };
@@ -185,7 +211,7 @@ function Mahasiswa() {
             </div>
             <div className="flex justify-center gap-x-4 mb-4">
               <img
-                src={data.fotoDoswal}
+                src={data.fotoDoswal === null ? profile : data.fotoDoswal}
                 alt="foto profil"
                 className="rounded-full w-24 h-24 object-cover"
               />
@@ -230,7 +256,7 @@ function Mahasiswa() {
             <div className="col-span-4 flex flex-col gap-y-4">
               {dataSemester.map(
                 (item, index) =>
-                  index <= 8 && (
+                  index < 8 && (
                     <ProgressBarSemester
                       onClick={() => handleSemester(index + 1)}
                       key={index}
@@ -264,7 +290,7 @@ function Mahasiswa() {
                 >
                   {dataSemester.map(
                     (item, index) =>
-                      index > 8 && (
+                      index >= 8 && (
                         <ProgressBarSemester
                           onClick={() => handleSemester(index + 1)}
                           key={index}
@@ -276,7 +302,7 @@ function Mahasiswa() {
                   )}
                 </motion.div>
               )}
-              {dataSemester.length > 8 && (
+              {dataSemester.length >= 8 && (
                 <Button onClick={handleShowMore}>Lihat Lebih Banyak</Button>
               )}
             </div>
@@ -298,13 +324,26 @@ function Mahasiswa() {
                   </div>
                   <div className="flex justify-evenly flex-wrap gap-4">
                     {currentData &&
-                      Object.keys(currentData.data).map((item, index) => (
-                        <CardInfo
-                          key={index}
-                          title={item}
-                          data={currentData.data[item]}
-                        />
-                      ))}
+                      Object.keys(currentData.data).map((item, index) => {
+                        if (item.toLowerCase() === "tanggal lulus sidang") {
+                          return (
+                            <CardInfo
+                              key={index}
+                              title={item}
+                              data={convertTimestampToDDMonthYYYY(
+                                currentData.data[item]
+                              )}
+                            />
+                          );
+                        }
+                        return (
+                          <CardInfo
+                            key={index}
+                            title={item}
+                            data={currentData.data[item]}
+                          />
+                        );
+                      })}
                   </div>
                   {currentData && !currentData.available ? (
                     <button
@@ -338,6 +377,8 @@ function Mahasiswa() {
         <EntryDataMhs
           setModal={setModal}
           modal={modal}
+          refreshData={() => handleSemester(currentSemester)}
+          currentSemester={currentSemester}
           setEntryState={setEntryState}
           entryState={entryState}
         />

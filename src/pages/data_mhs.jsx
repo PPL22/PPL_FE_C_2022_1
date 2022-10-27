@@ -36,7 +36,7 @@ export default function DataMhs() {
     const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Dosen") ? "dosen" : "departemen"
+        auth?.role.includes("Departemen") ? "departemen" : "dosen"
       }/search-mhs?keyword=${keyword}`;
       const response = await axios.get(url, {
         headers: {
@@ -61,7 +61,7 @@ export default function DataMhs() {
     const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Dosen") ? "dosen" : "departemen"
+        auth?.role.includes("Departemen") ? "departemen" : "dosen"
       }/data-akademik-mhs/${nim}`;
       const response = await axios.get(url, {
         headers: {
@@ -104,7 +104,7 @@ export default function DataMhs() {
     <div className="mt-4 flex justify-center flex-col px-4">
       <DropdownSearch
         id="data-mahasiswa"
-        placeholder="Cari Mahasiswa"
+        placeholder="Cari Nama atau NIM Mahasiswa"
         onChange={(inputValue) => {
           setTimeout(() => {
             handleChange(inputValue);
@@ -124,7 +124,11 @@ export default function DataMhs() {
             <div className="grid grid-cols-6 mt-6 ">
               <div className="col-span-2 flex m-auto">
                 <img
-                  src={`${mahasiswa.foto === null ? profile : mahasiswa.foto}`}
+                  src={`${
+                    mahasiswa.foto === null
+                      ? profile
+                      : config.API_IMAGE_URL + "/foto_mhs/" + mahasiswa.foto
+                  }`}
                   alt="foto profil"
                   className="rounded-full w-20 h-20 object-cover"
                 />
@@ -202,15 +206,13 @@ export default function DataMhs() {
                       <p className="py-4 font-semibold text-2xl tracking-tight text-gray-900 text-center">
                         {item.jumlahSks} SKS
                       </p>
-                      <Button>
-                        <a
-                          href={`${config.API_DOCUMENT_URL}/irs/${item.fileIrs}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Lihat Dokumen
-                        </a>
-                      </Button>
+                      <a
+                        href={`${config.API_DOCUMENT_URL}/irs/${item.fileIrs}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Button>Lihat Dokumen</Button>
+                      </a>
                     </div>
                   </Card>
                 ) : item.type === "khs" && item.available ? (
@@ -239,15 +241,13 @@ export default function DataMhs() {
                           <div>{item.ipk}</div>
                         </div>
                       </div>
-                      <Button>
-                        <a
-                          href={`${config.API_DOCUMENT_URL}/khs/${item.fileKhs}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Lihat Dokumen
-                        </a>
-                      </Button>
+                      <a
+                        href={`${config.API_DOCUMENT_URL}/khs/${item.fileKhs}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Button>Lihat Dokumen</Button>
+                      </a>
                     </div>
                   </Card>
                 ) : item.type === "pkl" && item.available ? (
@@ -266,15 +266,13 @@ export default function DataMhs() {
                           <div className="mt-2">{item.semester}</div>
                         </div>
                       </div>
-                      <Button>
-                        <a
-                          href={`${config.API_DOCUMENT_URL}/pkl/${item.filePkl}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Lihat Dokumen
-                        </a>
-                      </Button>
+                      <a
+                        href={`${config.API_DOCUMENT_URL}/pkl/${item.filePkl}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Button>Lihat Dokumen</Button>
+                      </a>
                     </div>
                   </Card>
                 ) : item.type === "skripsi" && item.available ? (
@@ -307,15 +305,13 @@ export default function DataMhs() {
                           </div>
                         </div>
                       </div>
-                      <Button>
-                        <a
-                          href={`${config.API_DOCUMENT_URL}/skripsi/${item.fileSkripsi}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Lihat Dokumen
-                        </a>
-                      </Button>
+                      <a
+                        href={`${config.API_DOCUMENT_URL}/skripsi/${item.fileSkripsi}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Button>Lihat Dokumen</Button>
+                      </a>
                     </div>
                   </Card>
                 ) : null;
