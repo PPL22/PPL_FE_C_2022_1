@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Input from './Input';
-import axios from 'axios';
-import config from '../configs/config.json';
+import React from "react";
+import { motion } from "framer-motion";
+import Input from "./Input";
+import axios from "axios";
+import config from "../configs/config.json";
 import {
   Dropdown,
   DropdownSearch,
@@ -10,24 +10,24 @@ import {
   Button,
   InputGenerate,
   DangerAlert,
-} from './components';
-import { useToast } from '../contexts/ToastContext';
+} from "./components";
+import { useToast } from "../contexts/ToastContext";
 
-function EntryData({ onClick, dataDosen }) {
+function EntryData({ onClick, dataDosen, refreshData }) {
   const toast = useToast();
   const generateCharacter = () => {
     return Math.random().toString(36).substring(2);
   };
   const [username, setUsername] = React.useState(generateCharacter());
   const [password, setPassword] = React.useState(generateCharacter());
-  const namaLengkap = React.useRef('');
-  const nim = React.useRef('');
-  const angkatan = React.useRef('');
-  const status = React.useRef('');
-  const jalurMasuk = React.useRef('');
-  const dosenWali = React.useRef('');
+  const namaLengkap = React.useRef("");
+  const nim = React.useRef("");
+  const angkatan = React.useRef("");
+  const status = React.useRef("");
+  const jalurMasuk = React.useRef("");
+  const dosenWali = React.useRef("");
 
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const formSubmit = async (e) => {
@@ -44,16 +44,17 @@ function EntryData({ onClick, dataDosen }) {
     };
     try {
       setLoading(true);
-      setErrorMessage('');
-      const token = localStorage.getItem('accessToken');
+      setErrorMessage("");
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/operator/add-mahasiswa`, data, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
 
       onClick();
-      toast.setToast('Data mahasiswa berhasil ditambahkan', 'success');
+      toast.setToast("Data mahasiswa berhasil ditambahkan", "success");
+      refreshData();
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -138,28 +139,28 @@ function EntryData({ onClick, dataDosen }) {
                 innerRef={status}
                 options={[
                   {
-                    value: 'Aktif',
-                    label: 'Aktif',
+                    value: "Aktif",
+                    label: "Aktif",
                   },
                   {
-                    value: 'Cuti',
-                    label: 'Cuti',
+                    value: "Cuti",
+                    label: "Cuti",
                   },
                   {
-                    value: 'Mangkir',
-                    label: 'Mangkir',
+                    value: "Mangkir",
+                    label: "Mangkir",
                   },
                   {
-                    value: 'DO',
-                    label: 'Drop Out',
+                    value: "DO",
+                    label: "Drop Out",
                   },
                   {
-                    value: 'Lulus',
-                    label: 'Lulus',
+                    value: "Lulus",
+                    label: "Lulus",
                   },
                   {
-                    value: 'MeninggalDunia',
-                    label: 'Meninggal Dunia',
+                    value: "MeninggalDunia",
+                    label: "Meninggal Dunia",
                   },
                 ]}
               />
@@ -169,20 +170,20 @@ function EntryData({ onClick, dataDosen }) {
                 innerRef={jalurMasuk}
                 options={[
                   {
-                    value: 'SNMPTN',
-                    label: 'SNMPTN',
+                    value: "SNMPTN",
+                    label: "SNMPTN",
                   },
                   {
-                    value: 'SBMPTN',
-                    label: 'SBMPTN',
+                    value: "SBMPTN",
+                    label: "SBMPTN",
                   },
                   {
-                    value: 'Mandiri',
-                    label: 'Mandiri',
+                    value: "Mandiri",
+                    label: "Mandiri",
                   },
                   {
-                    value: 'Lainnya',
-                    label: 'Lainnya',
+                    value: "Lainnya",
+                    label: "Lainnya",
                   },
                 ]}
               />

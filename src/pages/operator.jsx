@@ -1,12 +1,59 @@
-import config from '../configs/config.json';
-import React from 'react';
-import { Charts, EntryData, Spinner } from '../components/components';
-import axios from 'axios';
+import config from "../configs/config.json";
+import React from "react";
+import { Charts, EntryData, Spinner } from "../components/components";
+import axios from "axios";
+import { TableAkunMahasiswa } from "./pages";
 
 function Operator() {
   const [modal, setModal] = React.useState(false);
   const [dataMahasiswa, setDataMahasiswa] = React.useState({});
   const [dataDosen, setDataDosen] = React.useState([]);
+  const [dataAkun, setDataAkun] = React.useState({
+    thead: [
+      "Nama Mahasiswa",
+      "NIM",
+      "Username",
+      "Password",
+      "Angkatan",
+      "Jalur Masuk",
+      "Dosen Wali",
+      "Status",
+    ],
+    tbody: [],
+  });
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const getDataAkun = async () => {
+    const apiUrl = config.API_URL;
+    const token = localStorage.getItem("accessToken");
+    try {
+      const url = `${apiUrl}/operator/akun-mahasiswa`;
+      const response = await axios.get(url, {
+        headers: {
+          "x-access-token": token,
+        },
+      });
+
+      const data = response.data.map((item) => {
+        return [
+          item.nama,
+          item.nim,
+          item.username,
+          item.password,
+          item.angkatan,
+          item.jalurMasuk,
+          item.namaDoswal,
+          item.statusAktif,
+        ];
+      });
+      setDataAkun({
+        ...dataAkun,
+        tbody: data,
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
 
   function showModal() {
     setModal(true);
@@ -17,12 +64,12 @@ function Operator() {
 
   const getDataDosen = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/operator/data-dosen`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const data = response.data.map((item) => {
@@ -39,12 +86,12 @@ function Operator() {
 
   const getDataMahasiswa = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/operator/data-mahasiswa`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       setDataMahasiswa(response.data);
@@ -58,10 +105,16 @@ function Operator() {
     getDataMahasiswa();
   }, []);
 
+  React.useEffect(() => {
+    setIsLoading(true);
+    getDataAkun();
+    setIsLoading(false);
+  }, []);
+
   const data = {
-    labels: ['Sudah Memiliki Akun', 'Belum Memiliki Akun'],
-    colors: ['#5570F1', '#FFCC91'],
-    label: 'Jumlah Mahasiswa',
+    labels: ["Sudah Memiliki Akun", "Belum Memiliki Akun"],
+    colors: ["#5570F1", "#FFCC91"],
+    label: "Jumlah Mahasiswa",
     elements: [
       dataMahasiswa.sudahMemilikiAkun,
       dataMahasiswa.belumMemilikiAkun,
@@ -89,7 +142,14 @@ function Operator() {
           </div>
         </div>
       </section>
-      {modal && <EntryData onClick={closeModal} dataDosen={dataDosen} />}
+      {isLoading ? <Spinner /> : <TableAkunMahasiswa dataAkun={dataAkun} />}
+      {modal && (
+        <EntryData
+          onClick={closeModal}
+          dataDosen={dataDosen}
+          refreshData={getDataAkun}
+        />
+      )}
     </>
   );
 }
