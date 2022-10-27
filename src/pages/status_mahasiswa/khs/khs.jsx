@@ -1,23 +1,24 @@
-import React from 'react';
-import { Spinner } from '../../../components/components';
-import config from '../../../configs/config.json';
-import axios from 'axios';
-import TableStatusKHSMahasiswa from './TableStatusKHSMahasiswa';
+import React from "react";
+import { Spinner } from "../../../components/components";
+import config from "../../../configs/config.json";
+import axios from "axios";
+import TableStatusKHSMahasiswa from "./TableStatusKHSMahasiswa";
 
 function StatusKHSMahasiswa() {
   const [dataKHS, setDataKHS] = React.useState({
     thead: [
-      'Nama Mahasiswa',
-      'NIM',
-      'Angkatan',
-      'Semester',
-      'SKS Semester',
-      'SKS Kumulatif',
-      'IPs',
-      'IPk',
-      'Status Mahasiswa',
-      'Action',
-      'Status',
+      "No",
+      "Nama Mahasiswa",
+      "NIM",
+      "Angkatan",
+      "Semester",
+      "SKS Semester",
+      "SKS Kumulatif",
+      "IPs",
+      "IPk",
+      "Status Mahasiswa",
+      "Action",
+      "Status",
     ],
     tbody: [],
   });
@@ -25,17 +26,18 @@ function StatusKHSMahasiswa() {
 
   const getDataKHS = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/status-validasi/khs`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item) => {
+      const result = response.data.data.map((item, index) => {
         return {
           data: [
+            index + 1,
             item.nama,
             item.nim,
             item.angkatan,
@@ -47,7 +49,7 @@ function StatusKHSMahasiswa() {
             item.status,
           ],
           statusValidasi: item.statusValidasi,
-          document: config.API_DOCUMENT_URL + '/khs/' + item.fileKhs,
+          document: config.API_DOCUMENT_URL + "/khs/" + item.fileKhs,
         };
       });
       setDataKHS({
@@ -71,7 +73,7 @@ function StatusKHSMahasiswa() {
     </div>
   ) : (
     <section className="mt-10 px-8">
-      <h2 className="text-3xl font-bold">Status IRS Mahasiswa</h2>
+      <h2 className="text-3xl font-bold">Daftar Status KHS Mahasiswa</h2>
       <TableStatusKHSMahasiswa data={dataKHS} refreshData={getDataKHS} />
     </section>
   );

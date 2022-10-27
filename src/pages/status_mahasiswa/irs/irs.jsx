@@ -1,20 +1,21 @@
-import React from 'react';
-import { Spinner } from '../../../components/components';
-import config from '../../../configs/config.json';
-import axios from 'axios';
-import TableStatusIRSMahasiswa from './TableStatusIRSMahasiswa';
+import React from "react";
+import { Spinner } from "../../../components/components";
+import config from "../../../configs/config.json";
+import axios from "axios";
+import TableStatusIRSMahasiswa from "./TableStatusIRSMahasiswa";
 
 function StatusIRSMahasiswa() {
   const [dataIRS, setDataIRS] = React.useState({
     thead: [
-      'Nama Mahasiswa',
-      'NIM',
-      'Angkatan',
-      'Semester',
-      'SKS Semester',
-      'Status Mahasiswa',
-      'Action',
-      'Status',
+      "No",
+      "Nama Mahasiswa",
+      "NIM",
+      "Angkatan",
+      "Semester",
+      "SKS Semester",
+      "Status Mahasiswa",
+      "Action",
+      "Status",
     ],
     tbody: [],
   });
@@ -22,17 +23,18 @@ function StatusIRSMahasiswa() {
 
   const getDataIRS = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/status-validasi/irs`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item) => {
+      const result = response.data.data.map((item, index) => {
         return {
           data: [
+            index + 1,
             item.nama,
             item.nim,
             item.angkatan,
@@ -41,7 +43,7 @@ function StatusIRSMahasiswa() {
             item.status,
           ],
           statusValidasi: item.statusValidasi,
-          document: config.API_DOCUMENT_URL + '/irs/' + item.fileIrs,
+          document: config.API_DOCUMENT_URL + "/irs/" + item.fileIrs,
         };
       });
       setDataIRS({
@@ -65,7 +67,7 @@ function StatusIRSMahasiswa() {
     </div>
   ) : (
     <section className="mt-10 px-8">
-      <h2 className="text-3xl font-bold">Status IRS Mahasiswa</h2>
+      <h2 className="text-3xl font-bold">Daftar Status IRS Mahasiswa</h2>
       <TableStatusIRSMahasiswa data={dataIRS} refreshData={getDataIRS} />
     </section>
   );

@@ -1,21 +1,23 @@
-import pic from '../assets/images/logo_undip.png';
-import profile from '../assets/images/default_profile.png';
-import { useState, useEffect, useRef } from 'react';
-import config from '../configs/config.json';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import { Spinner, DangerAlert, DropdownSearch } from '../components/components';
-import { useNavigate } from 'react-router-dom';
+import pic from "../assets/images/logo_undip.png";
+import profile from "../assets/images/default_profile.png";
+import { useState, useEffect, useRef } from "react";
+import config from "../configs/config.json";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { Spinner, DangerAlert, DropdownSearch } from "../components/components";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const UpdateDataMhs = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [kabupaten, setKabupaten] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const email = useRef();
   const username = useRef();
@@ -47,13 +49,13 @@ const UpdateDataMhs = () => {
 
   const getDataMahasiswa = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       setLoading(true);
       const url = `${apiUrl}/mahasiswa/register`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       setData(response.data.data);
@@ -66,12 +68,12 @@ const UpdateDataMhs = () => {
 
   const getDataKabupaten = async (keyword) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
-      const url = `${apiUrl}/mahasiswa/kota?keyword=${keyword ?? ''}`;
+      const url = `${apiUrl}/mahasiswa/kota?keyword=${keyword ?? ""}`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const data = response.data.map((item) => {
@@ -94,29 +96,29 @@ const UpdateDataMhs = () => {
   const formSubmit = async (e) => {
     e.preventDefault();
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     const formData = new FormData();
-    formData.append('email', email.current.value);
-    formData.append('oldUsername', data.username);
-    formData.append('username', username.current.value);
-    formData.append('password', password.current.value);
-    formData.append('nim', data.nim);
-    formData.append('alamat', alamat.current.value);
-    formData.append('kodeKab', kodeKab.current.props.value.value);
-    formData.append('noHP', noHP.current.value);
-    formData.append('foto', selectedFile);
+    formData.append("email", email.current.value);
+    formData.append("oldUsername", data.username);
+    formData.append("username", username.current.value);
+    formData.append("password", password.current.value);
+    formData.append("nim", data.nim);
+    formData.append("alamat", alamat.current.value);
+    formData.append("kodeKab", kodeKab.current.props.value.value);
+    formData.append("noHP", noHP.current.value);
+    formData.append("foto", selectedFile);
 
     try {
       setIsSubmitted(true);
       const url = `${apiUrl}/mahasiswa/update-data`;
       const response = await axios.post(url, formData, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      localStorage.setItem('firstTime', false);
-      localStorage.setItem('foto', response.data.foto);
-      window.location.href = '/dashboard';
+      localStorage.setItem("firstTime", false);
+      localStorage.setItem("foto", response.data.data.foto);
+      window.location.href = "/dashboard";
     } catch (error) {
       setErrorMessage(error.response.data.message);
       throw error;
@@ -167,7 +169,7 @@ const UpdateDataMhs = () => {
                     onSubmit={(e) => formSubmit(e)}
                   >
                     <div className="relative">
-                      {' '}
+                      {" "}
                       <label
                         htmlFor="nama-lengkap"
                         className="text-sm font-medium text-gray-900"
@@ -380,12 +382,12 @@ const UpdateDataMhs = () => {
                     <div className="pt-4 flex justify-center">
                       <button
                         className={`${
-                          isSubmitted ? 'bg-slate-600' : 'bg-blue-500'
+                          isSubmitted ? "bg-slate-600" : "bg-blue-500"
                         } w-1/2 text-gray-100 py-3 rounded hover:bg-slate-600`}
                         type="submit"
                         disabled={isSubmitted}
                       >
-                        {isSubmitted ? 'Loading...' : 'Update Data'}
+                        {isSubmitted ? "Loading..." : "Update Data"}
                       </button>
                     </div>
                     {errorMessage && <DangerAlert message={errorMessage} />}

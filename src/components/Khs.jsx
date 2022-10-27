@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Input from './Input';
-import { Dropdown, OutlinedButton, Button, DangerAlert } from './components';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../contexts/ToastContext';
-import axios from 'axios';
-import config from '../configs/config.json';
+import React from "react";
+import { motion } from "framer-motion";
+import Input from "./Input";
+import { Dropdown, OutlinedButton, Button, DangerAlert } from "./components";
+import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
+import axios from "axios";
+import config from "../configs/config.json";
 function Khs({ closeModal }) {
   const auth = useAuth();
   const toast = useToast();
@@ -16,32 +16,32 @@ function Khs({ closeModal }) {
   const ipKumulatif = React.useRef();
   const status = React.useRef();
   const fileKhs = React.useRef();
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const formSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('nim', auth.id);
-    formData.append('semester', semester.current.value);
-    formData.append('jumlahSksSemester', jumlahSks.current.value);
-    formData.append('jumlahSksKumulatif', jumlahSksKumulatif.current.value);
-    formData.append('ips', ipSemester.current.value);
-    formData.append('ipk', ipKumulatif.current.value);
-    formData.append('status', status.current.value);
-    formData.append('dokumen', fileKhs.current.files[0]);
+    formData.append("nim", auth.id);
+    formData.append("semester", semester.current.value);
+    formData.append("jumlahSksSemester", jumlahSks.current.value);
+    formData.append("jumlahSksKumulatif", jumlahSksKumulatif.current.value);
+    formData.append("ips", ipSemester.current.value.toString());
+    formData.append("ipk", ipKumulatif.current.value.toString());
+    formData.append("status", status.current.value);
+    formData.append("dokumen", fileKhs.current.files[0]);
 
     try {
       setLoading(true);
-      setErrorMessage('');
-      const token = localStorage.getItem('accessToken');
+      setErrorMessage("");
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-khs`, formData, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       closeModal();
-      toast.setToast('Entry IRS Berhasil', 'success');
+      toast.setToast("Entry IRS Berhasil", "success");
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -98,12 +98,12 @@ function Khs({ closeModal }) {
                 innerRef={status}
                 options={[
                   {
-                    value: 'Aktif',
-                    label: 'Aktif',
+                    value: "Aktif",
+                    label: "Aktif",
                   },
                   {
-                    value: 'Cuti',
-                    label: 'Cuti',
+                    value: "Cuti",
+                    label: "Cuti",
                   },
                 ]}
               />
@@ -118,24 +118,41 @@ function Khs({ closeModal }) {
                 id="sks"
                 type="number"
                 innerRef={jumlahSks}
+                moreProps={{
+                  min: 0,
+                  max: 24,
+                }}
+              />
+              <Input
+                label="IP Semester"
+                id="ips"
+                type="number"
+                innerRef={ipSemester}
+                moreProps={{
+                  min: 0,
+                  max: 4,
+                  step: 0.01,
+                }}
               />
               <Input
                 label="Jumlah SKS Kumulatif"
                 id="sksk"
                 type="number"
                 innerRef={jumlahSksKumulatif}
-              />
-              <Input
-                label="IP Semester"
-                id="ips"
-                type="text"
-                innerRef={ipSemester}
+                moreProps={{
+                  min: 0,
+                }}
               />
               <Input
                 label="IP Semester Kumulatif"
                 id="ipk"
-                type="text"
+                type="number"
                 innerRef={ipKumulatif}
+                moreProps={{
+                  min: 0,
+                  max: 4,
+                  step: 0.01,
+                }}
               />
               <Input
                 label="File KHS"

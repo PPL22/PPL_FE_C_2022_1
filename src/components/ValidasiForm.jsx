@@ -1,6 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Document, Page, pdfjs } from 'react-pdf';
+import React from "react";
+import { motion } from "framer-motion";
+import { Document, Page, pdfjs } from "react-pdf";
+import { Button } from "flowbite-react";
 function ValidasiForm({
   document,
   documentTitle,
@@ -61,21 +62,24 @@ function ValidasiForm({
             <h3 className="text-gray-500 mb-5 font-medium">
               Hasil Upload {documentTitle}
             </h3>
-            <div className="w-[400px] h-[500px] overflow-auto">
+            <div className="w-[400px] h-[500px] overflow-auto mb-2">
               <Document
                 file={document}
-                options={{ workerSrc: '/pdf.worker.js' }}
+                options={{ workerSrc: "/pdf.worker.js" }}
                 onLoadSuccess={onDocumentLoadSuccess}
               >
                 {Array.from(new Array(numPages), (el, index) => (
                   <Page
-                    size="A10"
+                    size="A4"
                     key={`page_${index + 1}`}
                     pageNumber={index + 1}
                   />
                 ))}
-              </Document>{' '}
+              </Document>{" "}
             </div>
+            <a href={document} target="_blank" rel="noreferrer">
+              <Button>Lihat Lebih Detail</Button>
+            </a>
           </div>
           <div className="mt-10 lg:mt-0">
             <h3 className="text-gray-500 mb-5 font-medium">Data Mahasiswa</h3>

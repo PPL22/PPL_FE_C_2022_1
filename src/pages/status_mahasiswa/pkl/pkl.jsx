@@ -1,19 +1,20 @@
-import React from 'react';
-import { Spinner } from '../../../components/components';
-import config from '../../../configs/config.json';
-import axios from 'axios';
-import TableStatusPKLMahasiswa from './TableStatusPKLMahasiswa';
+import React from "react";
+import { Spinner } from "../../../components/components";
+import config from "../../../configs/config.json";
+import axios from "axios";
+import TableStatusPKLMahasiswa from "./TableStatusPKLMahasiswa";
 
 function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
   const [dataPkl, setDataPkl] = React.useState({
     thead: [
-      'Nama Mahasiswa',
-      'NIM',
-      'Angkatan',
-      'Semester',
-      'Nilai PKL',
-      'Action',
-      'Status',
+      "No",
+      "Nama Mahasiswa",
+      "NIM",
+      "Angkatan",
+      "Semester",
+      "Nilai PKL",
+      "Action",
+      "Status",
     ],
     tbody: [],
   });
@@ -21,21 +22,28 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
 
   const getDataPkl = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = isRekap
         ? apiUrl + endpoint
         : `${apiUrl}/dosen/status-validasi/pkl`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item) => {
+      const result = response.data.data.map((item, index) => {
         return {
-          data: [item.nama, item.nim, item.angkatan, item.semester, item.nilai],
+          data: [
+            index + 1,
+            item.nama,
+            item.nim,
+            item.angkatan,
+            item.semester,
+            item.nilai,
+          ],
           statusValidasi: item.statusValidasi,
-          document: config.API_DOCUMENT_URL + '/pkl/' + item.filePkl,
+          document: config.API_DOCUMENT_URL + "/pkl/" + item.filePkl,
         };
       });
       setDataPkl({

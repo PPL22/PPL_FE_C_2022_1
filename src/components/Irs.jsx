@@ -1,12 +1,12 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Input from './Input';
-import { OutlinedButton, Button, Dropdown, DangerAlert } from './components';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../contexts/ToastContext';
+import React from "react";
+import { motion } from "framer-motion";
+import Input from "./Input";
+import { OutlinedButton, Button, Dropdown, DangerAlert } from "./components";
+import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 
-import axios from 'axios';
-import config from '../configs/config.json';
+import axios from "axios";
+import config from "../configs/config.json";
 
 function Irs({ closeModal }) {
   const auth = useAuth();
@@ -15,29 +15,29 @@ function Irs({ closeModal }) {
   const jumlahSks = React.useRef();
   const status = React.useRef();
   const fileIrs = React.useRef();
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const formSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('nim', auth.id);
-    formData.append('semester', semester.current.value);
-    formData.append('jumlahSks', jumlahSks.current.value);
-    formData.append('status', status.current.value);
-    formData.append('dokumen', fileIrs.current.files[0]);
+    formData.append("nim", auth.id);
+    formData.append("semester", semester.current.value);
+    formData.append("jumlahSks", jumlahSks.current.value);
+    formData.append("status", status.current.value);
+    formData.append("dokumen", fileIrs.current.files[0]);
 
     try {
       setLoading(true);
-      setErrorMessage('');
-      const token = localStorage.getItem('accessToken');
+      setErrorMessage("");
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-irs`, formData, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       closeModal();
-      toast.setToast('Entry IRS Berhasil', 'success');
+      toast.setToast("Entry IRS Berhasil", "success");
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -95,12 +95,12 @@ function Irs({ closeModal }) {
                 innerRef={status}
                 options={[
                   {
-                    value: 'Aktif',
-                    label: 'Aktif',
+                    value: "Aktif",
+                    label: "Aktif",
                   },
                   {
-                    value: 'Cuti',
-                    label: 'Cuti',
+                    value: "Cuti",
+                    label: "Cuti",
                   },
                 ]}
               />
@@ -115,8 +115,11 @@ function Irs({ closeModal }) {
                 id="sks"
                 type="number"
                 innerRef={jumlahSks}
+                moreProps={{
+                  min: 0,
+                  max: 24,
+                }}
               />
-
               <Input
                 label="File IRS"
                 id="file-irs"

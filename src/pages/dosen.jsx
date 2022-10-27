@@ -1,53 +1,54 @@
-import React from 'react';
-import Charts from '../components/Charts';
-import config from '../configs/config.json';
-import axios from 'axios';
-import Spinner from '../components/Spinner';
-import { Link } from 'react-router-dom';
+import React from "react";
+import Charts from "../components/Charts";
+import config from "../configs/config.json";
+import axios from "axios";
+import Spinner from "../components/Spinner";
+import { Link } from "react-router-dom";
 
 function Dosen() {
   const [dataIRS, setDataIRS] = React.useState({
-    labels: ['Sudah Verifikasi', 'Belum Validasi', 'Belum Entry'],
-    colors: ['#5570F1', '#FFCC91', '#CC5F5F'],
-    label: 'Status IRS Mahasiswa',
+    labels: ["Sudah Verifikasi", "Belum Validasi", "Belum Entry"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status IRS Mahasiswa",
     elements: [0, 0, 0],
   });
   const [dataKHS, setDataKHS] = React.useState({
-    labels: ['Sudah Verifikasi', 'Belum Validasi', 'Belum Entry'],
-    colors: ['#5570F1', '#FFCC91', '#CC5F5F'],
-    label: 'Status KHS Mahasiswa',
-    elements: [0, 0],
+    labels: ["Sudah Verifikasi", "Belum Validasi", "Belum Entry"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status KHS Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [dataPKL, setDataPKL] = React.useState({
-    labels: ['Lulus', 'Belum Ambil'],
-    colors: ['#5570F1', '#CC5F5F'],
-    label: 'Status PKL Mahasiswa',
-    elements: [0, 0],
+    labels: ["Lulus", "Belum Validasi", "Belum Lulus"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status PKL Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [dataSkripsi, setDataSkripsi] = React.useState({
-    labels: ['Lulus', 'Belum Ambil'],
-    colors: ['#5570F1', '#CC5F5F'],
-    label: 'Status Skripsi Mahasiswa',
-    elements: [0, 0],
+    labels: ["Lulus", "Belum Validasi", "Belum Lulus"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status Skripsi Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [isLoading, setIsLoading] = React.useState(false);
 
   const getDashboard = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/dashboard`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data;
+      console.log(result);
       setDataIRS({
         ...dataIRS,
         elements: [
           result.irs.validated,
-          result.irs.validate,
+          result.irs.notValidated,
           result.irs.noEntry,
         ],
       });
@@ -55,17 +56,21 @@ function Dosen() {
         ...dataKHS,
         elements: [
           result.khs.validated,
-          result.khs.validate,
+          result.khs.notValidated,
           result.khs.noEntry,
         ],
       });
       setDataPKL({
         ...dataPKL,
-        elements: [result.pkl.blmLulus ?? 0, result.pkl.lulus ?? 0],
+        elements: [result.pkl.lulus, result.notValidated, result.pkl.blmLulus],
       });
       setDataSkripsi({
         ...dataSkripsi,
-        elements: [result.skripsi.blmLulus ?? 0, result.skripsi.lulus ?? 0],
+        elements: [
+          result.skripsi.lulus,
+          result.notValidated,
+          result.skripsi.blmLulus,
+        ],
       });
     } catch (error) {
       throw error;
@@ -93,7 +98,7 @@ function Dosen() {
         <Charts data={dataIRS} />
         <div className="flex justify-center">
           {dataIRS.elements[1] > 0 && (
-            <Link to="/status/irs">
+            <Link to="/dashboard/status/irs">
               <button
                 className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
                 type="button"
@@ -114,7 +119,7 @@ function Dosen() {
         <Charts data={dataPKL} />
         <div className="flex justify-center">
           {dataPKL.elements[1] > 0 && (
-            <Link to="/status/pkl">
+            <Link to="/dashboard/status/pkl">
               <button
                 className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
                 type="button"
@@ -135,7 +140,7 @@ function Dosen() {
         <Charts data={dataKHS} />
         <div className="flex justify-center">
           {dataKHS.elements[1] > 0 && (
-            <Link to="/status/khs">
+            <Link to="/dashboard/status/khs">
               <button
                 className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
                 type="button"
@@ -156,7 +161,7 @@ function Dosen() {
         <Charts data={dataSkripsi} />
         <div className="flex justify-center">
           {dataSkripsi.elements[1] > 0 && (
-            <Link to="/status/skripsi">
+            <Link to="/dashboard/status/skripsi">
               <button
                 className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
                 type="button"

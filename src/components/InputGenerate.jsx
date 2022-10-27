@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function InputGenerate({ id, label, name, type, onClick }) {
   return (
@@ -12,7 +12,7 @@ function InputGenerate({ id, label, name, type, onClick }) {
           id={id}
           placeholder={label}
           value={name}
-          className="p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg focus:outline-none"
+          className="p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border-none"
           required
           disabled
         />

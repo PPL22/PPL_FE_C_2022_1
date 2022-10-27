@@ -1,21 +1,22 @@
-import React from 'react';
-import { Spinner } from '../../../components/components';
-import config from '../../../configs/config.json';
-import axios from 'axios';
-import TableStatusSkripsiMahasiswa from './TableStatusSkripsiMahasiswa';
+import React from "react";
+import { Spinner } from "../../../components/components";
+import config from "../../../configs/config.json";
+import axios from "axios";
+import TableStatusSkripsiMahasiswa from "./TableStatusSkripsiMahasiswa";
 
 function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
   const [dataSkripsi, setDataSkripsi] = React.useState({
     thead: [
-      'Nama Mahasiswa',
-      'NIM',
-      'Angkatan',
-      'Semester',
-      'Nilai Skripsi',
-      'Lama Studi',
-      'Tanggal Lulus',
-      'Action',
-      'Status',
+      "No",
+      "Nama Mahasiswa",
+      "NIM",
+      "Angkatan",
+      "Semester",
+      "Nilai Skripsi",
+      "Lama Studi",
+      "Tanggal Lulus",
+      "Action",
+      "Status",
     ],
     tbody: [],
   });
@@ -23,19 +24,20 @@ function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
 
   const getDataSkripsi = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = isRekap
         ? apiUrl + endpoint
         : `${apiUrl}/dosen/status-validasi/skripsi`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item) => {
+      const result = response.data.data.map((item, index) => {
         return {
           data: [
+            index + 1,
             item.nama,
             item.nim,
             item.angkatan,
@@ -45,7 +47,7 @@ function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
             item.tanggalLulusSidang,
           ],
           statusValidasi: item.statusValidasi,
-          document: config.API_DOCUMENT_URL + '/skripsi/' + item.fileSkripsi,
+          document: config.API_DOCUMENT_URL + "/skripsi/" + item.fileSkripsi,
         };
       });
       setDataSkripsi({

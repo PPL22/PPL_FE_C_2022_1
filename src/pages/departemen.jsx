@@ -1,44 +1,44 @@
-import React from 'react';
-import Charts from '../components/Charts';
-import config from '../configs/config.json';
-import axios from 'axios';
-import Spinner from '../components/Spinner';
+import React from "react";
+import Charts from "../components/Charts";
+import config from "../configs/config.json";
+import axios from "axios";
+import Spinner from "../components/Spinner";
 
 function Departemen() {
   const [dataIRS, setDataIRS] = React.useState({
-    labels: ['Sudah Verifikasi', 'Belum Validasi', 'Belum Entry'],
-    colors: ['#5570F1', '#FFCC91', '#CC5F5F'],
-    label: 'Status IRS Mahasiswa',
+    labels: ["Sudah Verifikasi", "Belum Validasi", "Belum Entry"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status IRS Mahasiswa",
     elements: [0, 0, 0],
   });
   const [dataKHS, setDataKHS] = React.useState({
-    labels: ['Sudah Verifikasi', 'Belum Validasi', 'Belum Entry'],
-    colors: ['#5570F1', '#FFCC91', '#CC5F5F'],
-    label: 'Status KHS Mahasiswa',
-    elements: [0, 0],
+    labels: ["Sudah Verifikasi", "Belum Validasi", "Belum Entry"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status KHS Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [dataPKL, setDataPKL] = React.useState({
-    labels: ['Lulus', 'Belum Ambil'],
-    colors: ['#5570F1', '#CC5F5F'],
-    label: 'Status PKL Mahasiswa',
-    elements: [0, 0],
+    labels: ["Lulus", "Belum Validasi", "Belum Lulus"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status PKL Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [dataSkripsi, setDataSkripsi] = React.useState({
-    labels: ['Lulus', 'Belum Ambil'],
-    colors: ['#5570F1', '#CC5F5F'],
-    label: 'Status Skripsi Mahasiswa',
-    elements: [0, 0],
+    labels: ["Lulus", "Belum Validasi", "Belum Lulus"],
+    colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
+    label: "Status Skripsi Mahasiswa",
+    elements: [0, 0, 0],
   });
   const [isLoading, setIsLoading] = React.useState(false);
 
   const getDashboard = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/departemen/dashboard`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data;
@@ -46,7 +46,7 @@ function Departemen() {
         ...dataIRS,
         elements: [
           result.irs.validated,
-          result.irs.validate,
+          result.irs.notValidated,
           result.irs.noEntry,
         ],
       });
@@ -54,17 +54,21 @@ function Departemen() {
         ...dataKHS,
         elements: [
           result.khs.validated,
-          result.khs.validate,
+          result.khs.notValidated,
           result.khs.noEntry,
         ],
       });
       setDataPKL({
         ...dataPKL,
-        elements: [result.pkl.blmLulus ?? 0, result.pkl.lulus ?? 0],
+        elements: [result.pkl.lulus, result.notValidated, result.pkl.blmLulus],
       });
       setDataSkripsi({
         ...dataSkripsi,
-        elements: [result.skripsi.blmLulus ?? 0, result.skripsi.lulus ?? 0],
+        elements: [
+          result.skripsi.lulus,
+          result.notValidated,
+          result.skripsi.blmLulus,
+        ],
       });
     } catch (error) {
       throw error;

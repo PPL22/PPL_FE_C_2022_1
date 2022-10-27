@@ -1,7 +1,4 @@
 import React from "react";
-import { Spinner } from "../../components/components";
-import config from "../../configs/config.json";
-import axios from "axios";
 import { statusAktifColor } from "../../utils/statusAktifColor";
 
 function TableAkunMahasiswa({ dataAkun }) {
@@ -14,7 +11,7 @@ function TableAkunMahasiswa({ dataAkun }) {
             <tr>
               {dataAkun.thead.map((item, index) => {
                 return (
-                  <th scope="col" className="py-3 px-6" key={index}>
+                  <th className="py-3 px-6 " key={index}>
                     {item}
                   </th>
                 );

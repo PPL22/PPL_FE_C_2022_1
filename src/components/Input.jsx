@@ -1,13 +1,14 @@
-import React from 'react';
+import React from "react";
 
 function Input({
   id,
   label,
   type,
   innerRef,
-  accept = '',
+  accept = "",
   disabled = false,
   defaultValue,
+  moreProps,
 }) {
   return (
     <div>
@@ -20,12 +21,13 @@ function Input({
         placeholder={label}
         ref={innerRef}
         className={`p-4 w-full text-sm ${
-          disabled ? 'text-gray-500' : 'text-gray-900'
+          disabled ? "text-gray-500" : "text-gray-900"
         } bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500`}
         accept={accept}
         disabled={disabled}
         defaultValue={defaultValue}
         required
+        {...moreProps}
       />
     </div>
   );

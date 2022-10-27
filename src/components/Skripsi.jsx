@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Input from './Input';
-import { Dropdown, OutlinedButton, Button, DangerAlert } from './components';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from '../contexts/ToastContext';
-import axios from 'axios';
-import config from '../configs/config.json';
+import React from "react";
+import { motion } from "framer-motion";
+import Input from "./Input";
+import { Dropdown, OutlinedButton, Button, DangerAlert } from "./components";
+import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
+import axios from "axios";
+import config from "../configs/config.json";
 
 function Skripsi({ closeModal }) {
   const auth = useAuth();
@@ -15,30 +15,30 @@ function Skripsi({ closeModal }) {
   const fileSkripsi = React.useRef();
   const tanggalLulusSidang = React.useRef();
   const lamaStudi = React.useRef();
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const formSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('nim', auth.id);
-    formData.append('semester', semester.current.value);
-    formData.append('nilai', nilaiSkripsi.current.value);
-    formData.append('tanggalLulusSidang', tanggalLulusSidang.current.value);
-    formData.append('lamaStudi', lamaStudi.current.value);
-    formData.append('dokumen', fileSkripsi.current.files[0]);
+    formData.append("nim", auth.id);
+    formData.append("semester", semester.current.value);
+    formData.append("nilai", nilaiSkripsi.current.value);
+    formData.append("tanggalLulusSidang", tanggalLulusSidang.current.value);
+    formData.append("lamaStudi", lamaStudi.current.value);
+    formData.append("dokumen", fileSkripsi.current.files[0]);
 
     try {
       setLoading(true);
-      setErrorMessage('');
-      const token = localStorage.getItem('accessToken');
+      setErrorMessage("");
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-skripsi`, formData, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       closeModal();
-      toast.setToast('Entry Progress Skripsi Berhasil', 'success');
+      toast.setToast("Entry Progress Skripsi Berhasil", "success");
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -95,9 +95,8 @@ function Skripsi({ closeModal }) {
                 type="number"
                 innerRef={semester}
               />
-              re
               <Input
-                label="Upload Progress Skripsi"
+                label="Upload Seminar Sidang Skripsi"
                 id="file-skripsi"
                 type="file"
                 accept="application/pdf"

@@ -12,6 +12,7 @@ import {
   DangerAlert,
 } from "./components";
 import { useToast } from "../contexts/ToastContext";
+import { getCurrentYear } from "../utils/time";
 
 function EntryData({ onClick, dataDosen, refreshData }) {
   const toast = useToast();
@@ -119,12 +120,26 @@ function EntryData({ onClick, dataDosen, refreshData }) {
                 type="text"
                 innerRef={namaLengkap}
               />
-              <Input label="NIM" id="nim" type="number" innerRef={nim} />
               <Input
+                label="NIM"
+                id="nim"
+                type="number"
+                innerRef={nim}
+                moreProps={{
+                  min: 0,
+                }}
+              />
+              <Dropdown
                 label="Angkatan"
                 id="angkatan"
-                type="number"
                 innerRef={angkatan}
+                options={Array.from(
+                  { length: 7 },
+                  (_, i) => i + getCurrentYear() - 6
+                ).map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
               />
               <InputGenerate
                 label="Password"

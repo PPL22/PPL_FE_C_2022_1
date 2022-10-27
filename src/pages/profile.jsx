@@ -1,45 +1,51 @@
-import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import config from '../configs/config.json';
-import axios from 'axios';
-import profile from '../assets/images/default_profile.png';
-import Spinner from '../components/Spinner';
+import React from "react";
+import { useAuth } from "../contexts/AuthContext";
+import config from "../configs/config.json";
+import axios from "axios";
+import profile from "../assets/images/default_profile.png";
+import Spinner from "../components/Spinner";
 
 function Profile() {
   const auth = useAuth();
   const [data, setData] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  let role = '';
-  if (auth.role.includes('Mahasiswa')) {
-    role = 'mahasiswa';
-  } else if (auth.role.includes('Dosen')) {
-    role = 'dosen';
-  } else if (auth.role.includes('Operator')) {
-    role = 'operator';
-  } else if (auth.role.includes('Departemen')) {
-    role = 'departemen';
+  let role = "";
+  if (auth.role.includes("Mahasiswa")) {
+    role = "mahasiswa";
+  } else if (auth.role.includes("Dosen")) {
+    role = "dosen";
+  } else if (auth.role.includes("Operator")) {
+    role = "operator";
+  } else if (auth.role.includes("Departemen")) {
+    role = "departemen";
   }
 
   const getProfile = async () => {
     setIsLoading(true);
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${role}/profile`;
 
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
-      console.log(response.data.data);
       const result = Object.keys(response.data.data).map((item) => {
-        let key = item.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
-        key = key.charAt(0).toUpperCase() + key.slice(1);
-        if (key.split(' ')[0].length === 3) {
-          key = key.split(' ')[0].toUpperCase();
-          if (key.split(' ').length > 1) {
-            key += ' ' + key.split(' ')[1];
+        let key = item.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
+        if (key.toLowerCase() === "nama prov") {
+          key = "Provinsi";
+        } else if (key.toLowerCase() === "nama kab") {
+          key = "Kabupaten/kota";
+        } else {
+          key = key.charAt(0).toUpperCase() + key.slice(1);
+        }
+
+        if (key.split(" ")[0].length === 3) {
+          key = key.split(" ")[0].toUpperCase();
+          if (key.split(" ").length > 1) {
+            key += " " + key.split(" ")[1];
           }
         }
         return {
@@ -54,6 +60,7 @@ function Profile() {
       setIsLoading(false);
     }
   };
+
   React.useEffect(() => {
     getProfile();
   }, []);
@@ -65,15 +72,15 @@ function Profile() {
   ) : (
     <div className="my-5">
       <h1 className="text-center text-2xl font-bold">
-        Profile {auth.role.includes('Mahasiswa') ? 'Mahasiswa' : 'Dosen'}
+        Profile {auth.role.includes("Mahasiswa") ? "Mahasiswa" : "Dosen"}
       </h1>
       <section className="flex justify-center items-center gap-x-10 mt-20">
         <img
           src={
             auth.foto !== null &&
-            auth.foto !== 'undefined' &&
-            auth.foto !== 'null'
-              ? auth.foto.includes('http')
+            auth.foto !== "undefined" &&
+            auth.foto !== "null"
+              ? auth.foto.includes("http")
                 ? auth.foto
                 : `${config.API_IMAGE_URL}/foto_mhs/${auth.foto}`
               : profile
@@ -89,14 +96,14 @@ function Profile() {
           </div>
           <div className="flex">
             <p className="font-bold w-[200px]">
-              {auth.role.includes('Mahasiswa') ? 'NIM' : 'NIP'}{' '}
+              {auth.role.includes("Mahasiswa") ? "NIM" : "NIP"}{" "}
             </p>
             <p className="mr-2">:</p>
             <p>{auth.id}</p>
           </div>
           {data.map((item, index) => {
             return (
-              item.key !== 'Foto' && (
+              item.key !== "Foto" && (
                 <div className="flex" key={index}>
                   <p className="font-bold w-[200px]">{item.key}</p>
                   <p className="mr-2">:</p>
