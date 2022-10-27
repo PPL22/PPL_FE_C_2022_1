@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Login,
   Dashboard,
@@ -12,28 +12,28 @@ import {
   RekapStatusMahasiswa,
   DataMhs,
   Profile,
-} from './pages/pages';
-import jwt_decode from 'jwt-decode';
-import { Header, Sidebar, Spinner, Toast } from './components/components';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import { useToast } from './contexts/ToastContext';
+} from "./pages/pages";
+import jwt_decode from "jwt-decode";
+import { Header, Sidebar, Spinner, Toast } from "./components/components";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContext";
+import { useToast } from "./contexts/ToastContext";
 
 function App() {
   const auth = useAuth();
   const toast = useToast();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
-  const firstTime = localStorage.getItem('firstTime');
+  const firstTime = localStorage.getItem("firstTime");
 
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
       setLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       const pathname = window.location.pathname;
       if (!token) {
-        if (pathname !== '/') {
+        if (pathname !== "/") {
           auth.logout();
         }
       } else {
@@ -41,10 +41,10 @@ function App() {
         if (decoded) {
           auth.updateRole(decoded);
           if (
-            (pathname === '/register' || pathname === '/') &&
-            firstTime === 'false'
+            (pathname === "/register" || pathname === "/") &&
+            firstTime === "false"
           ) {
-            navigate('/dashboard');
+            navigate("/dashboard");
           }
         } else {
           auth.logout();
@@ -63,17 +63,17 @@ function App() {
         </div>
       ) : (
         <section className="grid grid-cols-12">
-          <div className={`${auth.role && 'col-span-2'} relative`}>
-            {auth.role && auth.firstTime === 'false' && <Sidebar />}
+          <div className={`${auth.role && "col-span-2"} relative`}>
+            {auth.role && auth.firstTime === "false" && <Sidebar />}
           </div>
           <div
             className={`${
-              auth.role && auth.firstTime === 'false'
-                ? 'col-span-10 ml-[32px]'
-                : 'col-span-12'
+              auth.role && auth.firstTime === "false"
+                ? "col-span-10 ml-[32px]"
+                : "col-span-12"
             } min-h-screen bg-background`}
           >
-            {auth.role && auth.firstTime === 'false' && <Header />}
+            {auth.role && auth.firstTime === "false" && <Header />}
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/register" element={<UpdateDataMhs />} />
@@ -81,7 +81,7 @@ function App() {
               {auth.role && (
                 <Route path="/dashboard/profile" element={<Profile />} />
               )}
-              {auth.role && auth.role.includes('Dosen') && (
+              {auth.role && auth.role.includes("Dosen") && (
                 <>
                   <Route
                     path="/dashboard/status/irs"
@@ -101,8 +101,8 @@ function App() {
                   />
                 </>
               )}
-              {((auth.role && auth.role.includes('Dosen')) ||
-                (auth.role && auth.role.includes('Departemen'))) && (
+              {((auth.role && auth.role.includes("Dosen")) ||
+                (auth.role && auth.role.includes("Departemen"))) && (
                 <>
                   <Route
                     path="/dashboard/rekap/status"

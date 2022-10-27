@@ -1,15 +1,16 @@
-import React from 'react';
-import { Card, Button } from 'flowbite-react';
+import React from "react";
+import { Card, Button } from "flowbite-react";
 import {
   Keterangan,
   BtnSemester,
   DropdownSearch,
-} from '../components/components';
-import axios from 'axios';
-import config from '../configs/config.json';
-import { useAuth } from '../contexts/AuthContext';
-import { convertDataAkademik } from '../utils/convertDataAkademik';
-import { convertTimestampToDDMonthYYYY } from '../utils/time';
+} from "../components/components";
+import axios from "axios";
+import config from "../configs/config.json";
+import { useAuth } from "../contexts/AuthContext";
+import { convertDataAkademik } from "../utils/convertDataAkademik";
+import { convertTimestampToDDMonthYYYY } from "../utils/time";
+import profile from "../assets/images/default_profile.png";
 
 export default function DataMhs() {
   const auth = useAuth();
@@ -32,14 +33,14 @@ export default function DataMhs() {
 
   const getDataMahasiswaByKeyword = async (keyword) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes('Dosen') ? 'dosen' : 'departemen'
+        auth?.role.includes("Dosen") ? "dosen" : "departemen"
       }/search-mhs?keyword=${keyword}`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data;
@@ -57,14 +58,14 @@ export default function DataMhs() {
 
   const getDataMahasiswaByNim = async (nim) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes('Dosen') ? 'dosen' : 'departemen'
+        auth?.role.includes("Dosen") ? "dosen" : "departemen"
       }/data-akademik-mhs/${nim}`;
       const response = await axios.get(url, {
         headers: {
-          'x-access-token': token,
+          "x-access-token": token,
         },
       });
       const result = response.data.data;
@@ -87,7 +88,7 @@ export default function DataMhs() {
         } else {
           semester.push({
             semester: `Semester ${i + 1}`,
-            type: '',
+            type: "",
             data: null,
           });
         }
@@ -123,7 +124,7 @@ export default function DataMhs() {
             <div className="grid grid-cols-6 mt-6 ">
               <div className="col-span-2 flex m-auto">
                 <img
-                  src={`${config.API_IMAGE_URL}/foto_mhs/${mahasiswa.foto}`}
+                  src={`${mahasiswa.foto === null ? profile : mahasiswa.foto}`}
                   alt="foto profil"
                   className="rounded-full w-20 h-20 object-cover"
                 />
@@ -164,22 +165,22 @@ export default function DataMhs() {
           <div className="mx-10 flex gap-x-4">
             <div>
               <Keterangan
-                color={'bg-blue-500'}
-                child={'Sudah diisikan atau digunakan'}
+                color={"bg-blue-500"}
+                child={"Sudah diisikan atau digunakan"}
               />
               <Keterangan
-                color={'bg-yellow-300'}
-                child={'Sudah diisikan PKL (IRS, KHS, PKL)'}
+                color={"bg-yellow-300"}
+                child={"Sudah diisikan PKL (IRS, KHS, PKL)"}
               />
             </div>
             <div>
               <Keterangan
-                color={'bg-red-500'}
-                child={'Belum diisikan atau digunakan'}
+                color={"bg-red-500"}
+                child={"Belum diisikan atau digunakan"}
               />
               <Keterangan
-                color={'bg-green-500'}
-                child={'Sudah diisikan skripsi'}
+                color={"bg-green-500"}
+                child={"Sudah diisikan skripsi"}
               />
             </div>
           </div>
@@ -192,7 +193,7 @@ export default function DataMhs() {
           <section className="py-4 grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-3">
             {progress &&
               progress.data.map((item, index) => {
-                return item.type === 'irs' && item.available ? (
+                return item.type === "irs" && item.available ? (
                   <Card key={index}>
                     <div className="h-full grid grid-cols-1 content-between">
                       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
@@ -212,7 +213,7 @@ export default function DataMhs() {
                       </Button>
                     </div>
                   </Card>
-                ) : item.type === 'khs' && item.available ? (
+                ) : item.type === "khs" && item.available ? (
                   <Card key={index}>
                     <div className="h-full grid grid-cols-1 content-between">
                       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
@@ -249,7 +250,7 @@ export default function DataMhs() {
                       </Button>
                     </div>
                   </Card>
-                ) : item.type === 'pkl' && item.available ? (
+                ) : item.type === "pkl" && item.available ? (
                   <Card key={index}>
                     <div className="h-full grid grid-cols-1 content-between">
                       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
@@ -276,7 +277,7 @@ export default function DataMhs() {
                       </Button>
                     </div>
                   </Card>
-                ) : item.type === 'skripsi' && item.available ? (
+                ) : item.type === "skripsi" && item.available ? (
                   <Card key={index}>
                     <div className="h-full grid grid-cols-1 content-between">
                       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
