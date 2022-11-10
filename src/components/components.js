@@ -19,3 +19,5 @@ export { default as ProgressBarSemester } from "./ProgressBarSemester";
 export { default as IndicatorButton } from "./IndicatorButton";
 export { default as CardInfo } from "./CardInfo";
 export { default as EntryDataMhs } from "./EntryDataMhs";
+export { default as DashboardCard } from "./DashboardCard";
+export { default as PaginationPage } from "./PaginationPage";

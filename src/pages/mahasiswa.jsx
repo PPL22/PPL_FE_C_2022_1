@@ -33,21 +33,18 @@ function Mahasiswa() {
 
   const handleDocumentName = (name) => {
     setDocumentName(name);
-    refreshCurrentData(name, currentSemester);
   };
 
   const handleSemester = (semester) => {
     setCurrentSemester(semester);
-    refreshCurrentData(documentName, semester);
-    handleStatusDocument(semester);
   };
 
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
 
-  const handleStatusDocument = (semester) => {
-    let document = data.dataAkademik[semester];
+  const handleStatusDocument = () => {
+    let document = data.dataAkademik[currentSemester];
     document = document.map((item) => {
       const type = item.type.length <= 3 ? item.type.toUpperCase() : item.type;
       return {
@@ -55,7 +52,7 @@ function Mahasiswa() {
         isAvailable: item.available,
       };
     });
-    if (document.length < 4 && semester > 5) {
+    if (document.length < 4 && currentSemester > 5) {
       if (document.find((item) => item.type === "PKL")) {
         document.push({
           type: "Skripsi",
@@ -71,7 +68,7 @@ function Mahasiswa() {
           type: "PKL",
           isAvailable: false,
         });
-        if (semester > 6) {
+        if (currentSemester > 6) {
           document.push({
             type: "Skripsi",
             isAvailable: false,
@@ -94,10 +91,11 @@ function Mahasiswa() {
     setStatusDocument(document);
   };
 
-  const refreshCurrentData = (document, semester) => {
-    let dataAkademik = data.dataAkademik[semester];
+  const refreshCurrentData = () => {
+    let dataAkademik = data.dataAkademik[currentSemester];
+    console.log("DIPANGGIL");
     dataAkademik = dataAkademik.filter(
-      (item) => item.type === document.toLowerCase()
+      (item) => item.type === documentName.toLowerCase()
     )[0];
     const result = {
       available: false,
@@ -112,7 +110,7 @@ function Mahasiswa() {
         } else if (item.includes("file")) {
           return (result.document =
             config.API_DOCUMENT_URL +
-            `/${document.toLowerCase()}/` +
+            `/${documentName.toLowerCase()}/` +
             dataAkademik[item]);
         } else if (item !== "statusValidasi" && item !== "type") {
           let key = item.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
@@ -129,7 +127,7 @@ function Mahasiswa() {
         return null;
       });
     } else {
-      result.data.Semester = semester;
+      result.data.Semester = currentSemester;
     }
     setCurrentData(result);
   };
@@ -138,7 +136,6 @@ function Mahasiswa() {
     const apiUrl = config.API_URL;
     const token = localStorage.getItem("accessToken");
     try {
-      setIsLoading(true);
       const url = `${apiUrl}/mahasiswa/dashboard`;
       const response = await axios.get(url, {
         headers: {
@@ -159,13 +156,25 @@ function Mahasiswa() {
       setData(result);
     } catch (error) {
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   React.useEffect(() => {
+    if (data && currentSemester !== 0) {
+      handleStatusDocument();
+    }
+  }, [currentSemester, data]);
+
+  React.useEffect(() => {
+    if (data) {
+      refreshCurrentData();
+    }
+  }, [statusDocument, documentName]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
     getDashboard();
+    setIsLoading(false);
   }, []);
 
   return isLoading || !data ? (
@@ -377,7 +386,7 @@ function Mahasiswa() {
         <EntryDataMhs
           setModal={setModal}
           modal={modal}
-          refreshData={() => handleSemester(currentSemester)}
+          refreshData={() => getDashboard()}
           currentSemester={currentSemester}
           setEntryState={setEntryState}
           entryState={entryState}

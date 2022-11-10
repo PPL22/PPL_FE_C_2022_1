@@ -1,5 +1,5 @@
-import React from 'react';
-import Select from 'react-select';
+import React from "react";
+import Select from "react-select";
 function DropdownSearch({
   id,
   label,
@@ -12,21 +12,21 @@ function DropdownSearch({
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      border: '1px solid #e2e8f0',
-      borderRadius: '0.375rem',
-      boxShadow: 'none',
-      backgroundColor: '#eff6ff',
-      padding: '0.5rem',
-      '&:hover': {
-        borderColor: '#cbd5e0',
+      border: "1px solid #e2e8f0",
+      borderRadius: "0.375rem",
+      boxShadow: "none",
+      backgroundColor: "#eff6ff",
+      padding: "0.5rem",
+      "&:hover": {
+        borderColor: "#cbd5e0",
       },
     }),
     option: (provided, state) => ({
       ...provided,
-      color: 'text-gray-900',
-      backgroundColor: '#fff',
-      '&:hover': {
-        backgroundColor: '#ebf8ff',
+      color: "text-gray-900",
+      backgroundColor: "#fff",
+      "&:hover": {
+        backgroundColor: "#ebf8ff",
       },
     }),
   };
@@ -44,6 +44,7 @@ function DropdownSearch({
         maxMenuHeight={200}
         onChange={onSelect}
         placeholder={placeholder}
+        noOptionsMessage={() => "Tidak ada data"}
       />
     </div>
   );

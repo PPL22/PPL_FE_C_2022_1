@@ -2,7 +2,7 @@ import React from "react";
 
 function Dropdown({ label, id, options, innerRef, defaultValue, onChange }) {
   return (
-    <div>
+    <div className="flex flex-col items-start gap-y-2">
       <label htmlFor={id} className="text-sm font-medium text-gray-900">
         {label}
       </label>

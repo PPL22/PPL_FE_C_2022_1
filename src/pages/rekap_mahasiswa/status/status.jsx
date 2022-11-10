@@ -1,5 +1,9 @@
 import React from "react";
-import { Spinner } from "../../../components/components";
+import {
+  Spinner,
+  Dropdown,
+  PaginationPage,
+} from "../../../components/components";
 import config from "../../../configs/config.json";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -34,6 +38,19 @@ function RekapStatusMahasiswa() {
   });
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [totalPage, setTotalPage] = React.useState(10);
+  const [limit, setLimit] = React.useState(10);
+
+  const updatePage = (value) => {
+    setPage(value);
+    console.log(value);
+  };
+
+  const updateLimit = (value) => {
+    setLimit(value);
+    console.log(value);
+  };
 
   const getRekapStatus = async () => {
     const apiUrl = config.API_URL;
@@ -193,6 +210,26 @@ function RekapStatusMahasiswa() {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-between mt-2">
+              <Dropdown
+                label={"Tampilkan"}
+                id="tampilkan"
+                defaultValue={"10"}
+                onChange={(value) => updateLimit(value)}
+                options={[
+                  { value: "10", label: "10 data" },
+                  { value: "25", label: "25 data" },
+                  { value: "50", label: "50 data" },
+                  { value: "100", label: "100 data" },
+                  { value: "Semua", label: "Semua data" },
+                ]}
+              />
+              <PaginationPage
+                currentPage={page}
+                updatePage={updatePage}
+                totalPage={totalPage}
+              />
+            </div>
           </div>
         </div>
       )}

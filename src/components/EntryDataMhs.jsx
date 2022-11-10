@@ -14,6 +14,7 @@ function EntryDataMhs({
   function closeModal() {
     setModal(false);
     setEntryState("none");
+    refreshData();
   }
   if (entryState === "irs") {
     return <Irs currentSemester={currentSemester} closeModal={closeModal} />;

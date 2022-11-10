@@ -2,7 +2,7 @@ import React from "react";
 import Charts from "../components/Charts";
 import config from "../configs/config.json";
 import axios from "axios";
-import Spinner from "../components/Spinner";
+import { DashboardCard, Spinner } from "../components/components";
 import { Link } from "react-router-dom";
 
 function Dosen() {
@@ -80,6 +80,10 @@ function Dosen() {
     }
   };
 
+  const updateData = (value) => {
+    console.log(value);
+  };
+
   React.useEffect(() => {
     setIsLoading(true);
     getDashboard();
@@ -91,83 +95,32 @@ function Dosen() {
       <Spinner />
     </div>
   ) : (
-    <section className="flex flex-wrap justify-evenly my-10 gap-10 items-center lg:px-20">
-      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status IRS Mahasiswa
-        </h5>
-        <Charts data={dataIRS} />
-        <div className="flex justify-center">
-          {dataIRS.elements[1] > 0 && (
-            <Link to="/dashboard/status/irs">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status PKL Mahasiswa
-        </h5>
-        <Charts data={dataPKL} />
-        <div className="flex justify-center">
-          {dataPKL.elements[1] > 0 && (
-            <Link to="/dashboard/status/pkl">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status KHS Mahasiswa
-        </h5>
-        <Charts data={dataKHS} />
-        <div className="flex justify-center">
-          {dataKHS.elements[1] > 0 && (
-            <Link to="/dashboard/status/khs">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="text-center p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status Skripsi Mahasiswa
-        </h5>
-        <Charts data={dataSkripsi} />
-        <div className="flex justify-center">
-          {dataSkripsi.elements[1] > 0 && (
-            <Link to="/dashboard/status/skripsi">
-              <button
-                className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 mt-4"
-                type="button"
-                data-modal-toggle="entry-data-modal"
-              >
-                Validasi
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
+    <section className="flex flex-wrap justify-evenly my-10 gap-10 lg:px-20">
+      <DashboardCard
+        data={dataIRS}
+        updateData={updateData}
+        title="Status IRS Mahasiswa"
+        path={"/dashboard/status/irs"}
+      />
+      <DashboardCard
+        data={dataPKL}
+        updateData={updateData}
+        title="Status PKL Mahasiswa"
+        path={"/dashboard/status/pkl"}
+      />
+
+      <DashboardCard
+        data={dataKHS}
+        updateData={updateData}
+        title="Status KHS Mahasiswa"
+        path={"/dashboard/status/khs"}
+      />
+      <DashboardCard
+        data={dataSkripsi}
+        updateData={updateData}
+        title="Status Skripsi Mahasiswa"
+        path={"/dashboard/status/skripsi"}
+      />
     </section>
   );
 }

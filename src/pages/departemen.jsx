@@ -3,6 +3,7 @@ import Charts from "../components/Charts";
 import config from "../configs/config.json";
 import axios from "axios";
 import Spinner from "../components/Spinner";
+import DashboardCard from "../components/DashboardCard";
 
 function Departemen() {
   const [dataIRS, setDataIRS] = React.useState({
@@ -85,36 +86,40 @@ function Departemen() {
     setIsLoading(false);
   }, []);
 
+  const updateData = (value) => {
+    console.log(value);
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
     </div>
   ) : (
     <section className="flex flex-wrap justify-evenly my-10 gap-10 items-center lg:px-20">
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status IRS Mahasiswa
-        </h5>
-        <Charts data={dataIRS} />
-      </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status PKL Mahasiswa
-        </h5>
-        <Charts data={dataPKL} />
-      </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status KHS Mahasiswa
-        </h5>
-        <Charts data={dataKHS} />
-      </div>
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md text-center">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-          Status Skripsi Mahasiswa
-        </h5>
-        <Charts data={dataSkripsi} />
-      </div>
+      <DashboardCard
+        data={dataIRS}
+        title="Status IRS Mahasiswa"
+        updateData={updateData}
+        path="/dashboard/status/irs"
+      />
+      <DashboardCard
+        data={dataKHS}
+        title="Status KHS Mahasiswa"
+        updateData={updateData}
+        path="/dashboard/status/khs"
+      />
+      <DashboardCard
+        data={dataPKL}
+        title="Status PKL Mahasiswa"
+        updateData={updateData}
+        path="/dashboard/status/pkl"
+      />
+      <DashboardCard
+        data={dataSkripsi}
+        title="Status Skripsi Mahasiswa"
+        updateData={updateData}
+        path="/dashboard/status/skripsi"
+      />
     </section>
   );
 }

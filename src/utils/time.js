@@ -19,7 +19,7 @@ export const convertTimestampToDDMonthYYYY = (timestamp) => {
   const dd = date.getDate();
   const mm = date.getMonth();
   const yyyy = date.getFullYear();
-  return dd + " " + months[mm] + " " + yyyy;
+  return dd + " " + months[mm - 1] + " " + yyyy;
 };
 
 export const convertTimestampToYYYYMMDD = (timestamp) => {
