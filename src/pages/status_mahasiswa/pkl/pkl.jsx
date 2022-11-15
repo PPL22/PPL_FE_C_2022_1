@@ -8,6 +8,7 @@ import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusPKLMahasiswa from "./TableStatusPKLMahasiswa";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 function StatusPKLMahasiswa({
   isRekap = false,
@@ -17,6 +18,7 @@ function StatusPKLMahasiswa({
   totalPageRekap,
   updateLimitRekap,
 }) {
+  const auth = useAuth();
   const [dataPkl, setDataPkl] = React.useState({
     thead: [
       "No",
@@ -33,16 +35,17 @@ function StatusPKLMahasiswa({
   const [isLoading, setIsLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(10);
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(5);
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
-    console.log(value);
   };
 
   const updateLimit = (value) => {
     setLimit(value);
-    console.log(value);
   };
 
   const getDataPkl = async () => {
@@ -53,14 +56,21 @@ function StatusPKLMahasiswa({
         ? apiUrl + endpoint
         : `${apiUrl}/dosen/status-validasi/pkl`;
       const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
+        },
         headers: {
           "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item, index) => {
+      let startNumber = (page - 1) * limit + 1;
+      const result = response.data.data.pkl.map((item) => {
         return {
           data: [
-            index + 1,
+            startNumber++,
             item.nama,
             item.nim,
             item.angkatan,
@@ -75,7 +85,11 @@ function StatusPKLMahasiswa({
         ...dataPkl,
         tbody: result,
       });
+      setTotalPage(response.data.data.maxPage);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -85,6 +99,28 @@ function StatusPKLMahasiswa({
     getDataPkl();
     setIsLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    getDataPkl();
+  }, [page, limit, orderBy, isAscending]);
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa") {
+      sorted = "nama";
+    } else if (sorted === "nilai pkl") {
+      sorted = "nilai";
+    } else if (sorted === "status") {
+      sorted = "statusValidasi";
+    }
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
+    }
+  };
 
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
@@ -103,13 +139,15 @@ function StatusPKLMahasiswa({
         )}
       </div>
       <TableStatusPKLMahasiswa
+        onClickHead={onClickHead}
+        currentFilter={currentFilter}
         isRekap={isRekap}
         data={dataPkl}
         refreshData={getDataPkl}
       />
       <div className="flex justify-between mt-2">
         <Dropdown
-          label={"Tampilkan"}
+          label={"Tampilkan per baris"}
           id="tampilkan"
           defaultValue={limit}
           onChange={
@@ -118,11 +156,10 @@ function StatusPKLMahasiswa({
               : (value) => updateLimit(value)
           }
           options={[
+            { value: 5, label: "5 data" },
             { value: 10, label: "10 data" },
-            { value: 25, label: "25 data" },
             { value: 50, label: "50 data" },
             { value: 100, label: "100 data" },
-            { value: "Semua", label: "Semua data" },
           ]}
         />
         {isRekap ? (

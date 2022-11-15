@@ -83,6 +83,9 @@ function RekapStatusMahasiswa() {
         tbody: result,
       });
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -117,6 +120,9 @@ function RekapStatusMahasiswa() {
         tbody: result,
       });
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -212,7 +218,7 @@ function RekapStatusMahasiswa() {
             </table>
             <div className="flex justify-between mt-2">
               <Dropdown
-                label={"Tampilkan"}
+                label={"Tampilkan per baris"}
                 id="tampilkan"
                 defaultValue={"10"}
                 onChange={(value) => updateLimit(value)}

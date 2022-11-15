@@ -10,9 +10,11 @@ import {
 import axios from "axios";
 import { TableAkunMahasiswa } from "./pages";
 import { useToast } from "../contexts/ToastContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function Operator() {
   const toast = useToast();
+  const auth = useAuth();
   const [modal, setModal] = React.useState(false);
   const [dataMahasiswa, setDataMahasiswa] = React.useState({});
   const [dataDosen, setDataDosen] = React.useState([]);
@@ -62,6 +64,9 @@ function Operator() {
         tbody: data,
       });
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -91,6 +96,9 @@ function Operator() {
       });
       setDataDosen(data);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -107,6 +115,9 @@ function Operator() {
       });
       setDataMahasiswa(response.data);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -133,6 +144,9 @@ function Operator() {
       toast.setToast(response.data.message, "success");
       refreshData();
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       setErrorMessage(error.response.data.message);
       throw error;
     } finally {

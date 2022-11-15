@@ -1,11 +1,11 @@
 import React from "react";
-import Charts from "../components/Charts";
 import config from "../configs/config.json";
 import axios from "axios";
 import { DashboardCard, Spinner } from "../components/components";
-import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function Dosen() {
+  const auth = useAuth();
   const [dataIRS, setDataIRS] = React.useState({
     labels: ["Sudah Verifikasi", "Belum Validasi", "Belum Entry"],
     colors: ["#5570F1", "#FFCC91", "#CC5F5F"],
@@ -76,6 +76,9 @@ function Dosen() {
         ],
       });
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };

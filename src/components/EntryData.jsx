@@ -13,9 +13,11 @@ import {
 } from "./components";
 import { useToast } from "../contexts/ToastContext";
 import { getCurrentYear } from "../utils/time";
+import { useAuth } from "../contexts/AuthContext";
 
 function EntryData({ onClick, dataDosen, refreshData }) {
   const toast = useToast();
+  const auth = useAuth();
   const generateCharacter = () => {
     return Math.random().toString(36).substring(2);
   };
@@ -57,7 +59,11 @@ function EntryData({ onClick, dataDosen, refreshData }) {
       toast.setToast("Data mahasiswa berhasil ditambahkan", "success");
       refreshData();
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      if (error.response.status === 401) {
+        auth.logout();
+      } else {
+        setErrorMessage(error.response.data.message);
+      }
     } finally {
       setLoading(false);
     }

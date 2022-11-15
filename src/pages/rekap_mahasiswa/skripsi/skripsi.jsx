@@ -41,6 +41,9 @@ function RekapSkripsiMahasiswa() {
       const result = response.data.data;
       setRekapSkripsi(result);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };

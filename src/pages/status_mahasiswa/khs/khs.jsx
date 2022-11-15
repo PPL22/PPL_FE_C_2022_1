@@ -7,8 +7,10 @@ import {
 import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusKHSMahasiswa from "./TableStatusKHSMahasiswa";
+import { useAuth } from "../../../contexts/AuthContext";
 
 function StatusKHSMahasiswa() {
+  const auth = useAuth();
   const [dataKHS, setDataKHS] = React.useState({
     thead: [
       "No",
@@ -28,11 +30,14 @@ function StatusKHSMahasiswa() {
   });
   const [isLoading, setIsLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(5);
   const [totalPage, setTotalPage] = React.useState(10);
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
-    console.log(value);
   };
 
   const getDataKHS = async () => {
@@ -41,14 +46,21 @@ function StatusKHSMahasiswa() {
     try {
       const url = `${apiUrl}/dosen/status-validasi/khs`;
       const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
+        },
         headers: {
           "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item, index) => {
+      let startNumber = (page - 1) * limit + 1;
+      const result = response.data.data.khs.map((item) => {
         return {
           data: [
-            index + 1,
+            startNumber++,
             item.nama,
             item.nim,
             item.angkatan,
@@ -67,7 +79,11 @@ function StatusKHSMahasiswa() {
         ...dataKHS,
         tbody: result,
       });
+      setTotalPage(response.data.data.maxPage);
     } catch (error) {
+      if (error.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -78,6 +94,32 @@ function StatusKHSMahasiswa() {
     setIsLoading(false);
   }, []);
 
+  React.useEffect(() => {
+    getDataKHS();
+  }, [page, limit, orderBy, isAscending]);
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa") {
+      sorted = "nama";
+    } else if (sorted === "sks semester") {
+      sorted = "jumlahSksSemester";
+    } else if (sorted === "sks kumulatif") {
+      sorted = "jumlahSksKumulatif";
+    } else if (sorted === "status mahasiswa") {
+      sorted = "statusAktif";
+    } else if (sorted === "status") {
+      sorted = "statusValidasi";
+    }
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
+    }
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
@@ -85,18 +127,23 @@ function StatusKHSMahasiswa() {
   ) : (
     <section className="mt-10 px-8">
       <h2 className="text-3xl font-bold">Daftar Status KHS Mahasiswa</h2>
-      <TableStatusKHSMahasiswa data={dataKHS} refreshData={getDataKHS} />
+      <TableStatusKHSMahasiswa
+        onClickHead={onClickHead}
+        currentFilter={currentFilter}
+        data={dataKHS}
+        refreshData={getDataKHS}
+      />
       <div className="flex justify-between mt-2">
         <Dropdown
-          label={"Tampilkan"}
+          label={"Tampilkan per baris"}
           id="tampilkan"
-          defaultValue={"10"}
+          defaultValue={limit}
+          onChange={setLimit}
           options={[
-            { value: "10", label: "10 data" },
-            { value: "25", label: "25 data" },
-            { value: "50", label: "50 data" },
-            { value: "100", label: "100 data" },
-            { value: "Semua", label: "Semua data" },
+            { value: 5, label: "10 data" },
+            { value: 10, label: "25 data" },
+            { value: 50, label: "50 data" },
+            { value: 100, label: "100 data" },
           ]}
         />
         <PaginationPage

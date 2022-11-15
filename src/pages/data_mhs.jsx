@@ -52,6 +52,9 @@ export default function DataMhs() {
       });
       setDataMahasiswa(data);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -96,6 +99,9 @@ export default function DataMhs() {
       setDataSemester(semester);
       setMahasiswa(result);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };

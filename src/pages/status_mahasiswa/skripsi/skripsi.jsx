@@ -7,6 +7,7 @@ import {
 import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusSkripsiMahasiswa from "./TableStatusSkripsiMahasiswa";
+import { useAuth } from "../../../contexts/AuthContext";
 
 function StatusSkripsiMahasiswa({
   isRekap = false,
@@ -16,6 +17,7 @@ function StatusSkripsiMahasiswa({
   totalPageRekap,
   updateLimitRekap,
 }) {
+  const auth = useAuth();
   const [dataSkripsi, setDataSkripsi] = React.useState({
     thead: [
       "No",
@@ -34,7 +36,10 @@ function StatusSkripsiMahasiswa({
   const [isLoading, setIsLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(10);
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(5);
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
@@ -58,10 +63,11 @@ function StatusSkripsiMahasiswa({
           "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item, index) => {
+      let startNumber = (page - 1) * limit + 1;
+      const result = response.data.data.skripsi.map((item, index) => {
         return {
           data: [
-            index + 1,
+            startNumber++,
             item.nama,
             item.nim,
             item.angkatan,
@@ -78,7 +84,11 @@ function StatusSkripsiMahasiswa({
         ...dataSkripsi,
         tbody: result,
       });
+      setTotalPage(response.data.data.maxPage);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -89,6 +99,32 @@ function StatusSkripsiMahasiswa({
     setIsLoading(false);
   }, []);
 
+  React.useEffect(() => {
+    getDataSkripsi();
+  }, [page, limit, orderBy, isAscending]);
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa") {
+      sorted = "nama";
+    } else if (sorted === "nilai skripsi") {
+      sorted = "nilai";
+    } else if (sorted === "lama studi") {
+      sorted = "lamaStudi";
+    } else if (sorted === "tanggal lulus") {
+      sorted = "tanggalLulusSidang";
+    } else if (sorted === "status") {
+      sorted = "statusValidasi";
+    }
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
+    }
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
@@ -97,13 +133,15 @@ function StatusSkripsiMahasiswa({
     <section className="mt-10 px-8">
       <h2 className="text-xl font-bold">Daftar Status Skripsi Mahasiswa</h2>
       <TableStatusSkripsiMahasiswa
+        onClickHead={onClickHead}
+        currentFilter={currentFilter}
         data={dataSkripsi}
         refreshData={getDataSkripsi}
         isRekap={isRekap}
       />
       <div className="flex justify-between mt-2">
         <Dropdown
-          label={"Tampilkan"}
+          label={"Tampilkan per baris"}
           id="tampilkan"
           defaultValue={limit}
           onChange={
@@ -112,11 +150,10 @@ function StatusSkripsiMahasiswa({
               : (value) => updateLimit(value)
           }
           options={[
+            { value: 5, label: "5 data" },
             { value: 10, label: "10 data" },
-            { value: 25, label: "25 data" },
             { value: 50, label: "50 data" },
             { value: 100, label: "100 data" },
-            { value: "Semua", label: "Semua data" },
           ]}
         />
         {isRekap ? (

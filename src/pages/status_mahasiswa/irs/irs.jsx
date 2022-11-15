@@ -7,8 +7,10 @@ import {
 import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusIRSMahasiswa from "./TableStatusIRSMahasiswa";
+import { useAuth } from "../../../contexts/AuthContext";
 
 function StatusIRSMahasiswa() {
+  const auth = useAuth();
   const [dataIRS, setDataIRS] = React.useState({
     thead: [
       "No",
@@ -25,7 +27,11 @@ function StatusIRSMahasiswa() {
   });
   const [isLoading, setIsLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(5);
   const [totalPage, setTotalPage] = React.useState(10);
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
@@ -40,11 +46,18 @@ function StatusIRSMahasiswa() {
         headers: {
           "x-access-token": token,
         },
+        params: {
+          page: page,
+          qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
+        },
       });
-      const result = response.data.data.map((item, index) => {
+      let startNumber = (page - 1) * limit + 1;
+      const result = response.data.data.irs.map((item) => {
         return {
           data: [
-            index + 1,
+            startNumber++,
             item.nama,
             item.nim,
             item.angkatan,
@@ -60,7 +73,11 @@ function StatusIRSMahasiswa() {
         ...dataIRS,
         tbody: result,
       });
+      setTotalPage(response.data.data.maxPage);
     } catch (error) {
+      if (error.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -71,6 +88,31 @@ function StatusIRSMahasiswa() {
     setIsLoading(false);
   }, []);
 
+  React.useEffect(() => {
+    getDataIRS();
+  }, [page, limit, orderBy, isAscending]);
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa") {
+      sorted = "nama";
+    } else if (sorted === "sks semester") {
+      sorted = "jumlahSks";
+    } else if (sorted === "status mahasiswa") {
+      sorted = "statusAktif";
+    } else if (sorted === "status") {
+      sorted = "statusValidasi";
+    }
+
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
+    }
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
@@ -78,18 +120,23 @@ function StatusIRSMahasiswa() {
   ) : (
     <section className="mt-10 px-8">
       <h2 className="text-3xl font-bold">Daftar Status IRS Mahasiswa</h2>
-      <TableStatusIRSMahasiswa data={dataIRS} refreshData={getDataIRS} />
+      <TableStatusIRSMahasiswa
+        onClickHead={onClickHead}
+        currentFilter={currentFilter}
+        data={dataIRS}
+        refreshData={getDataIRS}
+      />
       <div className="flex justify-between mt-2">
         <Dropdown
-          label={"Tampilkan"}
+          label={"Tampilkan per baris"}
           id="tampilkan"
-          defaultValue={"10"}
+          defaultValue={limit}
+          onChange={setLimit}
           options={[
-            { value: "10", label: "10 data" },
-            { value: "25", label: "25 data" },
-            { value: "50", label: "50 data" },
-            { value: "100", label: "100 data" },
-            { value: "Semua", label: "Semua data" },
+            { value: 5, label: "5 data" },
+            { value: 10, label: "10 data" },
+            { value: 50, label: "50 data" },
+            { value: 100, label: "100 data" },
           ]}
         />
         <PaginationPage

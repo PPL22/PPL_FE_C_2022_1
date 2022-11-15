@@ -13,8 +13,10 @@ import { Button } from "flowbite-react";
 import { motion } from "framer-motion";
 import { convertTimestampToDDMonthYYYY } from "../utils/time";
 import profile from "../assets/images/default_profile.png";
+import { useAuth } from "../contexts/AuthContext";
 
 function Mahasiswa() {
+  const auth = useAuth();
   const [modal, setModal] = React.useState(false);
   const [entryState, setEntryState] = React.useState("none");
   const [data, setData] = React.useState(null);
@@ -155,6 +157,9 @@ function Mahasiswa() {
       setDataSemester(semester);
       setData(result);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };

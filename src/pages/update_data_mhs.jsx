@@ -84,6 +84,9 @@ const UpdateDataMhs = () => {
       });
       setKabupaten(data);
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       throw error;
     }
   };
@@ -120,6 +123,9 @@ const UpdateDataMhs = () => {
       localStorage.setItem("foto", response.data.data.foto);
       window.location.href = "/dashboard";
     } catch (error) {
+      if (error.response.status === 401) {
+        auth.logout();
+      }
       setErrorMessage(error.response.data.message);
       throw error;
     } finally {
