@@ -13,20 +13,6 @@ function RekapPKLMahasiswa() {
     ? "/departemen/daftar-pkl"
     : "/dosen/daftar-pkl";
 
-  const [page, setPage] = React.useState(1);
-  const [totalPage, setTotalPage] = React.useState(10);
-  const [limit, setLimit] = React.useState(10);
-
-  const updatePage = (value) => {
-    setPage(value);
-    console.log(value);
-  };
-
-  const updateLimit = (value) => {
-    setLimit(value);
-    console.log(value);
-  };
-
   const getRekapPKL = async () => {
     const apiUrl = config.API_URL;
     const token = localStorage.getItem("accessToken");
@@ -40,10 +26,9 @@ function RekapPKLMahasiswa() {
         },
       });
       const result = response.data.data;
-      console.log(result);
       setRekapPKL(result);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -118,14 +103,7 @@ function RekapPKLMahasiswa() {
           </table>
         </div>
       )}
-      <StatusPKLMahasiswa
-        isRekap={true}
-        endpoint={endpoint}
-        pageRekap={page}
-        totalPageRekap={totalPage}
-        updateLimitRekap={updateLimit}
-        updatePageRekap={updatePage}
-      />
+      <StatusPKLMahasiswa isRekap={true} endpoint={endpoint} />
     </div>
   );
 }

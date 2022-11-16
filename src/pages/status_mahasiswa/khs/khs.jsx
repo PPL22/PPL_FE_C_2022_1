@@ -142,6 +142,7 @@ function StatusKHSMahasiswa() {
           options={[
             { value: 5, label: "10 data" },
             { value: 10, label: "25 data" },
+            { value: 25, label: "25 data" },
             { value: 50, label: "50 data" },
             { value: 100, label: "100 data" },
           ]}

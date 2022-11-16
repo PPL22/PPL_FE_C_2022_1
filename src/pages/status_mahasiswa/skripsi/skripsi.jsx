@@ -9,14 +9,7 @@ import axios from "axios";
 import TableStatusSkripsiMahasiswa from "./TableStatusSkripsiMahasiswa";
 import { useAuth } from "../../../contexts/AuthContext";
 
-function StatusSkripsiMahasiswa({
-  isRekap = false,
-  endpoint,
-  updateRekapPage,
-  pageRekap,
-  totalPageRekap,
-  updateLimitRekap,
-}) {
+function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
   const [dataSkripsi, setDataSkripsi] = React.useState({
     thead: [
@@ -43,12 +36,11 @@ function StatusSkripsiMahasiswa({
 
   const updatePage = (value) => {
     setPage(value);
-    console.log(value);
   };
 
   const updateLimit = (value) => {
     setLimit(value);
-    console.log(value);
+    setPage(1);
   };
 
   const getDataSkripsi = async () => {
@@ -59,6 +51,12 @@ function StatusSkripsiMahasiswa({
         ? apiUrl + endpoint
         : `${apiUrl}/dosen/status-validasi/skripsi`;
       const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
+        },
         headers: {
           "x-access-token": token,
         },
@@ -86,7 +84,7 @@ function StatusSkripsiMahasiswa({
       });
       setTotalPage(response.data.data.maxPage);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -144,31 +142,20 @@ function StatusSkripsiMahasiswa({
           label={"Tampilkan per baris"}
           id="tampilkan"
           defaultValue={limit}
-          onChange={
-            isRekap
-              ? (value) => updateLimitRekap(value)
-              : (value) => updateLimit(value)
-          }
+          onChange={updateLimit}
           options={[
             { value: 5, label: "5 data" },
             { value: 10, label: "10 data" },
+            { value: 25, label: "25 data" },
             { value: 50, label: "50 data" },
             { value: 100, label: "100 data" },
           ]}
         />
-        {isRekap ? (
-          <PaginationPage
-            page={pageRekap}
-            totalPage={totalPageRekap}
-            updatePage={updateRekapPage}
-          />
-        ) : (
-          <PaginationPage
-            page={page}
-            totalPage={totalPage}
-            updatePage={updatePage}
-          />
-        )}
+        <PaginationPage
+          currentPage={page}
+          totalPage={totalPage}
+          updatePage={updatePage}
+        />
       </div>
     </section>
   );

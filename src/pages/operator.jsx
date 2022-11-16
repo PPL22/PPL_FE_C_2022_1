@@ -3,8 +3,10 @@ import React from "react";
 import {
   Charts,
   DangerAlert,
+  Dropdown,
   EntryData,
   Input,
+  PaginationPage,
   Spinner,
 } from "../components/components";
 import axios from "axios";
@@ -20,6 +22,7 @@ function Operator() {
   const [dataDosen, setDataDosen] = React.useState([]);
   const [dataAkun, setDataAkun] = React.useState({
     thead: [
+      "No",
       "Nama Mahasiswa",
       "NIM",
       "Username",
@@ -35,6 +38,18 @@ function Operator() {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [document, setDocument] = React.useState(null);
+  const [page, setPage] = React.useState(1);
+  const [totalPage, setTotalPage] = React.useState(10);
+  const [limit, setLimit] = React.useState(5);
+
+  const updatePage = (value) => {
+    setPage(value);
+  };
+
+  const updateLimit = (value) => {
+    setLimit(value);
+    setPage(1);
+  };
 
   const getDataAkun = async () => {
     const apiUrl = config.API_URL;
@@ -42,13 +57,18 @@ function Operator() {
     try {
       const url = `${apiUrl}/operator/akun-mahasiswa`;
       const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+        },
         headers: {
           "x-access-token": token,
         },
       });
-
-      const data = response.data.map((item) => {
+      let startNumber = (page - 1) * limit + 1;
+      const data = response.data.list.map((item) => {
         return [
+          startNumber++,
           item.nama,
           item.nim,
           item.username,
@@ -63,8 +83,9 @@ function Operator() {
         ...dataAkun,
         tbody: data,
       });
+      setTotalPage(response.data.maxPage);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -96,7 +117,7 @@ function Operator() {
       });
       setDataDosen(data);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -115,7 +136,7 @@ function Operator() {
       });
       setDataMahasiswa(response.data);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -144,7 +165,7 @@ function Operator() {
       toast.setToast(response.data.message, "success");
       refreshData();
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       setErrorMessage(error.response.data.message);
@@ -166,6 +187,10 @@ function Operator() {
     getDataMahasiswa();
     setIsLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    getDataAkun();
+  }, [page, limit]);
 
   const data = {
     labels: ["Sudah Memiliki Akun", "Belum Memiliki Akun"],
@@ -247,7 +272,34 @@ function Operator() {
           </div>
         </div>
       </section>
-      {isLoading ? <Spinner /> : <TableAkunMahasiswa dataAkun={dataAkun} />}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <TableAkunMahasiswa dataAkun={dataAkun} />
+          <div className="flex justify-between mt-2 px-8">
+            <Dropdown
+              label={"Tampilkan per baris"}
+              id="tampilkan"
+              defaultValue={limit}
+              onChange={(value) => updateLimit(value)}
+              options={[
+                { value: 5, label: "5 data" },
+                { value: 10, label: "10 data" },
+                { value: 50, label: "50 data" },
+                { value: 100, label: "100 data" },
+              ]}
+            />
+
+            <PaginationPage
+              currentPage={page}
+              totalPage={totalPage}
+              updatePage={updatePage}
+            />
+          </div>
+        </>
+      )}
+
       {modal && (
         <EntryData
           onClick={closeModal}

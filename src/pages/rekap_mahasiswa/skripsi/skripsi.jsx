@@ -12,19 +12,6 @@ function RekapSkripsiMahasiswa() {
   const endpoint = auth?.role.includes("Departemen")
     ? "/departemen/daftar-skripsi"
     : "/dosen/daftar-skripsi";
-  const [page, setPage] = React.useState(1);
-  const [totalPage, setTotalPage] = React.useState(10);
-  const [limit, setLimit] = React.useState(10);
-
-  const updatePage = (value) => {
-    setPage(value);
-    console.log(value);
-  };
-
-  const updateLimit = (value) => {
-    setLimit(value);
-    console.log(value);
-  };
 
   const getRekapSkripsi = async () => {
     const apiUrl = config.API_URL;
@@ -41,7 +28,7 @@ function RekapSkripsiMahasiswa() {
       const result = response.data.data;
       setRekapSkripsi(result);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -116,14 +103,7 @@ function RekapSkripsiMahasiswa() {
           </table>
         </div>
       )}
-      <StatusSkripsiMahasiswa
-        isRekap={true}
-        endpoint={endpoint}
-        pageRekap={page}
-        totalPageRekap={totalPage}
-        updateLimitRekap={updateLimit}
-        updatePageRekap={updatePage}
-      />
+      <StatusSkripsiMahasiswa isRekap={true} endpoint={endpoint} />
     </div>
   );
 }

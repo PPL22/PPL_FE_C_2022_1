@@ -24,7 +24,7 @@ function DropdownSearch({
     option: (provided, state) => ({
       ...provided,
       color: "text-gray-900",
-      backgroundColor: "#fff",
+      backgroundColor: state.isFocused ? "#cbd5e0" : "#fff",
       "&:hover": {
         backgroundColor: "#ebf8ff",
       },

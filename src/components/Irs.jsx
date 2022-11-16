@@ -39,7 +39,7 @@ function Irs({ closeModal, currentSemester }) {
       closeModal();
       toast.setToast("Entry IRS Berhasil", "success");
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       } else {
         setErrorMessage(error.response.data.message);

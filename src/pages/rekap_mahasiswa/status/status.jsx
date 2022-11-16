@@ -39,17 +39,19 @@ function RekapStatusMahasiswa() {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(5);
   const [totalPage, setTotalPage] = React.useState(10);
-  const [limit, setLimit] = React.useState(10);
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
-    console.log(value);
   };
 
   const updateLimit = (value) => {
     setLimit(value);
-    console.log(value);
+    setPage(1);
   };
 
   const getRekapStatus = async () => {
@@ -83,7 +85,7 @@ function RekapStatusMahasiswa() {
         tbody: result,
       });
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -98,14 +100,22 @@ function RekapStatusMahasiswa() {
         auth?.role.includes("Departemen") ? "departemen" : "dosen"
       }/daftar-status`;
       const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
+        },
         headers: {
           "x-access-token": token,
         },
       });
-      const result = response.data.data.map((item, index) => {
+      console.log(response.data);
+      let startNumber = (page - 1) * limit + 1;
+      const result = response.data.data.list.map((item, index) => {
         return {
           data: [
-            index + 1,
+            startNumber++,
             item.nama,
             item.nim,
             item.angkatan,
@@ -119,8 +129,9 @@ function RekapStatusMahasiswa() {
         ...daftarStatus,
         tbody: result,
       });
+      setTotalPage(response.data.data.maxPage);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -133,6 +144,31 @@ function RekapStatusMahasiswa() {
     getDaftarStatus();
     setIsLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    getDaftarStatus();
+  }, [page, limit, orderBy, isAscending]);
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa") {
+      sorted = "nama";
+    } else if (sorted === "sks semester") {
+      sorted = "jumlahSks";
+    } else if (sorted === "status mahasiswa") {
+      sorted = "statusAktif";
+    } else if (sorted === "status") {
+      sorted = "statusValidasi";
+    }
+
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
+    }
+  };
 
   return (
     <div className="overflow-x-auto relative my-10">
@@ -187,7 +223,39 @@ function RekapStatusMahasiswa() {
                   {daftarStatus.thead.map((item, index) => {
                     return (
                       <th scope="col" className="py-3 px-6" key={index}>
-                        {item}
+                        {item === "Action" || item === "No" ? (
+                          item
+                        ) : (
+                          <button
+                            className="flex justify-center items-center gap-x-2 mx-auto"
+                            onClick={() => onClickHead(item)}
+                          >
+                            {item}
+                            {currentFilter.toLowerCase() ===
+                              item.toLowerCase() && (
+                              <svg
+                                width={16}
+                                height={16}
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M14 5.1665H2C1.72667 5.1665 1.5 4.93984 1.5 4.6665C1.5 4.39317 1.72667 4.1665 2 4.1665H14C14.2733 4.1665 14.5 4.39317 14.5 4.6665C14.5 4.93984 14.2733 5.1665 14 5.1665Z"
+                                  fill="#00092E"
+                                />
+                                <path
+                                  d="M12 8.5H4C3.72667 8.5 3.5 8.27333 3.5 8C3.5 7.72667 3.72667 7.5 4 7.5H12C12.2733 7.5 12.5 7.72667 12.5 8C12.5 8.27333 12.2733 8.5 12 8.5Z"
+                                  fill="#00092E"
+                                />
+                                <path
+                                  d="M9.33366 11.8335H6.66699C6.39366 11.8335 6.16699 11.6068 6.16699 11.3335C6.16699 11.0602 6.39366 10.8335 6.66699 10.8335H9.33366C9.60699 10.8335 9.83366 11.0602 9.83366 11.3335C9.83366 11.6068 9.60699 11.8335 9.33366 11.8335Z"
+                                  fill="#00092E"
+                                />
+                              </svg>
+                            )}
+                          </button>
+                        )}
                       </th>
                     );
                   })}
@@ -220,14 +288,14 @@ function RekapStatusMahasiswa() {
               <Dropdown
                 label={"Tampilkan per baris"}
                 id="tampilkan"
-                defaultValue={"10"}
-                onChange={(value) => updateLimit(value)}
+                defaultValue={limit}
+                onChange={updateLimit}
                 options={[
-                  { value: "10", label: "10 data" },
-                  { value: "25", label: "25 data" },
-                  { value: "50", label: "50 data" },
-                  { value: "100", label: "100 data" },
-                  { value: "Semua", label: "Semua data" },
+                  { value: 5, label: "5 data" },
+                  { value: 10, label: "10 data" },
+                  { value: 25, label: "25 data" },
+                  { value: 50, label: "50 data" },
+                  { value: 100, label: "100 data" },
                 ]}
               />
               <PaginationPage

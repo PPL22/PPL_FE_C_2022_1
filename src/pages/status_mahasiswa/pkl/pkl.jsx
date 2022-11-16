@@ -10,14 +10,7 @@ import TableStatusPKLMahasiswa from "./TableStatusPKLMahasiswa";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 
-function StatusPKLMahasiswa({
-  isRekap = false,
-  endpoint,
-  updateRekapPage,
-  pageRekap,
-  totalPageRekap,
-  updateLimitRekap,
-}) {
+function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
   const [dataPkl, setDataPkl] = React.useState({
     thead: [
@@ -87,7 +80,7 @@ function StatusPKLMahasiswa({
       });
       setTotalPage(response.data.data.maxPage);
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.status === 401) {
         auth.logout();
       }
       throw error;
@@ -150,31 +143,20 @@ function StatusPKLMahasiswa({
           label={"Tampilkan per baris"}
           id="tampilkan"
           defaultValue={limit}
-          onChange={
-            isRekap
-              ? (value) => updateLimitRekap(value)
-              : (value) => updateLimit(value)
-          }
+          onChange={updateLimit}
           options={[
             { value: 5, label: "5 data" },
             { value: 10, label: "10 data" },
+            { value: 25, label: "25 data" },
             { value: 50, label: "50 data" },
             { value: 100, label: "100 data" },
           ]}
         />
-        {isRekap ? (
-          <PaginationPage
-            page={pageRekap}
-            totalPage={totalPageRekap}
-            updatePage={updateRekapPage}
-          />
-        ) : (
-          <PaginationPage
-            page={page}
-            totalPage={totalPage}
-            updatePage={updatePage}
-          />
-        )}
+        <PaginationPage
+          currentPage={page}
+          totalPage={totalPage}
+          updatePage={updatePage}
+        />
       </div>
     </section>
   );
