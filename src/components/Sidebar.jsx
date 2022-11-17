@@ -9,6 +9,8 @@ function Sidebar() {
   const auth = useAuth();
   const location = useLocation();
   const pathname = location.pathname;
+  const roles = auth.role.split(" ");
+  const role = auth.currentRole === null ? roles[0] : auth.currentRole;
   return (
     <div className="fixed top-0 left-0 bottom-0 bg-acintya-prasada bg-cover px-4 mx-auto max-w-[280px] h-full">
       <div className="flex items-center flex-col bg-background bg-cover h-full py-8 text-center">
@@ -63,7 +65,7 @@ function Sidebar() {
               </svg>
               Dashboard
             </Link>
-            {auth.currentRole === "Dosen" && (
+            {role === "Dosen" && (
               <CollapseMenu
                 svg={
                   <svg
@@ -115,8 +117,7 @@ function Sidebar() {
                 ]}
               />
             )}
-            {(auth.currentRole === "Dosen" ||
-              auth.currentRole === "Departemen") && (
+            {(role === "Dosen" || role === "Departemen") && (
               <CollapseMenu
                 svg={
                   <svg
@@ -191,8 +192,7 @@ function Sidebar() {
                 ]}
               />
             )}
-            {(auth.currentRole === "Dosen" ||
-              auth.currentRole === "Departemen") && (
+            {(role === "Dosen" || role === "Departemen") && (
               <Link
                 to="/dashboard/data-mahasiswa"
                 className={`${
