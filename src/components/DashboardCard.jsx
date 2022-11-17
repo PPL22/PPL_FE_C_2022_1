@@ -7,16 +7,18 @@ import Dropdown from "./Dropdown";
 
 function DashboardCard({ title, updateData, data, path }) {
   const auth = useAuth();
+  let isDataExist = data.elements.filter((element) => element !== 0).length > 0;
 
+  const document = path.split("/")[3].toUpperCase();
   return (
-    <div className="text-center max-w-sm p-6 mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
+    <div className="text-center min-w-[380px] max-w-sm p-6 mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
       <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
         {title}
       </h5>
       <div className="mb-4">
         <Dropdown
-          defaultValue={"Semua Angkatan"}
-          onChange={(value) => updateData(value)}
+          defaultValue={data.angkatan}
+          onChange={(value) => updateData(value, document)}
           id="angkatan"
           label={"Angkatan"}
           options={[
@@ -31,7 +33,13 @@ function DashboardCard({ title, updateData, data, path }) {
           ]}
         />
       </div>
-      <Charts data={data} />
+      {isDataExist ? (
+        <Charts data={data} />
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <p className="text-gray-500">Tidak ada data</p>
+        </div>
+      )}
       {auth.role.includes("Dosen") && (
         <div className="flex justify-center">
           {data.elements[1] > 0 && (

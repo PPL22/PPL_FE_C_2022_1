@@ -57,7 +57,7 @@ function StatusKHSMahasiswa() {
         },
       });
       let startNumber = (page - 1) * limit + 1;
-      const result = response.data.data.khs.map((item) => {
+      const result = response.data.data.list.map((item) => {
         return {
           data: [
             startNumber++,

@@ -60,7 +60,7 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
         },
       });
       let startNumber = (page - 1) * limit + 1;
-      const result = response.data.data.pkl.map((item) => {
+      const result = response.data.data.list.map((item) => {
         return {
           data: [
             startNumber++,

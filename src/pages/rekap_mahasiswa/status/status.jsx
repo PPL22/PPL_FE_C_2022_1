@@ -153,12 +153,12 @@ function RekapStatusMahasiswa() {
     let sorted = value.toLowerCase();
     if (sorted === "nama mahasiswa") {
       sorted = "nama";
-    } else if (sorted === "sks semester") {
-      sorted = "jumlahSks";
+    } else if (sorted === "sks kumulatif") {
+      sorted = "jumlahSksKumulatif";
     } else if (sorted === "status mahasiswa") {
       sorted = "statusAktif";
-    } else if (sorted === "status") {
-      sorted = "statusValidasi";
+    } else if (sorted === "ip kumulatif") {
+      sorted = "ipk";
     }
 
     if (sorted === orderBy) {

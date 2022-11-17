@@ -54,7 +54,7 @@ function StatusIRSMahasiswa() {
         },
       });
       let startNumber = (page - 1) * limit + 1;
-      const result = response.data.data.irs.map((item) => {
+      const result = response.data.data.list.map((item) => {
         return {
           data: [
             startNumber++,
