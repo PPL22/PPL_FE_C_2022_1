@@ -1,5 +1,4 @@
 import React from "react";
-import Charts from "../components/Charts";
 import config from "../configs/config.json";
 import axios from "axios";
 import Spinner from "../components/Spinner";

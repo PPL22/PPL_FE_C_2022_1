@@ -70,6 +70,9 @@ function useAuthProvider() {
     if (Array.isArray(data.role)) {
       role = role.join(" ");
     }
+    if (currentRole === null) {
+      setCurrentRole(role.split(" ")[0]);
+    }
     setRole(role);
     setFoto(localStorage.getItem("foto"));
     setId(localStorage.getItem("id"));

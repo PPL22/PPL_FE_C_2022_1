@@ -23,8 +23,8 @@ function TableStatusSkripsiMahasiswa({
   currentFilter,
 }) {
   if (isRekap) {
-    delete data.thead[7];
     delete data.thead[8];
+    delete data.thead[9];
   }
   const auth = useAuth();
   const [document, setDocument] = React.useState("");

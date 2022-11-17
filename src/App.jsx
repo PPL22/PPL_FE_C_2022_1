@@ -59,7 +59,7 @@ function App() {
 
   return (
     <>
-      {loading ? (
+      {loading || auth.currentRole === null ? (
         <div className="h-screen flex justify-center items-center">
           <Spinner />
         </div>
@@ -81,11 +81,9 @@ function App() {
           >
             {auth.firstTime === "false" && <Header />}
             <Routes>
-              <>
-                <Route path="/register" element={<UpdateDataMhs />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/dashboard/profile" element={<Profile />} />
-              </>
+              <Route path="/register" element={<UpdateDataMhs />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/profile" element={<Profile />} />
               {auth.currentRole === "Dosen" && (
                 <>
                   <Route
