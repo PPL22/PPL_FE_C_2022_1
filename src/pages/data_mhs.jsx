@@ -11,6 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { convertDataAkademik } from "../utils/convertDataAkademik";
 import { convertTimestampToDDMonthYYYY } from "../utils/time";
 import profile from "../assets/images/default_profile.png";
+import secureLocalStorage from "react-secure-storage";
 
 export default function DataMhs() {
   const auth = useAuth();
@@ -33,7 +34,7 @@ export default function DataMhs() {
 
   const getDataMahasiswaByKeyword = async (keyword) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"
@@ -61,7 +62,7 @@ export default function DataMhs() {
 
   const getDataMahasiswaByNim = async (nim) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"

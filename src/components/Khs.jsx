@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import axios from "axios";
 import config from "../configs/config.json";
+import secureLocalStorage from "react-secure-storage";
 function Khs({ closeModal, currentSemester }) {
   const auth = useAuth();
   const toast = useToast();
@@ -34,7 +35,7 @@ function Khs({ closeModal, currentSemester }) {
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-khs`, formData, {
         headers: {
           "x-access-token": token,

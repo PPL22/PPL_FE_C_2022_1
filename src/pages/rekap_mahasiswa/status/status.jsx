@@ -8,6 +8,7 @@ import config from "../../../configs/config.json";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 import { statusAktifColor } from "../../../utils/statusAktifColor";
+import secureLocalStorage from "react-secure-storage";
 
 function RekapStatusMahasiswa() {
   const auth = useAuth();
@@ -56,7 +57,7 @@ function RekapStatusMahasiswa() {
 
   const getRekapStatus = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"
@@ -94,7 +95,7 @@ function RekapStatusMahasiswa() {
 
   const getDaftarStatus = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"

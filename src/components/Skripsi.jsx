@@ -1,10 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Input from "./Input";
-import { Dropdown, OutlinedButton, Button, DangerAlert } from "./components";
+import { OutlinedButton, Button, DangerAlert } from "./components";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 import config from "../configs/config.json";
 
 function Skripsi({ closeModal, currentSemester }) {
@@ -31,7 +32,7 @@ function Skripsi({ closeModal, currentSemester }) {
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-skripsi`, formData, {
         headers: {
           "x-access-token": token,

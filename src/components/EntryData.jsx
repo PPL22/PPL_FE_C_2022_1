@@ -14,6 +14,7 @@ import {
 import { useToast } from "../contexts/ToastContext";
 import { getCurrentYear } from "../utils/time";
 import { useAuth } from "../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function EntryData({ onClick, dataDosen, refreshData }) {
   const toast = useToast();
@@ -48,7 +49,7 @@ function EntryData({ onClick, dataDosen, refreshData }) {
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/operator/add-mahasiswa`, data, {
         headers: {
           "x-access-token": token,

@@ -4,6 +4,7 @@ import { Spinner } from "../../../components/components";
 import config from "../../../configs/config.json";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function RekapPKLMahasiswa() {
   const auth = useAuth();
@@ -15,7 +16,7 @@ function RekapPKLMahasiswa() {
 
   const getRekapPKL = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"

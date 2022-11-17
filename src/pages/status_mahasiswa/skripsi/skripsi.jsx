@@ -8,6 +8,7 @@ import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusSkripsiMahasiswa from "./TableStatusSkripsiMahasiswa";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
@@ -45,7 +46,7 @@ function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
 
   const getDataSkripsi = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = isRekap
         ? apiUrl + endpoint

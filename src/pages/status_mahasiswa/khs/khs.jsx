@@ -8,6 +8,7 @@ import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusKHSMahasiswa from "./TableStatusKHSMahasiswa";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function StatusKHSMahasiswa() {
   const auth = useAuth();
@@ -47,7 +48,7 @@ function StatusKHSMahasiswa() {
 
   const getDataKHS = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/status-validasi/khs`;
       const response = await axios.get(url, {

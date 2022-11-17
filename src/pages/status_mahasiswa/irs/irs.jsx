@@ -8,6 +8,7 @@ import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusIRSMahasiswa from "./TableStatusIRSMahasiswa";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function StatusIRSMahasiswa() {
   const auth = useAuth();
@@ -44,7 +45,7 @@ function StatusIRSMahasiswa() {
   };
   const getDataIRS = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/status-validasi/irs`;
       const response = await axios.get(url, {

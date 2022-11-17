@@ -3,6 +3,7 @@ import config from "../configs/config.json";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import DashboardCard from "../components/DashboardCard";
+import secureLocalStorage from "react-secure-storage";
 import { useAuth } from "../contexts/AuthContext";
 
 function Departemen() {
@@ -35,7 +36,7 @@ function Departemen() {
 
   const getDashboard = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/departemen/dashboard`;
       const response = await axios.get(url, {
@@ -90,7 +91,7 @@ function Departemen() {
 
   const filterDashboard = async (angkatan, document) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/departemen/dashboard`;
       const response = await axios.get(url, {

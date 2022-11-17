@@ -13,6 +13,7 @@ import { Button } from "flowbite-react";
 import { motion } from "framer-motion";
 import { convertTimestampToDDMonthYYYY } from "../utils/time";
 import profile from "../assets/images/default_profile.png";
+import secureLocalStorage from "react-secure-storage";
 import { useAuth } from "../contexts/AuthContext";
 
 function Mahasiswa() {
@@ -136,7 +137,7 @@ function Mahasiswa() {
 
   const getDashboard = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/mahasiswa/dashboard`;
       const response = await axios.get(url, {

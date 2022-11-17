@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Input from "./Input";
 import { OutlinedButton, Button, Dropdown, DangerAlert } from "./components";
 import { useAuth } from "../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 import { useToast } from "../contexts/ToastContext";
 
 import axios from "axios";
@@ -30,7 +31,7 @@ function Irs({ closeModal, currentSemester }) {
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.post(`${config.API_URL}/mahasiswa/entry-irs`, formData, {
         headers: {
           "x-access-token": token,

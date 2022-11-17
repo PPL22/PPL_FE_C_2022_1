@@ -4,6 +4,7 @@ import config from "../configs/config.json";
 import axios from "axios";
 import profile from "../assets/images/default_profile.png";
 import Spinner from "../components/Spinner";
+import secureLocalStorage from "react-secure-storage";
 
 function Profile() {
   const auth = useAuth();
@@ -23,7 +24,7 @@ function Profile() {
   const getProfile = async () => {
     setIsLoading(true);
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${role}/profile`;
 

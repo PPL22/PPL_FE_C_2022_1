@@ -1,5 +1,6 @@
 import { useState, createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 
 const AuthContext = createContext();
 
@@ -24,12 +25,11 @@ function useAuthProvider() {
 
   // login
   const login = (data) => {
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
-    localStorage.setItem("id", data.id);
-    localStorage.setItem("firstTime", data.firstTime);
-    localStorage.setItem("name", data.nama);
-    localStorage.setItem("foto", data.image);
+    secureLocalStorage.setItem("accessToken", data.accessToken);
+    secureLocalStorage.setItem("refreshToken", data.refreshToken);
+    secureLocalStorage.setItem("id", data.id);
+    secureLocalStorage.setItem("name", data.nama);
+    secureLocalStorage.setItem("foto", data.image);
     setId(data.id);
     setName(data.nama);
     setFoto(data.image);
@@ -40,10 +40,14 @@ function useAuthProvider() {
       role = data.role;
     }
     setRole(role);
+    secureLocalStorage.setItem("currentRole", role.split(" ")[0]);
+    setCurrentRole(role.split(" ")[0]);
     if (role === "Mahasiswa" && data.firstTime) {
+      secureLocalStorage.setItem("firstTime", "true");
       setFirstTime("true");
       navigate("/register");
     } else {
+      secureLocalStorage.setItem("firstTime", "false");
       setFirstTime("false");
       navigate("/dashboard");
     }
@@ -52,13 +56,15 @@ function useAuthProvider() {
   // logout
   const logout = () => {
     console.log("logout");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("id");
-    localStorage.removeItem("firstTime");
-    localStorage.removeItem("name");
-    localStorage.removeItem("foto");
+    secureLocalStorage.removeItem("accessToken");
+    secureLocalStorage.removeItem("refreshToken");
+    secureLocalStorage.removeItem("id");
+    secureLocalStorage.removeItem("firstTime");
+    secureLocalStorage.removeItem("currentRole");
+    secureLocalStorage.removeItem("name");
+    secureLocalStorage.removeItem("foto");
     setRole(null);
+    setCurrentRole(null);
     setFoto(null);
     navigate("/");
   };
@@ -66,17 +72,17 @@ function useAuthProvider() {
   // update role
   const updateRole = (data) => {
     let role = data.role;
-    const firstTime = localStorage.getItem("firstTime");
+    const firstTime = secureLocalStorage.getItem("firstTime");
+    console.log(firstTime);
     if (Array.isArray(data.role)) {
       role = role.join(" ");
     }
-    if (currentRole === null) {
-      setCurrentRole(role.split(" ")[0]);
-    }
+
     setRole(role);
-    setFoto(localStorage.getItem("foto"));
-    setId(localStorage.getItem("id"));
-    setName(localStorage.getItem("name"));
+    setCurrentRole(secureLocalStorage.getItem("currentRole"));
+    setFoto(secureLocalStorage.getItem("foto"));
+    setId(secureLocalStorage.getItem("id"));
+    setName(secureLocalStorage.getItem("name"));
     setFirstTime(firstTime);
     if (role === "Mahasiswa" && firstTime === "true") {
       navigate("/register");
@@ -85,6 +91,7 @@ function useAuthProvider() {
 
   // update current role
   const updateCurrentRole = (data) => {
+    secureLocalStorage.setItem("currentRole", data);
     setCurrentRole(data);
   };
 

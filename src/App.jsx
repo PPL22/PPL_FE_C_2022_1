@@ -18,19 +18,22 @@ import { Header, Sidebar, Spinner, Toast } from "./components/components";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import { useToast } from "./contexts/ToastContext";
+import secureLocalStorage from "react-secure-storage";
 
 function App() {
   const auth = useAuth();
   const toast = useToast();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
-  const firstTime = localStorage.getItem("firstTime");
+  const firstTime = secureLocalStorage.getItem("firstTime");
 
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
       setLoading(true);
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
+      const currentRoleStorage = secureLocalStorage.getItem("currentRole");
+      console.log(currentRoleStorage);
       const pathname = window.location.pathname;
       if (!token) {
         if (pathname !== "/") {
@@ -41,6 +44,7 @@ function App() {
           const decoded = jwt_decode(token);
           if (decoded) {
             auth.updateRole(decoded);
+
             if (
               (pathname === "/register" || pathname === "/") &&
               firstTime === "false"
@@ -59,10 +63,12 @@ function App() {
 
   return (
     <>
-      {loading || auth.currentRole === null ? (
-        <div className="h-screen flex justify-center items-center">
-          <Spinner />
-        </div>
+      {loading ? (
+        (auth.currentRole === null && auth.role)(
+          <div className="h-screen flex justify-center items-center">
+            <Spinner />
+          </div>
+        )
       ) : auth.role === null ? (
         <Routes>
           <Route path="/" element={<Login />} />

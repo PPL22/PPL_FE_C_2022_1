@@ -14,6 +14,7 @@ import {
   convertTimestampToDDMonthYYYY,
 } from "../../../utils/time";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function TableStatusSkripsiMahasiswa({
   isRekap = false,
@@ -67,7 +68,7 @@ function TableStatusSkripsiMahasiswa({
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.put(`${config.API_URL}/dosen/validasi/skripsi`, data, {
         headers: {
           "x-access-token": token,

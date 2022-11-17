@@ -5,11 +5,10 @@ import config from "../configs/config.json";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Spinner, DangerAlert, DropdownSearch } from "../components/components";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 const UpdateDataMhs = () => {
-  const navigate = useNavigate();
   const auth = useAuth();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
@@ -49,7 +48,7 @@ const UpdateDataMhs = () => {
 
   const getDataMahasiswa = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       setLoading(true);
       const url = `${apiUrl}/mahasiswa/register`;
@@ -68,7 +67,7 @@ const UpdateDataMhs = () => {
 
   const getDataKabupaten = async (keyword) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/mahasiswa/kota?keyword=${keyword ?? ""}`;
       const response = await axios.get(url, {
@@ -99,7 +98,7 @@ const UpdateDataMhs = () => {
   const formSubmit = async (e) => {
     e.preventDefault();
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     const formData = new FormData();
     formData.append("email", email.current.value);
     formData.append("oldUsername", data.username);
@@ -119,8 +118,8 @@ const UpdateDataMhs = () => {
           "x-access-token": token,
         },
       });
-      localStorage.setItem("firstTime", false);
-      localStorage.setItem("foto", response.data.data.foto);
+      secureLocalStorage.setItem("firstTime", false);
+      secureLocalStorage.setItem("foto", response.data.data.foto);
       window.location.href = "/dashboard";
     } catch (error) {
       if (error.status === 401) {

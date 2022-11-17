@@ -11,6 +11,7 @@ import Input from "../../../components/Input";
 import axios from "axios";
 import config from "../../../configs/config.json";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function TableStatusIRSMahasiswa({
   data,
@@ -55,7 +56,7 @@ function TableStatusIRSMahasiswa({
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.put(`${config.API_URL}/dosen/validasi/irs`, data, {
         headers: {
           "x-access-token": token,

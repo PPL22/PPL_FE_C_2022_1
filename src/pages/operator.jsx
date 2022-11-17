@@ -13,6 +13,7 @@ import axios from "axios";
 import { TableAkunMahasiswa } from "./pages";
 import { useToast } from "../contexts/ToastContext";
 import { useAuth } from "../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function Operator() {
   const toast = useToast();
@@ -53,7 +54,7 @@ function Operator() {
 
   const getDataAkun = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/operator/akun-mahasiswa`;
       const response = await axios.get(url, {
@@ -101,7 +102,7 @@ function Operator() {
 
   const getDataDosen = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/operator/data-dosen`;
       const response = await axios.get(url, {
@@ -126,7 +127,7 @@ function Operator() {
 
   const getDataMahasiswa = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/operator/data-mahasiswa`;
       const response = await axios.get(url, {
@@ -149,7 +150,7 @@ function Operator() {
 
   const submitFileExcel = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     const form = new FormData();
     form.append("dokumen", document);
     try {

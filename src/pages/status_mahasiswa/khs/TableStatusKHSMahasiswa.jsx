@@ -10,6 +10,7 @@ import { useToast } from "../../../contexts/ToastContext";
 import Input from "../../../components/Input";
 import axios from "axios";
 import config from "../../../configs/config.json";
+import secureLocalStorage from "react-secure-storage";
 import { useAuth } from "../../../contexts/AuthContext";
 
 function TableStatusKHSMahasiswa({
@@ -61,7 +62,7 @@ function TableStatusKHSMahasiswa({
     try {
       setLoading(true);
       setErrorMessage("");
-      const token = localStorage.getItem("accessToken");
+      const token = secureLocalStorage.getItem("accessToken");
       await axios.put(`${config.API_URL}/dosen/validasi/khs`, data, {
         headers: {
           "x-access-token": token,

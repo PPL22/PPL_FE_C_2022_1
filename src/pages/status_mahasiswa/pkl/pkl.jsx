@@ -9,6 +9,7 @@ import axios from "axios";
 import TableStatusPKLMahasiswa from "./TableStatusPKLMahasiswa";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
@@ -44,7 +45,7 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
 
   const getDataPkl = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = isRekap
         ? apiUrl + endpoint

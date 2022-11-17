@@ -3,6 +3,7 @@ import config from "../configs/config.json";
 import axios from "axios";
 import { DashboardCard, Spinner } from "../components/components";
 import { useAuth } from "../contexts/AuthContext";
+import secureLocalStorage from "react-secure-storage";
 
 function Dosen() {
   const auth = useAuth();
@@ -38,7 +39,7 @@ function Dosen() {
 
   const getDashboard = async () => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/dashboard`;
       const response = await axios.get(url, {
@@ -49,7 +50,6 @@ function Dosen() {
           "x-access-token": token,
         },
       });
-      console.log(response);
       const result = response.data.data;
       setDataIRS({
         ...dataIRS,
@@ -93,7 +93,7 @@ function Dosen() {
 
   const filterDashboard = async (angkatan, document) => {
     const apiUrl = config.API_URL;
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/dosen/dashboard`;
       const response = await axios.get(url, {
