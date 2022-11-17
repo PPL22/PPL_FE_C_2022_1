@@ -15,6 +15,7 @@ export const useAuth = () => {
 
 function useAuthProvider() {
   const [role, setRole] = useState(null);
+  const [currentRole, setCurrentRole] = useState(null);
   const [firstTime, setFirstTime] = useState();
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
@@ -79,8 +80,14 @@ function useAuthProvider() {
     }
   };
 
+  // update current role
+  const updateCurrentRole = (data) => {
+    setCurrentRole(data);
+  };
+
   return {
     role,
+    currentRole,
     name,
     firstTime,
     id,
@@ -88,5 +95,6 @@ function useAuthProvider() {
     login,
     logout,
     updateRole,
+    updateCurrentRole,
   };
 }

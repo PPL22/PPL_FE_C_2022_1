@@ -63,7 +63,7 @@ function Sidebar() {
               </svg>
               Dashboard
             </Link>
-            {auth.role?.includes("Dosen") && (
+            {auth.currentRole === "Dosen" && (
               <CollapseMenu
                 svg={
                   <svg
@@ -115,8 +115,8 @@ function Sidebar() {
                 ]}
               />
             )}
-            {(auth.role?.includes("Dosen") ||
-              auth.role?.includes("Departemen")) && (
+            {(auth.currentRole === "Dosen" ||
+              auth.currentRole === "Departemen") && (
               <CollapseMenu
                 svg={
                   <svg
@@ -191,8 +191,8 @@ function Sidebar() {
                 ]}
               />
             )}
-            {(auth.role?.includes("Dosen") ||
-              auth.role?.includes("Departemen")) && (
+            {(auth.currentRole === "Dosen" ||
+              auth.currentRole === "Departemen") && (
               <Link
                 to="/dashboard/data-mahasiswa"
                 className={`${

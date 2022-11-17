@@ -40,7 +40,7 @@ function DashboardCard({ title, updateData, data, path }) {
           <p className="text-gray-500">Tidak ada data</p>
         </div>
       )}
-      {auth.role.includes("Dosen") && (
+      {auth.currentRole === "Dosen" && (
         <div className="flex justify-center">
           {data.elements[1] > 0 && (
             <Link to={path}>

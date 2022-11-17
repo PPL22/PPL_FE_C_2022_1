@@ -40,10 +40,14 @@ function Departemen() {
     try {
       const url = `${apiUrl}/departemen/dashboard`;
       const response = await axios.get(url, {
+        params: {
+          dokumen: "ALL",
+        },
         headers: {
           "x-access-token": token,
         },
       });
+      console.log(response);
       const result = response.data.data;
       setDataIRS({
         ...dataIRS,
@@ -85,15 +89,78 @@ function Departemen() {
     }
   };
 
+  const filterDashboard = async (angkatan, document) => {
+    const apiUrl = config.API_URL;
+    const token = localStorage.getItem("accessToken");
+    try {
+      const url = `${apiUrl}/departemen/dashboard`;
+      const response = await axios.get(url, {
+        params: {
+          angkatan: angkatan === "Semua Angkatan" ? null : angkatan,
+          dokumen: document,
+        },
+        headers: {
+          "x-access-token": token,
+        },
+      });
+      const result = response.data.data;
+      console.log(result);
+      if (document === "IRS") {
+        setDataIRS({
+          ...dataIRS,
+          elements: [
+            result.irs.validated,
+            result.irs.notValidated,
+            result.irs.noEntry,
+          ],
+        });
+      } else if (document === "KHS") {
+        setDataKHS({
+          ...dataKHS,
+          elements: [
+            result.khs.validated,
+            result.khs.notValidated,
+            result.khs.noEntry,
+          ],
+        });
+      } else if (document === "PKL") {
+        setDataPKL({
+          ...dataPKL,
+          elements: [
+            result.pkl.lulus,
+            result.pkl.notValidated,
+            result.pkl.blmLulus,
+          ],
+        });
+      } else if (document === "SKRIPSI") {
+        setDataSkripsi({
+          ...dataSkripsi,
+          elements: [
+            result.skripsi.lulus,
+            result.skripsi.notValidated,
+            result.skripsi.blmLulus,
+          ],
+        });
+      }
+    } catch (error) {
+      if (error.status === 401) {
+        auth.logout();
+      }
+      throw error;
+    }
+  };
+
   React.useEffect(() => {
     setIsLoading(true);
     getDashboard();
     setIsLoading(false);
   }, []);
 
-  const updateData = (value) => {
-    console.log(value);
+  const updateData = (angkatan, document) => {
+    filterDashboard(angkatan, document);
   };
+
+  React.useEffect(() => {}, [dataIRS, dataKHS, dataPKL, dataSkripsi]);
 
   return isLoading ? (
     <div className="h-full flex justify-center items-center">

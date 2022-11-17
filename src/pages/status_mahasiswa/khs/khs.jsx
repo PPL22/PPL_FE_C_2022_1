@@ -40,6 +40,11 @@ function StatusKHSMahasiswa() {
     setPage(value);
   };
 
+  const updateLimit = (value) => {
+    setLimit(value);
+    setPage(1);
+  };
+
   const getDataKHS = async () => {
     const apiUrl = config.API_URL;
     const token = localStorage.getItem("accessToken");
@@ -138,7 +143,7 @@ function StatusKHSMahasiswa() {
           label={"Tampilkan per baris"}
           id="tampilkan"
           defaultValue={limit}
-          onChange={setLimit}
+          onChange={updateLimit}
           options={[
             { value: 5, label: "10 data" },
             { value: 10, label: "25 data" },

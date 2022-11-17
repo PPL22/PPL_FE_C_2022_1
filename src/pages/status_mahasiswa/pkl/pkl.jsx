@@ -39,6 +39,7 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
 
   const updateLimit = (value) => {
     setLimit(value);
+    setPage(1);
   };
 
   const getDataPkl = async () => {

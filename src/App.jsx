@@ -55,9 +55,7 @@ function App() {
       setLoading(false);
     };
     verifyToken();
-  }, []);
-
-  console.log(auth.role);
+  }, [auth.currentRole]);
 
   return (
     <>
@@ -88,7 +86,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
               </>
-              {auth.role.includes("Dosen") && (
+              {auth.currentRole === "Dosen" && (
                 <>
                   <Route
                     path="/dashboard/status/irs"
@@ -108,8 +106,8 @@ function App() {
                   />
                 </>
               )}
-              {(auth.role.includes("Dosen") ||
-                auth.role.includes("Departemen")) && (
+              {(auth.currentRole === "Dosen" ||
+                auth.currentRole === "Departemen") && (
                 <>
                   <Route
                     path="/dashboard/rekap/status"

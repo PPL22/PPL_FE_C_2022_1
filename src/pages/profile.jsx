@@ -10,13 +10,13 @@ function Profile() {
   const [data, setData] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   let role = "";
-  if (auth.role.includes("Mahasiswa")) {
+  if (auth.currentRole === "Mahasiswa") {
     role = "mahasiswa";
-  } else if (auth.role.includes("Dosen")) {
+  } else if (auth.currentRole === "Dosen") {
     role = "dosen";
-  } else if (auth.role.includes("Operator")) {
+  } else if (auth.currentRole === "Operator") {
     role = "operator";
-  } else if (auth.role.includes("Departemen")) {
+  } else if (auth.currentRole === "Departemen") {
     role = "departemen";
   }
 
@@ -72,7 +72,7 @@ function Profile() {
   ) : (
     <div className="my-5">
       <h1 className="text-center text-2xl font-bold">
-        Profile {auth.role.includes("Mahasiswa") ? "Mahasiswa" : "Dosen"}
+        Profile {auth.currentRole === "Mahasiswa" ? "Mahasiswa" : "Dosen"}
       </h1>
       <section className="flex justify-center items-center gap-x-10 mt-20">
         <img
@@ -96,7 +96,7 @@ function Profile() {
           </div>
           <div className="flex">
             <p className="font-bold w-[200px]">
-              {auth.role.includes("Mahasiswa") ? "NIM" : "NIP"}{" "}
+              {auth.currentRole === "Mahasiswa" ? "NIM" : "NIP"}{" "}
             </p>
             <p className="mr-2">:</p>
             <p>{auth.id}</p>
