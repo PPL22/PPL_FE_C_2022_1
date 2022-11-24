@@ -8,7 +8,7 @@ import { Spinner, DangerAlert, DropdownSearch } from "../components/components";
 import { useAuth } from "../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
 
-const UpdateDataMhs = () => {
+const Registration = () => {
   const auth = useAuth();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
@@ -21,9 +21,11 @@ const UpdateDataMhs = () => {
   const email = useRef();
   const username = useRef();
   const password = useRef();
+  const confirmPassword = useRef();
   const alamat = useRef();
   const kodeKab = useRef();
   const noHP = useRef();
+  const [foto, setFoto] = useState(null);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -46,18 +48,36 @@ const UpdateDataMhs = () => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const getDataMahasiswa = async () => {
+  const getDataRegistration = async () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
       setLoading(true);
-      const url = `${apiUrl}/mahasiswa/register`;
+      let url;
+      if (auth.currentRole === "Mahasiswa") {
+        url = `${apiUrl}/mahasiswa/register`;
+      } else {
+        url = `${apiUrl}/dosen/register`;
+      }
       const response = await axios.get(url, {
         headers: {
           "x-access-token": token,
         },
       });
       setData(response.data.data);
+      if (response.data.data.foto != null) {
+        if (auth.currenRole === "Mahasiswa") {
+          const url = `${config.API_IMAGE_URL}/foto_mhs/${response.data.data.foto}`;
+          setFoto(url);
+        } else {
+          if (response.data.data.foto.includes("http")) {
+            setFoto(response.data.data.foto);
+          } else {
+            const url = `${config.API_IMAGE_URL}/foto_dosen/${response.data.data.foto}`;
+            setFoto(url);
+          }
+        }
+      }
     } catch (error) {
       throw error;
     } finally {
@@ -67,14 +87,9 @@ const UpdateDataMhs = () => {
 
   const getDataKabupaten = async (keyword) => {
     const apiUrl = config.API_URL;
-    const token = secureLocalStorage.getItem("accessToken");
     try {
-      const url = `${apiUrl}/mahasiswa/kota?keyword=${keyword ?? ""}`;
-      const response = await axios.get(url, {
-        headers: {
-          "x-access-token": token,
-        },
-      });
+      const url = `${apiUrl}/kota?keyword=${keyword ?? ""}`;
+      const response = await axios.get(url);
       const data = response.data.map((item) => {
         return {
           value: item.kodeKab,
@@ -91,12 +106,18 @@ const UpdateDataMhs = () => {
   };
 
   useEffect(() => {
-    getDataMahasiswa();
+    getDataRegistration();
     getDataKabupaten();
   }, []);
 
   const formSubmit = async (e) => {
     e.preventDefault();
+
+    if (password.current.value !== confirmPassword.current.value) {
+      setErrorMessage("Password tidak sama");
+      return;
+    }
+
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     const formData = new FormData();
@@ -104,22 +125,33 @@ const UpdateDataMhs = () => {
     formData.append("oldUsername", data.username);
     formData.append("username", username.current.value);
     formData.append("password", password.current.value);
-    formData.append("nim", data.nim);
     formData.append("alamat", alamat.current.value);
     formData.append("kodeKab", kodeKab.current.props.value.value);
     formData.append("noHP", noHP.current.value);
     formData.append("foto", selectedFile);
+    if (auth.currenRole === "Mahasiswa") {
+      formData.append("nim", data.nim);
+    } else {
+      formData.append("nip", data.nip);
+    }
 
     try {
       setIsSubmitted(true);
-      const url = `${apiUrl}/mahasiswa/update-data`;
+      let url;
+      if (auth.currentRole === "Mahasiswa") {
+        url = `${apiUrl}/mahasiswa/update-data`;
+      } else {
+        url = `${apiUrl}/dosen/update-data`;
+      }
       const response = await axios.post(url, formData, {
         headers: {
           "x-access-token": token,
         },
       });
-      secureLocalStorage.setItem("firstTime", false);
-      secureLocalStorage.setItem("foto", response.data.data.foto);
+      secureLocalStorage.setItem("firstTime", "false");
+      if (selectedFile) {
+        secureLocalStorage.setItem("foto", response.data.data.foto);
+      }
       window.location.href = "/dashboard";
     } catch (error) {
       if (error.status === 401) {
@@ -193,16 +225,18 @@ const UpdateDataMhs = () => {
 
                     <div className="relative">
                       <label
-                        htmlFor="nim"
+                        htmlFor="id"
                         className="text-sm font-medium text-gray-900"
                       >
-                        NIM
+                        {auth.currentRole === "Mahasiswa" ? "NIM" : "NIP"}
                       </label>
                       <input
                         type="text"
-                        id="nim"
+                        id="id"
                         className="block p-4 w-full text-sm text-gray-600 bg-gray-200 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={data.nim}
+                        value={
+                          auth.currenRole === "Mahasiswa" ? data.nim : data.nip
+                        }
                         disabled
                         required
                       />
@@ -229,7 +263,6 @@ const UpdateDataMhs = () => {
                       <label
                         htmlFor="username"
                         className="text-sm font-medium text-gray-900"
-                        defaultValue={data.nama}
                       >
                         Username
                       </label>
@@ -255,6 +288,22 @@ const UpdateDataMhs = () => {
                         id="password"
                         className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
                         ref={password}
+                        required
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <label
+                        htmlFor="confirmPassword"
+                        className="text-sm font-medium text-gray-900"
+                      >
+                        Konfirmasi Password
+                      </label>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
+                        ref={confirmPassword}
                         required
                       />
                     </div>
@@ -301,60 +350,64 @@ const UpdateDataMhs = () => {
                         id="no-handphone"
                         ref={noHP}
                         className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        placeholder="No Handphone"
+                        placeholder="No Handphone (+62)"
                         required
                       />
                     </div>
 
-                    <div className="relative">
-                      <label
-                        htmlFor="status"
-                        className="text-sm font-medium text-gray-900"
-                      >
-                        Status
-                      </label>
-                      <input
-                        type="text"
-                        id="status"
-                        className="block p-4 w-full text-sm  text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={data.statusAktif}
-                        disabled
-                        required
-                      />
-                    </div>
-                    <div className="relative">
-                      <label
-                        htmlFor="jalur-masuk"
-                        className="text-sm font-medium text-gray-900"
-                      >
-                        Jalur Masuk
-                      </label>
-                      <input
-                        type="text"
-                        id="jalur-masuk"
-                        className="block p-4 w-full text-sm text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={data.jalurMasuk}
-                        disabled
-                        required
-                      />
-                    </div>
+                    {auth.currenRole === "Mahasiswa" && (
+                      <>
+                        <div className="relative">
+                          <label
+                            htmlFor="status"
+                            className="text-sm font-medium text-gray-900"
+                          >
+                            Status
+                          </label>
+                          <input
+                            type="text"
+                            id="status"
+                            className="block p-4 w-full text-sm  text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
+                            value={data.statusAktif}
+                            disabled
+                            required
+                          />
+                        </div>
+                        <div className="relative">
+                          <label
+                            htmlFor="jalur-masuk"
+                            className="text-sm font-medium text-gray-900"
+                          >
+                            Jalur Masuk
+                          </label>
+                          <input
+                            type="text"
+                            id="jalur-masuk"
+                            className="block p-4 w-full text-sm text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
+                            value={data.jalurMasuk}
+                            disabled
+                            required
+                          />
+                        </div>
 
-                    <div className="relative">
-                      <label
-                        htmlFor="dosen-wali"
-                        className="text-sm font-medium text-gray-900"
-                      >
-                        Dosen Wali
-                      </label>
-                      <input
-                        type="text"
-                        id="dosen-wali"
-                        className="block p-4 w-full text-sm text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={data.namaWali}
-                        disabled
-                        required
-                      />
-                    </div>
+                        <div className="relative">
+                          <label
+                            htmlFor="dosen-wali"
+                            className="text-sm font-medium text-gray-900"
+                          >
+                            Dosen Wali
+                          </label>
+                          <input
+                            type="text"
+                            id="dosen-wali"
+                            className="block p-4 w-full text-sm text-gray-600 bg-gray-200  rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
+                            value={data.namaWali}
+                            disabled
+                            required
+                          />
+                        </div>
+                      </>
+                    )}
 
                     <div className="block p-4 w-full text-sm text-gray-900 bg-blue-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 ">
                       <div className="">
@@ -368,8 +421,8 @@ const UpdateDataMhs = () => {
                         ) : (
                           <img
                             className="mx-auto rounded w-[200px] h-[200px] object-cover"
-                            src={profile}
-                            alt="foto-mahasiswa"
+                            src={foto ?? profile}
+                            alt="foto-profile"
                           />
                           /* Ceritanya profile image default */
                         )}
@@ -378,7 +431,7 @@ const UpdateDataMhs = () => {
                             className="mt-4 max-w-xs"
                             type="file"
                             onChange={onSelectFile}
-                            required
+                            required={foto === null}
                           />
                         </div>
                       </div>
@@ -408,4 +461,4 @@ const UpdateDataMhs = () => {
   );
 };
 
-export default UpdateDataMhs;
+export default Registration;

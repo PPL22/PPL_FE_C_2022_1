@@ -4,13 +4,11 @@ import {
   Charts,
   DangerAlert,
   Dropdown,
-  EntryData,
-  Input,
   PaginationPage,
   Spinner,
 } from "../components/components";
 import axios from "axios";
-import { TableAkunMahasiswa } from "./pages";
+import { TableAkun, EntryDataMahasiswa, EntryDataDosen } from "./pages";
 import { useToast } from "../contexts/ToastContext";
 import { useAuth } from "../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
@@ -18,10 +16,11 @@ import secureLocalStorage from "react-secure-storage";
 function Operator() {
   const toast = useToast();
   const auth = useAuth();
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = React.useState(null);
   const [dataMahasiswa, setDataMahasiswa] = React.useState({});
-  const [dataDosen, setDataDosen] = React.useState([]);
-  const [dataAkun, setDataAkun] = React.useState({
+  const [dataDosen, setDataDosen] = React.useState({});
+  const [daftarDosen, setDaftarDosen] = React.useState([]);
+  const [dataAkunMahasiswa, setDataAkunMahasiswa] = React.useState({
     thead: [
       "No",
       "Nama Mahasiswa",
@@ -35,6 +34,10 @@ function Operator() {
     ],
     tbody: [],
   });
+  const [dataAkunDosen, setDataAkunDosen] = React.useState({
+    thead: ["No", "Nama Dosen", "NIP", "Username", "Password"],
+    tbody: [],
+  });
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -42,6 +45,7 @@ function Operator() {
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(10);
   const [limit, setLimit] = React.useState(5);
+  const [toggleAkun, setToggleAkun] = React.useState("Mahasiswa");
 
   const updatePage = (value) => {
     setPage(value);
@@ -52,7 +56,7 @@ function Operator() {
     setPage(1);
   };
 
-  const getDataAkun = async () => {
+  const getDataAkunMahasiswa = async () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
@@ -80,8 +84,8 @@ function Operator() {
           item.statusAktif,
         ];
       });
-      setDataAkun({
-        ...dataAkun,
+      setDataAkunMahasiswa({
+        ...dataAkunMahasiswa,
         tbody: data,
       });
       setTotalPage(response.data.maxPage);
@@ -93,18 +97,55 @@ function Operator() {
     }
   };
 
-  function showModal() {
-    setModal(true);
-  }
-  function closeModal() {
-    setModal(false);
-  }
-
-  const getDataDosen = async () => {
+  const getDataAkunDosen = async () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
-      const url = `${apiUrl}/operator/data-dosen`;
+      const url = `${apiUrl}/operator/akun-dosen`;
+      const response = await axios.get(url, {
+        params: {
+          page: page,
+          qty: limit,
+        },
+        headers: {
+          "x-access-token": token,
+        },
+      });
+      let startNumber = (page - 1) * limit + 1;
+      const data = response.data.list.map((item) => {
+        return [
+          startNumber++,
+          item.nama,
+          item.nip,
+          item.username,
+          item.password,
+        ];
+      });
+      setDataAkunDosen({
+        ...dataAkunDosen,
+        tbody: data,
+      });
+      setTotalPage(response.data.maxPage);
+    } catch (error) {
+      if (error.status === 401) {
+        auth.logout();
+      }
+      throw error;
+    }
+  };
+
+  function showModal(akun) {
+    setModal(akun);
+  }
+  function closeModal() {
+    setModal(null);
+  }
+
+  const getDaftarDosen = async () => {
+    const apiUrl = config.API_URL;
+    const token = secureLocalStorage.getItem("accessToken");
+    try {
+      const url = `${apiUrl}/operator/daftar-dosen`;
       const response = await axios.get(url, {
         headers: {
           "x-access-token": token,
@@ -116,7 +157,7 @@ function Operator() {
           label: item.nama,
         };
       });
-      setDataDosen(data);
+      setDaftarDosen(data);
     } catch (error) {
       if (error.status === 401) {
         auth.logout();
@@ -136,6 +177,26 @@ function Operator() {
         },
       });
       setDataMahasiswa(response.data);
+    } catch (error) {
+      if (error.status === 401) {
+        auth.logout();
+      }
+      throw error;
+    }
+  };
+
+  const getDataDosen = async () => {
+    const apiUrl = config.API_URL;
+    const token = secureLocalStorage.getItem("accessToken");
+    try {
+      const url = `${apiUrl}/operator/data-dosen`;
+      const response = await axios.get(url, {
+        headers: {
+          "x-access-token": token,
+        },
+      });
+      console.log(response.data);
+      setDataDosen(response.data);
     } catch (error) {
       if (error.status === 401) {
         auth.logout();
@@ -164,7 +225,7 @@ function Operator() {
       });
       setDocument(null);
       toast.setToast(response.data.message, "success");
-      refreshData();
+      refreshDataMahasiswa();
     } catch (error) {
       if (error.status === 401) {
         auth.logout();
@@ -176,24 +237,49 @@ function Operator() {
     }
   };
 
-  const refreshData = () => {
-    getDataAkun();
+  const refreshDataMahasiswa = () => {
+    setPage(1);
+    setTotalPage(0);
+    getDataAkunMahasiswa();
     getDataMahasiswa();
+  };
+
+  const refreshDataDosen = () => {
+    setPage(1);
+    setTotalPage(0);
+    getDataAkunDosen();
+    getDataDosen();
   };
 
   React.useEffect(() => {
     setIsLoading(true);
+    getDaftarDosen();
+    getDataAkunMahasiswa();
     getDataDosen();
-    getDataAkun();
     getDataMahasiswa();
     setIsLoading(false);
   }, []);
 
   React.useEffect(() => {
-    getDataAkun();
+    if (toggleAkun === "Mahasiswa") {
+      getDataAkunMahasiswa();
+    } else {
+      getDataAkunDosen();
+    }
   }, [page, limit]);
 
-  const data = {
+  const handleToggleAkun = (akun) => {
+    setToggleAkun(akun);
+    setPage(1);
+    setTotalPage(0);
+    if (akun === "Mahasiswa") {
+      getDataAkunMahasiswa();
+    } else {
+      getDataAkunDosen();
+    }
+  };
+
+  const dashboardMahasiswa = {
     labels: ["Sudah Memiliki Akun", "Belum Memiliki Akun"],
     colors: ["#5570F1", "#FFCC91"],
     label: "Jumlah Mahasiswa",
@@ -202,6 +288,13 @@ function Operator() {
       dataMahasiswa.belumMemilikiAkun,
     ],
   };
+
+  const dashboardDosen = {
+    labels: ["Sudah Memiliki Akun", "Belum Memiliki Akun"],
+    colors: ["#5570F1", "#FFCC91"],
+    label: "Jumlah Dosen",
+    elements: [dataDosen.sudahMemilikiAkun, dataDosen.belumMemilikiAkun],
+  };
   return (
     <>
       {errorMessage && (
@@ -209,23 +302,25 @@ function Operator() {
           <DangerAlert message={errorMessage} />
         </div>
       )}
-      <section className="flex justify-center">
+      <section className="flex justify-center gap-x-10">
         <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-md">
           <div className="flex justify-between">
             <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
               Data Mahasiswa
             </h5>
           </div>
-          {data && (
-            <div className="max-w-xs mx-auto">
-              <Charts data={data} />
-            </div>
-          )}
+          <div className="flex gap-x-10">
+            {dashboardMahasiswa && (
+              <div className="max-w-xs mx-auto">
+                <Charts data={dashboardMahasiswa} />
+              </div>
+            )}
+          </div>
           <div className="flex justify-center items-center mt-4 gap-x-4">
             <button
               className="flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
               type="button"
-              onClick={showModal}
+              onClick={() => showModal("Mahasiswa")}
               data-modal-toggle="entry-data-modal"
             >
               Entry Data
@@ -272,13 +367,70 @@ function Operator() {
             )}
           </div>
         </div>
+
+        <div className="p-6 bg-white rounded-lg border border-gray-200 shadow-md">
+          <div className="flex justify-between">
+            <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+              Data Dosen
+            </h5>
+          </div>
+          <div className="flex gap-x-10">
+            {dashboardDosen && (
+              <div className="max-w-xs mx-auto">
+                <Charts data={dashboardDosen} />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-center items-center mt-4 gap-x-4">
+            <button
+              className="flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+              type="button"
+              onClick={() => showModal("Dosen")}
+              data-modal-toggle="entry-data-modal"
+            >
+              Entry Data
+            </button>
+          </div>
+        </div>
       </section>
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <TableAkunMahasiswa dataAkun={dataAkun} />
-          <div className="flex justify-between mt-2 px-8">
+        <section className="mt-10 mx-10">
+          <div className="flex gap-x-8 justify-center">
+            <button
+              onClick={() => handleToggleAkun("Mahasiswa")}
+              className={`font-semibold border border-blue-500 px-4 py-3 rounded hover:text-gray-100 hover:bg-blue-500 ${
+                toggleAkun === "Mahasiswa"
+                  ? "bg-blue-500 text-gray-100"
+                  : "text-gray-900"
+              }`}
+            >
+              Daftar Akun Mahasiswa
+            </button>
+
+            <button
+              onClick={() => handleToggleAkun("Dosen")}
+              className={`font-semibold border border-blue-500 px-4 py-3 rounded hover:text-gray-100 hover:bg-blue-500 ${
+                toggleAkun === "Dosen"
+                  ? "bg-blue-500 text-gray-100"
+                  : "text-gray-900"
+              }`}
+            >
+              Daftar Akun Dosen
+            </button>
+          </div>
+          <TableAkun
+            dataAkun={
+              toggleAkun === "Mahasiswa" ? dataAkunMahasiswa : dataAkunDosen
+            }
+            title={
+              toggleAkun === "Mahasiswa"
+                ? "Daftar Akun Mahasiswa"
+                : "Daftar Akun Dosen"
+            }
+          />
+          <div className="flex justify-between mt-2">
             <Dropdown
               label={"Tampilkan per baris"}
               id="tampilkan"
@@ -298,16 +450,19 @@ function Operator() {
               updatePage={updatePage}
             />
           </div>
-        </>
+        </section>
       )}
 
-      {modal && (
-        <EntryData
-          onClick={closeModal}
-          dataDosen={dataDosen}
-          refreshData={refreshData}
-        />
-      )}
+      {modal !== null &&
+        (modal === "Mahasiswa" ? (
+          <EntryDataMahasiswa
+            onClick={closeModal}
+            dataDosen={daftarDosen}
+            refreshData={refreshDataMahasiswa}
+          />
+        ) : (
+          <EntryDataDosen onClick={closeModal} refreshData={refreshDataDosen} />
+        ))}
     </>
   );
 }

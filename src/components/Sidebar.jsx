@@ -23,7 +23,11 @@ function Sidebar() {
                 auth.foto !== "null"
                   ? auth.foto.includes("http")
                     ? auth.foto
-                    : `${configs.API_IMAGE_URL}/foto_mhs/${auth.foto}`
+                    : `${configs.API_IMAGE_URL}/${
+                        auth.currentRole === "Mahasiswa"
+                          ? "foto_mhs"
+                          : "foto_dosen"
+                      }/${auth.foto}`
                   : profile
               }
               alt="foto profil"

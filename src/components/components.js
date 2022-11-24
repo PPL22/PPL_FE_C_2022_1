@@ -3,7 +3,6 @@ export { default as DangerAlert } from "./DangerAlert";
 export { default as Charts } from "./Charts";
 export { default as Sidebar } from "./Sidebar";
 export { default as Header } from "./Header";
-export { default as EntryData } from "./EntryData";
 export { default as Input } from "./Input";
 export { default as InputGenerate } from "./InputGenerate";
 export { default as Dropdown } from "./Dropdown";

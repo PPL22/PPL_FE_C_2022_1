@@ -42,7 +42,7 @@ function useAuthProvider() {
     setRole(role);
     secureLocalStorage.setItem("currentRole", role.split(" ")[0]);
     setCurrentRole(role.split(" ")[0]);
-    if (role === "Mahasiswa" && data.firstTime) {
+    if (data.firstTime) {
       secureLocalStorage.setItem("firstTime", "true");
       setFirstTime("true");
       navigate("/register");
@@ -84,7 +84,7 @@ function useAuthProvider() {
     setId(secureLocalStorage.getItem("id"));
     setName(secureLocalStorage.getItem("name"));
     setFirstTime(firstTime);
-    if (role === "Mahasiswa" && firstTime === "true") {
+    if (firstTime === "true") {
       navigate("/register");
     }
   };

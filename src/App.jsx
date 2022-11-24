@@ -3,7 +3,6 @@ import {
   Login,
   Dashboard,
   StatusIRSMahasiswa,
-  UpdateDataMhs,
   StatusKHSMahasiswa,
   StatusSkripsiMahasiswa,
   StatusPKLMahasiswa,
@@ -12,6 +11,7 @@ import {
   RekapStatusMahasiswa,
   DataMhs,
   Profile,
+  Registration,
 } from "./pages/pages";
 import jwt_decode from "jwt-decode";
 import { Header, Sidebar, Spinner, Toast } from "./components/components";
@@ -44,7 +44,6 @@ function App() {
           const decoded = jwt_decode(token);
           if (decoded) {
             auth.updateRole(decoded);
-
             if (
               (pathname === "/register" || pathname === "/") &&
               firstTime === "false"
@@ -87,7 +86,7 @@ function App() {
           >
             {auth.firstTime === "false" && <Header />}
             <Routes>
-              <Route path="/register" element={<UpdateDataMhs />} />
+              <Route path="/register" element={<Registration />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/dashboard/profile" element={<Profile />} />
               {auth.currentRole === "Dosen" && (

@@ -1,22 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Input from "./Input";
 import axios from "axios";
-import config from "../configs/config.json";
+import config from "../../configs/config.json";
 import {
+  Input,
   Dropdown,
   DropdownSearch,
   OutlinedButton,
   Button,
   InputGenerate,
   DangerAlert,
-} from "./components";
-import { useToast } from "../contexts/ToastContext";
-import { getCurrentYear } from "../utils/time";
-import { useAuth } from "../contexts/AuthContext";
+} from "../../components/components";
+import { useToast } from "../../contexts/ToastContext";
+import { getCurrentYear } from "../../utils/time";
+import { useAuth } from "../../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
 
-function EntryData({ onClick, dataDosen, refreshData }) {
+function EntryDataMahasiswa({ onClick, dataDosen, refreshData }) {
   const toast = useToast();
   const auth = useAuth();
   const generateCharacter = () => {
@@ -236,4 +236,4 @@ function EntryData({ onClick, dataDosen, refreshData }) {
   );
 }
 
-export default EntryData;
+export default EntryDataMahasiswa;

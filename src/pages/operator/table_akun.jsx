@@ -1,10 +1,10 @@
 import React from "react";
 import { statusAktifColor } from "../../utils/statusAktifColor";
 
-function TableAkunMahasiswa({ dataAkun }) {
+function TableAkun({ dataAkun, title }) {
   return (
-    <section className="mt-10 px-8">
-      <h2 className="text-xl font-bold">Daftar Akun Mahasiswa</h2>
+    <section className="mt-10">
+      <h2 className="text-xl font-bold">{title}</h2>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-6">
         <table className="w-full text-sm text-gray-500 text-center table-fixed">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -43,4 +43,4 @@ function TableAkunMahasiswa({ dataAkun }) {
   );
 }
 
-export default TableAkunMahasiswa;
+export default TableAkun;

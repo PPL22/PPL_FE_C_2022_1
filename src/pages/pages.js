@@ -1,6 +1,6 @@
 export { default as Home } from "./home";
 export { default as Login } from "./login";
-export { default as UpdateDataMhs } from "./update_data_mhs";
+export { default as Registration } from "./registration";
 export { default as Dashboard } from "./dashboard";
 export { default as Profile } from "./profile";
 export { default as Dosen } from "./dosen";
@@ -17,4 +17,6 @@ export { default as RekapStatusMahasiswa } from "./rekap_mahasiswa/status/status
 export { default as RekapPKLMahasiswa } from "./rekap_mahasiswa/pkl/pkl";
 export { default as RekapSkripsiMahasiswa } from "./rekap_mahasiswa/skripsi/skripsi";
 
-export { default as TableAkunMahasiswa } from "./akun_mahasiswa/table_akun_mahasiswa";
+export { default as TableAkun } from "./operator/table_akun";
+export { default as EntryDataDosen } from "./operator/EntryDataDosen";
+export { default as EntryDataMahasiswa } from "./operator/EntryDataMahasiswa";

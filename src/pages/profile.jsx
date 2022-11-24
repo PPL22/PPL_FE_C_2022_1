@@ -83,7 +83,9 @@ function Profile() {
             auth.foto !== "null"
               ? auth.foto.includes("http")
                 ? auth.foto
-                : `${config.API_IMAGE_URL}/foto_mhs/${auth.foto}`
+                : `${config.API_IMAGE_URL}/${
+                    auth.currentRole === "Mahasiswa" ? "foto_mhs" : "foto_dosen"
+                  }/${auth.foto}`
               : profile
           }
           alt="foto profil"
