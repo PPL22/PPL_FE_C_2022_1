@@ -170,7 +170,7 @@ function Operator() {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
-      const url = `${apiUrl}/operator/data-mahasiswa`;
+      const url = `${apiUrl}/operator/jumlah-akun-mahasiswa`;
       const response = await axios.get(url, {
         headers: {
           "x-access-token": token,
@@ -189,7 +189,7 @@ function Operator() {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
-      const url = `${apiUrl}/operator/data-dosen`;
+      const url = `${apiUrl}/operator/jumlah-akun-dosen`;
       const response = await axios.get(url, {
         headers: {
           "x-access-token": token,
@@ -295,6 +295,7 @@ function Operator() {
     label: "Jumlah Dosen",
     elements: [dataDosen.sudahMemilikiAkun, dataDosen.belumMemilikiAkun],
   };
+
   return (
     <>
       {errorMessage && (
@@ -429,6 +430,7 @@ function Operator() {
                 ? "Daftar Akun Mahasiswa"
                 : "Daftar Akun Dosen"
             }
+            akun={toggleAkun.toLowerCase()}
           />
           <div className="flex justify-between mt-2">
             <Dropdown

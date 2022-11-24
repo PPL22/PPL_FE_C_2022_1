@@ -7,12 +7,14 @@ import {
 import config from "../../../configs/config.json";
 import axios from "axios";
 import TableStatusPKLMahasiswa from "./TableStatusPKLMahasiswa";
-import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
+import { downloadExcel } from "../../../utils/downloadExcel";
+import { useToast } from "../../../contexts/ToastContext";
 
 function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
+  const toast = useToast();
   const [dataPkl, setDataPkl] = React.useState({
     thead: [
       "No",
@@ -117,6 +119,19 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
     }
   };
 
+  const handleCetak = async () => {
+    const apiUrl = config.API_URL;
+    const url = `${apiUrl}/${
+      auth.currentRole === "Dosen" ? "dosen" : "departemen"
+    }/daftar-pkl/cetak`;
+    const result = await downloadExcel(url, "daftar pkl");
+    if (result === "success") {
+      toast.setToast("Berhasil mendownload file", "success");
+    } else {
+      toast.setToast("Gagal mendownload file", "error");
+    }
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
@@ -126,11 +141,12 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Daftar Status PKL Mahasiswa</h2>
         {isRekap && (
-          <Link to="#">
-            <button className="border border-blue-500 hover:bg-blue-700 text-gray-900 hover:text-white font-bold py-2 px-4 rounded">
-              Cetak
-            </button>
-          </Link>
+          <button
+            onClick={() => handleCetak()}
+            className="border border-blue-500 hover:bg-blue-700 text-gray-900 hover:text-white font-bold py-2 px-4 rounded"
+          >
+            Cetak
+          </button>
         )}
       </div>
       <TableStatusPKLMahasiswa

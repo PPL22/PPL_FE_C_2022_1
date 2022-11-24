@@ -9,9 +9,12 @@ import axios from "axios";
 import TableStatusSkripsiMahasiswa from "./TableStatusSkripsiMahasiswa";
 import { useAuth } from "../../../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
+import { downloadExcel } from "../../../utils/downloadExcel";
+import { useToast } from "../../../contexts/ToastContext";
 
 function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
   const auth = useAuth();
+  const toast = useToast();
   const [dataSkripsi, setDataSkripsi] = React.useState({
     thead: [
       "No",
@@ -124,13 +127,36 @@ function StatusSkripsiMahasiswa({ isRekap = false, endpoint }) {
     }
   };
 
+  const handleCetak = async () => {
+    const apiUrl = config.API_URL;
+    const url = `${apiUrl}/${
+      auth.currentRole === "Dosen" ? "dosen" : "departemen"
+    }/daftar-skripsi/cetak`;
+    const result = await downloadExcel(url, "daftar skripsi");
+    if (result === "success") {
+      toast.setToast("Berhasil mendownload file", "success");
+    } else {
+      toast.setToast("Gagal mendownload file", "error");
+    }
+  };
+
   return isLoading ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />
     </div>
   ) : (
     <section className="mt-10 px-8">
-      <h2 className="text-xl font-bold">Daftar Status Skripsi Mahasiswa</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Daftar Status Skripsi Mahasiswa</h2>
+        {isRekap && (
+          <button
+            onClick={() => handleCetak()}
+            className="border border-blue-500 hover:bg-blue-700 text-gray-900 hover:text-white font-bold py-2 px-4 rounded"
+          >
+            Cetak
+          </button>
+        )}
+      </div>
       <TableStatusSkripsiMahasiswa
         onClickHead={onClickHead}
         currentFilter={currentFilter}

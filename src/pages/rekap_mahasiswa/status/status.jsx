@@ -9,9 +9,12 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 import { statusAktifColor } from "../../../utils/statusAktifColor";
 import secureLocalStorage from "react-secure-storage";
+import { downloadExcel } from "../../../utils/downloadExcel";
+import { useToast } from "../../../contexts/ToastContext";
 
 function RekapStatusMahasiswa() {
   const auth = useAuth();
+  const toast = useToast();
   const [rekapStatus, setRekapStatus] = React.useState({
     thead: [
       "Angkatan",
@@ -171,6 +174,19 @@ function RekapStatusMahasiswa() {
     }
   };
 
+  const handleCetak = async () => {
+    const apiUrl = config.API_URL;
+    const url = `${apiUrl}/${
+      auth.currentRole === "Dosen" ? "dosen" : "departemen"
+    }/daftar-status/cetak`;
+    const result = await downloadExcel(url, "daftar status mahasiswa");
+    if (result === "success") {
+      toast.setToast("Berhasil mendownload file", "success");
+    } else {
+      toast.setToast("Gagal mendownload file", "error");
+    }
+  };
+
   return (
     <div className="overflow-x-auto relative my-10">
       <h1 className="text-center font-bold text-xl mb-8">
@@ -215,9 +231,18 @@ function RekapStatusMahasiswa() {
             </table>
           </div>
           <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
-            <h2 className="text-xl font-bold mb-6">
-              Daftar Status Aktif Mahasiswa
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold mb-6">
+                Daftar Status Aktif Mahasiswa
+              </h2>
+              <button
+                onClick={() => handleCetak()}
+                className="border border-blue-500 hover:bg-blue-700 text-gray-900 hover:text-white font-bold py-2 px-4 rounded"
+              >
+                Cetak
+              </button>
+            </div>
+
             <table className="w-full text-sm text-gray-500 text-center">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
