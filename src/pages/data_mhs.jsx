@@ -66,7 +66,7 @@ export default function DataMhs() {
     try {
       const url = `${apiUrl}/${
         auth?.role.includes("Departemen") ? "departemen" : "dosen"
-      }/data-akademik-mhs/${nim}`;
+      }/data-akademik-mhs?nim=${nim}`;
       const response = await axios.get(url, {
         headers: {
           "x-access-token": token,
