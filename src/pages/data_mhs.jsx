@@ -4,6 +4,7 @@ import {
   Keterangan,
   BtnSemester,
   DropdownSearch,
+  ModalStatus,
 } from "../components/components";
 import axios from "axios";
 import config from "../configs/config.json";
@@ -19,6 +20,7 @@ export default function DataMhs() {
   const [mahasiswa, setMahasiswa] = React.useState(null);
   const [dataSemester, setDataSemester] = React.useState([]);
   const [progress, setProgress] = React.useState(null);
+  const [showStatus, setShowStatus] = React.useState(false);
 
   const handleChange = (keyword) => {
     if (keyword.length > 0) {
@@ -107,6 +109,13 @@ export default function DataMhs() {
     }
   };
 
+  const closeModal = (isRefresh) => {
+    setShowStatus(false);
+    if (isRefresh) {
+      getDataMahasiswaByNim(mahasiswa.nim);
+    }
+  };
+
   return (
     <div className="mt-4 flex justify-center flex-col px-4">
       <DropdownSearch
@@ -152,6 +161,18 @@ export default function DataMhs() {
                 </p>
                 <p className="text-lg mt-2">
                   <strong>Dosen Wali :</strong> {mahasiswa.namaDoswal}
+                </p>
+                <p className="text-lg mt-2 flex items-center gap-x-2">
+                  <strong>Status Aktif :</strong> {mahasiswa.statusAktif}{" "}
+                  <button
+                    onClick={() => setShowStatus(true)}
+                    className="text-xs p-1 bg-orange-500 rounded font-semibold text-white"
+                  >
+                    Ubah Status
+                  </button>
+                  {showStatus && (
+                    <ModalStatus closeModal={closeModal} data={mahasiswa} />
+                  )}
                 </p>
               </div>
             </div>

@@ -19,3 +19,4 @@ export { default as IndicatorButton } from "./IndicatorButton";
 export { default as CardInfo } from "./CardInfo";
 export { default as DashboardCard } from "./DashboardCard";
 export { default as PaginationPage } from "./PaginationPage";
+export { default as ModalStatus } from "./ModalStatus";
