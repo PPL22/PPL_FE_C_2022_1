@@ -3,8 +3,9 @@ import React from "react";
 import { downloadExcel } from "../../utils/downloadExcel";
 import { statusAktifColor } from "../../utils/statusAktifColor";
 import { useToast } from "../../contexts/ToastContext";
-
-function TableAkun({ dataAkun, title, akun }) {
+import secureLocalStorage from "react-secure-storage";
+import ToggleAkun from "./ToggleAkun";
+function TableAkun({ dataAkun, title, akun, children }) {
   const toast = useToast();
   const handleCetak = async () => {
     const apiUrl = config.API_URL;
@@ -14,6 +15,35 @@ function TableAkun({ dataAkun, title, akun }) {
       toast.setToast("Berhasil mendownload file", "success");
     } else {
       toast.setToast("Gagal mendownload file", "error");
+    }
+  };
+
+  console.log(dataAkun);
+
+  const updateStatusAkun = async (id, index) => {
+    try {
+      const apiUrl = config.API_URL;
+      const token = secureLocalStorage.getItem("accessToken");
+      const url = `${apiUrl}/operator/akun-${akun}/status-aktif/${id}`;
+      const result = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "x-access-token": token,
+        },
+      });
+
+      if (result.status === 200) {
+        if (title === "mahasiswa") {
+          dataAkun.tbody[index][9] = !dataAkun.tbody[index][9];
+        } else if (title === "dosen") {
+          dataAkun.tbody[index][5] = !dataAkun.tbody[index][5];
+        }
+        toast.setToast("Berhasil mengubah status akun", "success");
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+      toast.setToast("Gagal mengubah status akun", "error");
     }
   };
 
@@ -29,6 +59,7 @@ function TableAkun({ dataAkun, title, akun }) {
           Cetak
         </button>
       </div>
+      {children}
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-6">
         <table className="w-full text-sm text-gray-500 text-center table-fixed">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -45,15 +76,26 @@ function TableAkun({ dataAkun, title, akun }) {
           <tbody>
             {dataAkun.tbody.map((body, index) => (
               <tr key={index} className="bg-white border-b hover:bg-gray-50">
-                {body.map((item, index) => {
+                {body.map((item, idx) => {
                   return (
-                    <td key={index} className="py-4 px-2">
+                    <td key={idx} className="py-4 px-2">
                       <div
                         className={`${
-                          index === 8 && statusAktifColor(item)
+                          title.includes("Mahasiswa") &&
+                          idx === 8 &&
+                          statusAktifColor(item)
                         } overflow-hidden text-ellipsis`}
                       >
-                        {item}
+                        {(akun === "mahasiswa" && idx === 9) ||
+                        (akun === "dosen" && idx === 5) ? (
+                          <ToggleAkun
+                            item={item}
+                            onChange={() => updateStatusAkun(body[2], index)}
+                            value={item === "Aktif" ? true : false}
+                          />
+                        ) : (
+                          item
+                        )}
                       </div>
                     </td>
                   );

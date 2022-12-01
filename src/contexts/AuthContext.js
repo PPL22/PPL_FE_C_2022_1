@@ -21,7 +21,6 @@ function useAuthProvider() {
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
   const [foto, setFoto] = useState(null);
-  const navigate = useNavigate();
 
   // login
   const login = (data) => {
@@ -45,11 +44,11 @@ function useAuthProvider() {
     if (data.firstTime) {
       secureLocalStorage.setItem("firstTime", "true");
       setFirstTime("true");
-      navigate("/register");
+      window.location.href = "/register";
     } else {
       secureLocalStorage.setItem("firstTime", "false");
       setFirstTime("false");
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
     }
   };
 
@@ -66,14 +65,13 @@ function useAuthProvider() {
     setRole(null);
     setCurrentRole(null);
     setFoto(null);
-    navigate("/");
+    window.location.href = "/";
   };
 
   // update role
   const updateRole = (data) => {
     let role = data.role;
     const firstTime = secureLocalStorage.getItem("firstTime");
-    console.log(firstTime);
     if (Array.isArray(data.role)) {
       role = role.join(" ");
     }
@@ -85,7 +83,7 @@ function useAuthProvider() {
     setName(secureLocalStorage.getItem("name"));
     setFirstTime(firstTime);
     if (firstTime === "true") {
-      navigate("/register");
+      window.location.href = "/register";
     }
   };
 

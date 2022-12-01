@@ -6,6 +6,7 @@ import {
   Dropdown,
   PaginationPage,
   Spinner,
+  Input,
 } from "../components/components";
 import axios from "axios";
 import { TableAkun, EntryDataMahasiswa, EntryDataDosen } from "./pages";
@@ -31,6 +32,7 @@ function Operator() {
       "Jalur Masuk",
       "Dosen Wali",
       "Status",
+      "Action",
     ],
     tbody: [],
   });
@@ -46,6 +48,7 @@ function Operator() {
   const [totalPage, setTotalPage] = React.useState(10);
   const [limit, setLimit] = React.useState(5);
   const [toggleAkun, setToggleAkun] = React.useState("Mahasiswa");
+  const [search, setSearch] = React.useState("");
 
   const updatePage = (value) => {
     setPage(value);
@@ -65,6 +68,7 @@ function Operator() {
         params: {
           page: page,
           qty: limit,
+          keyword: search,
         },
         headers: {
           "x-access-token": token,
@@ -82,6 +86,7 @@ function Operator() {
           item.jalurMasuk,
           item.namaDoswal,
           item.statusAktif,
+          item.statusAkun,
         ];
       });
       setDataAkunMahasiswa({
@@ -106,6 +111,7 @@ function Operator() {
         params: {
           page: page,
           qty: limit,
+          keyword: search,
         },
         headers: {
           "x-access-token": token,
@@ -119,6 +125,7 @@ function Operator() {
           item.nip,
           item.username,
           item.password,
+          item.statusAkun,
         ];
       });
       setDataAkunDosen({
@@ -266,7 +273,7 @@ function Operator() {
     } else {
       getDataAkunDosen();
     }
-  }, [page, limit]);
+  }, [page, limit, search]);
 
   const handleToggleAkun = (akun) => {
     setToggleAkun(akun);
@@ -431,6 +438,19 @@ function Operator() {
                 : "Daftar Akun Dosen"
             }
             akun={toggleAkun.toLowerCase()}
+            children={
+              <div className="w-52">
+                <Input
+                  id="search"
+                  type="text"
+                  label="Cari Akun"
+                  value={search}
+                  moreProps={{
+                    onChange: (e) => setSearch(e.target.value),
+                  }}
+                />
+              </div>
+            }
           />
           <div className="flex justify-between mt-2">
             <Dropdown

@@ -17,6 +17,6 @@ export { default as RekapStatusMahasiswa } from "./rekap_mahasiswa/status/status
 export { default as RekapPKLMahasiswa } from "./rekap_mahasiswa/pkl/pkl";
 export { default as RekapSkripsiMahasiswa } from "./rekap_mahasiswa/skripsi/skripsi";
 
-export { default as TableAkun } from "./operator/table_akun";
+export { default as TableAkun } from "./operator/TableAkun";
 export { default as EntryDataDosen } from "./operator/EntryDataDosen";
 export { default as EntryDataMahasiswa } from "./operator/EntryDataMahasiswa";
