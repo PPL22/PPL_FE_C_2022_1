@@ -254,7 +254,7 @@ function TableStatusKHSMahasiswa({
           />
           {errorMessage && <DangerAlert message={errorMessage} />}
           <div className="flex justify-center gap-x-4">
-            <OutlinedButton child="Cancel" onClick={closeModal} />
+            <OutlinedButton child="Batal" onClick={closeModal} />
             <Button
               type="submit"
               child="Validasi"

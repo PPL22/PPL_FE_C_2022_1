@@ -1,10 +1,10 @@
 import React from "react";
 import {
   CardInfo,
-  EntryDataMhs,
   IndicatorButton,
   ProgressBarSemester,
 } from "../components/components";
+import EntryDataMhs from "./mahasiswa/EntryDataMhs";
 import config from "../configs/config.json";
 import axios from "axios";
 import Spinner from "../components/Spinner";
@@ -92,11 +92,11 @@ function Mahasiswa() {
     });
 
     setStatusDocument(document);
+    setDocumentName("IRS");
   };
 
   const refreshCurrentData = () => {
     let dataAkademik = data.dataAkademik[currentSemester];
-    console.log("DIPANGGIL");
     dataAkademik = dataAkademik.filter(
       (item) => item.type === documentName.toLowerCase()
     )[0];
@@ -104,6 +104,8 @@ function Mahasiswa() {
       available: false,
       data: {},
       type: "",
+      statusValidasi: false,
+      form: [],
     };
 
     if (dataAkademik) {
@@ -111,11 +113,15 @@ function Mahasiswa() {
         if (item === "available") {
           return (result.available = dataAkademik[item]);
         } else if (item.includes("file")) {
+          result.form.push(dataAkademik[item]);
           return (result.document =
             config.API_DOCUMENT_URL +
             `/${documentName.toLowerCase()}/` +
             dataAkademik[item]);
-        } else if (item !== "statusValidasi" && item !== "type") {
+        } else if (item === "statusValidasi") {
+          return (result.statusValidasi = dataAkademik[item]);
+        } else if (item !== "type") {
+          result.form.push(dataAkademik[item]);
           let key = item.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
           key = key.charAt(0).toUpperCase() + key.slice(1);
 
@@ -182,6 +188,8 @@ function Mahasiswa() {
     getDashboard();
     setIsLoading(false);
   }, []);
+
+  // console.log(currentData);
 
   return isLoading || !data ? (
     <div className="h-full flex justify-center items-center">
@@ -369,18 +377,25 @@ function Mahasiswa() {
                       Entry Document
                     </button>
                   ) : currentData && currentData.available ? (
-                    <a
-                      href={currentData.document}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <button
-                        type="button"
+                    <div className="flex gap-x-4">
+                      <a
+                        href={currentData.document}
+                        target="_blank"
+                        rel="noreferrer"
                         className="flex mt-4 w-full bg-gradient-to-br py-2 from-green-400 to-cyan-400 rounded-lg justify-center items-center text-xl font-bold tracking-tight text-gray-700"
                       >
                         Lihat Dokumen
-                      </button>
-                    </a>
+                      </a>
+                      {currentData.statusValidasi === false && (
+                        <button
+                          type="button"
+                          onClick={() => showModal(documentName.toLowerCase())}
+                          className="flex mt-4 w-full bg-gradient-to-br py-2 from-blue-400 to-cyan-400 rounded-lg justify-center items-center text-xl font-bold tracking-tight text-gray-700"
+                        >
+                          Ubah Data
+                        </button>
+                      )}
+                    </div>
                   ) : null}
                 </div>
               )}
@@ -396,8 +411,11 @@ function Mahasiswa() {
           currentSemester={currentSemester}
           setEntryState={setEntryState}
           entryState={entryState}
+          currentData={currentData}
         />
       )}
+
+      {}
     </>
   );
 }

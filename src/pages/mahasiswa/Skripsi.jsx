@@ -1,14 +1,27 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Input from "./Input";
-import { OutlinedButton, Button, DangerAlert } from "./components";
-import { useAuth } from "../contexts/AuthContext";
-import { useToast } from "../contexts/ToastContext";
+import {
+  OutlinedButton,
+  Button,
+  DangerAlert,
+  Input,
+} from "../../components/components";
+import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
-import config from "../configs/config.json";
+import config from "../../configs/config.json";
 
-function Skripsi({ closeModal, currentSemester }) {
+import { Document, Page, pdfjs } from "react-pdf";
+import { convertTimestampToYYYYMMDD } from "../../utils/time";
+
+function Skripsi({ closeModal, currentSemester, currentData }) {
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  const [numPages, setNumPages] = React.useState(null);
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
@@ -18,6 +31,7 @@ function Skripsi({ closeModal, currentSemester }) {
   const lamaStudi = React.useRef();
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [file, setFile] = React.useState(null);
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +43,10 @@ function Skripsi({ closeModal, currentSemester }) {
     formData.append("lamaStudi", lamaStudi.current.value);
     formData.append("dokumen", fileSkripsi.current.files[0]);
 
+    if (currentData.available) {
+      formData.append("oldSemester", currentData.data["Semester"]);
+    }
+
     try {
       setLoading(true);
       setErrorMessage("");
@@ -38,8 +56,12 @@ function Skripsi({ closeModal, currentSemester }) {
           "x-access-token": token,
         },
       });
-      closeModal();
-      toast.setToast("Entry Progress Skripsi Berhasil", "success");
+      closeModal(true);
+      if (currentData.available) {
+        toast.setToast("Data Skripsi berhasil diubah", "success");
+      } else {
+        toast.setToast("Entry Progress Skripsi Berhasil", "success");
+      }
     } catch (error) {
       if (error.status === 401) {
         auth.logout();
@@ -58,7 +80,7 @@ function Skripsi({ closeModal, currentSemester }) {
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full inset-0 h-full flex justify-center"
     >
       <div
-        onClick={closeModal}
+        onClick={() => closeModal(false)}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
       <motion.div
@@ -76,7 +98,7 @@ function Skripsi({ closeModal, currentSemester }) {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm"
               data-modal-toggle="entry-modal-modal"
-              onClick={closeModal}
+              onClick={() => closeModal(false)}
             >
               <svg
                 aria-hidden="true"
@@ -109,6 +131,9 @@ function Skripsi({ closeModal, currentSemester }) {
                 id="nilai-skripsi"
                 type="number"
                 innerRef={nilaiSkripsi}
+                defaultValue={
+                  currentData.available ? currentData.data["Nilai"] : ""
+                }
                 moreProps={{
                   min: 0,
                   max: 100,
@@ -119,12 +144,22 @@ function Skripsi({ closeModal, currentSemester }) {
                 id="tanggal-sidang"
                 type="date"
                 innerRef={tanggalLulusSidang}
+                defaultValue={
+                  currentData.available
+                    ? convertTimestampToYYYYMMDD(
+                        currentData.data["Tanggal Lulus Sidang"]
+                      )
+                    : ""
+                }
               />
               <Input
                 label="Lama Studi Semester"
                 id="lama-studi-semester"
                 type="number"
                 innerRef={lamaStudi}
+                defaultValue={
+                  currentData.available ? currentData.data["Lama Studi"] : ""
+                }
                 moreProps={{
                   min: 7,
                   max: 14,
@@ -136,13 +171,43 @@ function Skripsi({ closeModal, currentSemester }) {
                 type="file"
                 accept="application/pdf"
                 innerRef={fileSkripsi}
+                moreProps={{
+                  onChange: (e) => {
+                    setFile(e.target.files[0]);
+                  },
+                }}
+                isRequired={currentData.available ? false : true}
               />
+              <div className="overflow-auto max-h-80">
+                <Document
+                  file={
+                    file
+                      ? file
+                      : currentData.available === true
+                      ? currentData["document"]
+                      : null
+                  }
+                  options={{ workerSrc: "/pdf.worker.js" }}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page
+                      size="A4"
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                    />
+                  ))}
+                </Document>
+              </div>
               {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
-                <OutlinedButton child="Cancel" onClick={closeModal} />
+                <OutlinedButton
+                  child="Batal"
+                  onClick={() => closeModal(false)}
+                />
                 <Button
                   type="submit"
-                  child="Submit"
+                  child={`${currentData.available ? "Update" : "Submit"}`}
                   loadingState="Loading..."
                   loading={loading}
                 />

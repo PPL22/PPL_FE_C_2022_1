@@ -1,13 +1,27 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Input from "./Input";
-import { Dropdown, OutlinedButton, Button, DangerAlert } from "./components";
-import { useAuth } from "../contexts/AuthContext";
-import { useToast } from "../contexts/ToastContext";
+import {
+  Dropdown,
+  OutlinedButton,
+  Button,
+  DangerAlert,
+  Input,
+} from "../../components/components";
+import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 import axios from "axios";
-import config from "../configs/config.json";
+import config from "../../configs/config.json";
 import secureLocalStorage from "react-secure-storage";
-function Khs({ closeModal, currentSemester }) {
+
+import { Document, Page, pdfjs } from "react-pdf";
+
+function Khs({ closeModal, currentSemester, currentData }) {
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  const [numPages, setNumPages] = React.useState(null);
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   const auth = useAuth();
   const toast = useToast();
   const semester = React.useRef();
@@ -19,6 +33,7 @@ function Khs({ closeModal, currentSemester }) {
   const fileKhs = React.useRef();
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [file, setFile] = React.useState(null);
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +46,9 @@ function Khs({ closeModal, currentSemester }) {
     formData.append("ipk", ipKumulatif.current.value.toString());
     formData.append("status", status.current.value);
     formData.append("dokumen", fileKhs.current.files[0]);
+    if (currentData.available) {
+      formData.append("oldSemester", currentData.data["Semester"]);
+    }
 
     try {
       setLoading(true);
@@ -41,8 +59,12 @@ function Khs({ closeModal, currentSemester }) {
           "x-access-token": token,
         },
       });
-      closeModal();
-      toast.setToast("Entry IRS Berhasil", "success");
+      closeModal(true);
+      if (currentData.available) {
+        toast.setToast("Data KHS berhasil diubah", "success");
+      } else {
+        toast.setToast("Entry KHS Berhasil", "success");
+      }
     } catch (error) {
       if (error.status === 401) {
         auth.logout();
@@ -61,7 +83,7 @@ function Khs({ closeModal, currentSemester }) {
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full inset-0 h-full flex justify-center"
     >
       <div
-        onClick={closeModal}
+        onClick={() => closeModal(false)}
         className="fixed left-0 top-0 bottom-0 right-0 bg-black/20"
       ></div>
       <motion.div
@@ -79,7 +101,7 @@ function Khs({ closeModal, currentSemester }) {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm"
               data-modal-toggle="entry-modal-modal"
-              onClick={closeModal}
+              onClick={() => closeModal(false)}
             >
               <svg
                 aria-hidden="true"
@@ -103,6 +125,9 @@ function Khs({ closeModal, currentSemester }) {
                 label="Status"
                 id="status"
                 innerRef={status}
+                defaultValue={
+                  currentData.available ? currentData.data["Status"] : ""
+                }
                 options={[
                   {
                     value: "Aktif",
@@ -127,6 +152,11 @@ function Khs({ closeModal, currentSemester }) {
                 id="sks"
                 type="number"
                 innerRef={jumlahSks}
+                defaultValue={
+                  currentData.available
+                    ? currentData.data["Jumlah Sks Semester"]
+                    : ""
+                }
                 moreProps={{
                   min: 0,
                   max: 24,
@@ -137,6 +167,9 @@ function Khs({ closeModal, currentSemester }) {
                 id="ips"
                 type="number"
                 innerRef={ipSemester}
+                defaultValue={
+                  currentData.available ? currentData.data["IPS"] : ""
+                }
                 moreProps={{
                   min: 0,
                   max: 4,
@@ -148,6 +181,11 @@ function Khs({ closeModal, currentSemester }) {
                 id="sksk"
                 type="number"
                 innerRef={jumlahSksKumulatif}
+                defaultValue={
+                  currentData.available
+                    ? currentData.data["Jumlah Sks Kumulatif"]
+                    : ""
+                }
                 moreProps={{
                   min: 0,
                 }}
@@ -157,6 +195,9 @@ function Khs({ closeModal, currentSemester }) {
                 id="ipk"
                 type="number"
                 innerRef={ipKumulatif}
+                defaultValue={
+                  currentData.available ? currentData.data["IPK"] : ""
+                }
                 moreProps={{
                   min: 0,
                   max: 4,
@@ -169,13 +210,43 @@ function Khs({ closeModal, currentSemester }) {
                 type="file"
                 accept="application/pdf"
                 innerRef={fileKhs}
+                moreProps={{
+                  onChange: (e) => {
+                    setFile(e.target.files[0]);
+                  },
+                }}
+                isRequired={currentData.available ? false : true}
               />
+              <div className="overflow-auto max-h-80">
+                <Document
+                  file={
+                    file
+                      ? file
+                      : currentData.available === true
+                      ? currentData["document"]
+                      : null
+                  }
+                  options={{ workerSrc: "/pdf.worker.js" }}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page
+                      size="A4"
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                    />
+                  ))}
+                </Document>
+              </div>
               {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
-                <OutlinedButton child="Cancel" onClick={closeModal} />
+                <OutlinedButton
+                  child="Batal"
+                  onClick={() => closeModal(false)}
+                />
                 <Button
                   type="submit"
-                  child="Submit"
+                  child={`${currentData.available ? "Update" : "Submit"}`}
                   loadingState="Loading..."
                   loading={loading}
                 />

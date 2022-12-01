@@ -9,6 +9,7 @@ function Input({
   disabled = false,
   defaultValue,
   moreProps,
+  isRequired = true,
 }) {
   return (
     <div>
@@ -26,7 +27,7 @@ function Input({
         accept={accept}
         disabled={disabled}
         defaultValue={defaultValue}
-        required
+        required={isRequired}
         {...moreProps}
       />
     </div>

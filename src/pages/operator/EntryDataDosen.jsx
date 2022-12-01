@@ -136,7 +136,7 @@ function EntryDataDosen({ onClick, refreshData }) {
               />
               {errorMessage && <DangerAlert message={errorMessage} />}
               <div className="flex justify-center gap-x-4">
-                <OutlinedButton child="Cancel" onClick={onClick} />
+                <OutlinedButton child="Batal" onClick={onClick} />
                 <Button
                   type="submit"
                   child="Submit"
