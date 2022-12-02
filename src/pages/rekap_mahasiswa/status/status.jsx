@@ -114,7 +114,6 @@ function RekapStatusMahasiswa() {
           "x-access-token": token,
         },
       });
-      console.log(response.data);
       let startNumber = (page - 1) * limit + 1;
       const result = response.data.data.list.map((item, index) => {
         return {

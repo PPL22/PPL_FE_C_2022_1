@@ -55,7 +55,6 @@ function useAuthProvider() {
 
   // logout
   const logout = () => {
-    console.log("logout");
     secureLocalStorage.removeItem("accessToken");
     secureLocalStorage.removeItem("refreshToken");
     secureLocalStorage.removeItem("id");

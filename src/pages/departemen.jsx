@@ -47,7 +47,6 @@ function Departemen() {
           "x-access-token": token,
         },
       });
-      console.log(response);
       const result = response.data.data;
       setDataIRS({
         ...dataIRS,
@@ -104,7 +103,6 @@ function Departemen() {
         },
       });
       const result = response.data.data;
-      console.log(result);
       if (document === "IRS") {
         setDataIRS({
           ...dataIRS,

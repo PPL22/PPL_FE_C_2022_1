@@ -36,7 +36,6 @@ function StatusIRSMahasiswa() {
 
   const updatePage = (value) => {
     setPage(value);
-    console.log(value);
   };
 
   const updateLimit = (value) => {

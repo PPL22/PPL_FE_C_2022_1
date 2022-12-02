@@ -15,7 +15,6 @@ function ToggleAkun({ item, onChange, value }) {
   const handleChange = async () => {
     const result = await onChange();
     if (result) {
-      console.log(result);
       setChecked(!checked);
       if (checked) {
         setTitle("Non-Aktif");

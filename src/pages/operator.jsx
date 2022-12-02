@@ -37,7 +37,7 @@ function Operator() {
     tbody: [],
   });
   const [dataAkunDosen, setDataAkunDosen] = React.useState({
-    thead: ["No", "Nama Dosen", "NIP", "Username", "Password"],
+    thead: ["No", "Nama Dosen", "NIP", "Username", "Password", "Action"],
     tbody: [],
   });
   const [isLoading, setIsLoading] = React.useState(false);
@@ -49,6 +49,10 @@ function Operator() {
   const [limit, setLimit] = React.useState(5);
   const [toggleAkun, setToggleAkun] = React.useState("Mahasiswa");
   const [search, setSearch] = React.useState("");
+
+  const [orderBy, setOrderBy] = React.useState("nim");
+  const [currentFilter, setCurrentFilter] = React.useState("nim");
+  const [isAscending, setIsAscending] = React.useState(true);
 
   const updatePage = (value) => {
     setPage(value);
@@ -68,6 +72,8 @@ function Operator() {
         params: {
           page: page,
           qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
           keyword: search,
         },
         headers: {
@@ -111,6 +117,8 @@ function Operator() {
         params: {
           page: page,
           qty: limit,
+          sortBy: orderBy,
+          order: isAscending ? "asc" : "desc",
           keyword: search,
         },
         headers: {
@@ -202,7 +210,6 @@ function Operator() {
           "x-access-token": token,
         },
       });
-      console.log(response.data);
       setDataDosen(response.data);
     } catch (error) {
       if (error.response.status === 401) {
@@ -273,16 +280,37 @@ function Operator() {
     } else {
       getDataAkunDosen();
     }
-  }, [page, limit, search]);
+  }, [page, limit, search, orderBy, isAscending]);
 
   const handleToggleAkun = (akun) => {
     setToggleAkun(akun);
     setPage(1);
     setTotalPage(0);
     if (akun === "Mahasiswa") {
-      getDataAkunMahasiswa();
+      setOrderBy("nim");
+      setCurrentFilter("nim");
     } else {
-      getDataAkunDosen();
+      setOrderBy("nip");
+      setCurrentFilter("nip");
+    }
+  };
+
+  const onClickHead = (value) => {
+    let sorted = value.toLowerCase();
+    if (sorted === "nama mahasiswa" || sorted === "nama dosen") {
+      sorted = "nama";
+    } else if (sorted === "status") {
+      sorted = "statusAktif";
+    } else if (sorted === "jalur masuk") {
+      sorted = "jalurMasuk";
+    }
+
+    if (sorted === orderBy) {
+      setIsAscending(!isAscending);
+    } else {
+      setOrderBy(sorted);
+      setIsAscending(true);
+      setCurrentFilter(value);
     }
   };
 
@@ -451,6 +479,8 @@ function Operator() {
                 />
               </div>
             }
+            onClickHead={onClickHead}
+            currentFilter={currentFilter}
           />
           <div className="flex justify-between mt-2">
             <Dropdown

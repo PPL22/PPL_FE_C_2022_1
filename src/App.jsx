@@ -32,8 +32,6 @@ function App() {
     const verifyToken = () => {
       setLoading(true);
       const token = secureLocalStorage.getItem("accessToken");
-      const currentRoleStorage = secureLocalStorage.getItem("currentRole");
-      console.log(currentRoleStorage);
       const pathname = window.location.pathname;
       if (!token) {
         if (pathname !== "/") {

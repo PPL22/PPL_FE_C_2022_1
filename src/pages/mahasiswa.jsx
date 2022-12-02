@@ -189,8 +189,6 @@ function Mahasiswa() {
     setIsLoading(false);
   }, []);
 
-  // console.log(currentData);
-
   return isLoading || !data ? (
     <div className="h-full flex justify-center items-center">
       <Spinner />

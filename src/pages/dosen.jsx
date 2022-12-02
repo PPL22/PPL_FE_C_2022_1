@@ -106,7 +106,6 @@ function Dosen() {
         },
       });
       const result = response.data.data;
-      console.log(result);
       if (document === "IRS") {
         setDataIRS({
           ...dataIRS,
