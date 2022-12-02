@@ -15,6 +15,7 @@ export const useAuth = () => {
 };
 
 function useAuthProvider() {
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [currentRole, setCurrentRole] = useState(null);
   const [firstTime, setFirstTime] = useState();
@@ -44,11 +45,11 @@ function useAuthProvider() {
     if (data.firstTime) {
       secureLocalStorage.setItem("firstTime", "true");
       setFirstTime("true");
-      window.location.href = "/register";
+      navigate("/register");
     } else {
       secureLocalStorage.setItem("firstTime", "false");
       setFirstTime("false");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     }
   };
 

@@ -66,7 +66,7 @@ function Khs({ closeModal, currentSemester, currentData }) {
         toast.setToast("Entry KHS Berhasil", "success");
       }
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       } else {
         setErrorMessage(error.response.data.message);

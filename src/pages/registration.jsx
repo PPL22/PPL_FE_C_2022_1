@@ -98,7 +98,7 @@ const Registration = () => {
       });
       setKabupaten(data);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -154,7 +154,7 @@ const Registration = () => {
       }
       window.location.href = "/dashboard";
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       setErrorMessage(error.response.data.message);

@@ -72,7 +72,7 @@ function TableStatusKHSMahasiswa({
       refreshData();
       toast.setToast("Validasi KHS Berhasil", "success");
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       setErrorMessage(error.response.data.message);

@@ -95,7 +95,7 @@ function Operator() {
       });
       setTotalPage(response.data.maxPage);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -134,7 +134,7 @@ function Operator() {
       });
       setTotalPage(response.data.maxPage);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -166,7 +166,7 @@ function Operator() {
       });
       setDaftarDosen(data);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -185,7 +185,7 @@ function Operator() {
       });
       setDataMahasiswa(response.data);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -205,7 +205,7 @@ function Operator() {
       console.log(response.data);
       setDataDosen(response.data);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -234,7 +234,7 @@ function Operator() {
       toast.setToast(response.data.message, "success");
       refreshDataMahasiswa();
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       setErrorMessage(error.response.data.message);

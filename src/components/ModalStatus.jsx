@@ -44,7 +44,7 @@ function ModalStatus({ closeModal, data }) {
       closeModal(true);
       toast.setToast("Status aktif mahasiswa berhasil diubah", "success");
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       } else {
         setErrorMessage(error.response.data.message);

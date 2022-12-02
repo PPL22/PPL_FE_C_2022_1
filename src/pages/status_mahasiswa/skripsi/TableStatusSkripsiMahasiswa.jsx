@@ -78,7 +78,7 @@ function TableStatusSkripsiMahasiswa({
       refreshData();
       toast.setToast("Validasi Skripsi Berhasil", "success");
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       setErrorMessage(error.response.data.message);

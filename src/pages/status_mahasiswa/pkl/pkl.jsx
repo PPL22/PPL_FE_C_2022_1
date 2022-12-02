@@ -84,7 +84,7 @@ function StatusPKLMahasiswa({ isRekap = false, endpoint }) {
       });
       setTotalPage(response.data.data.maxPage);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;

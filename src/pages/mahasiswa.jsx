@@ -164,7 +164,7 @@ function Mahasiswa() {
       setDataSemester(semester);
       setData(result);
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       }
       throw error;
@@ -368,7 +368,9 @@ function Mahasiswa() {
                         );
                       })}
                   </div>
-                  {currentData && !currentData.available ? (
+                  {currentData &&
+                  data.statusAktif === "Aktif" &&
+                  !currentData.available ? (
                     <button
                       type="button"
                       onClick={() => showModal(documentName.toLowerCase())}
@@ -386,15 +388,18 @@ function Mahasiswa() {
                       >
                         Lihat Dokumen
                       </a>
-                      {currentData.statusValidasi === false && (
-                        <button
-                          type="button"
-                          onClick={() => showModal(documentName.toLowerCase())}
-                          className="flex mt-4 w-full bg-gradient-to-br py-2 from-blue-400 to-cyan-400 rounded-lg justify-center items-center text-xl font-bold tracking-tight text-gray-700"
-                        >
-                          Ubah Data
-                        </button>
-                      )}
+                      {currentData.statusValidasi === false &&
+                        data.statusAktif === "Aktif" && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              showModal(documentName.toLowerCase())
+                            }
+                            className="flex mt-4 w-full bg-gradient-to-br py-2 from-blue-400 to-cyan-400 rounded-lg justify-center items-center text-xl font-bold tracking-tight text-gray-700"
+                          >
+                            Ubah Data
+                          </button>
+                        )}
                     </div>
                   ) : null}
                 </div>

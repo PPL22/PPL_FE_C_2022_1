@@ -60,7 +60,7 @@ function EntryDataMahasiswa({ onClick, dataDosen, refreshData }) {
       toast.setToast("Data mahasiswa berhasil ditambahkan", "success");
       refreshData();
     } catch (error) {
-      if (error.status === 401) {
+      if (error.response.status === 401) {
         auth.logout();
       } else {
         setErrorMessage(error.response.data.message);
