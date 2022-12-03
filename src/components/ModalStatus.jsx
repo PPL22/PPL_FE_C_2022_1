@@ -74,7 +74,7 @@ function ModalStatus({ closeModal, data }) {
         <div className="relative bg-background rounded-lg shadow">
           <div className="flex justify-between items-center pt-6 px-4">
             <h3 className="text-xl font-semibold text-gray-900">
-              Entry Data Isian Rencana Studi
+              Ubah Status Mahasiswa
             </h3>
             <button
               type="button"
