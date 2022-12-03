@@ -69,6 +69,7 @@ function App() {
       ) : auth.role === null ? (
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="*" element={<Login />} />
         </Routes>
       ) : (
         <section className="grid grid-cols-12">

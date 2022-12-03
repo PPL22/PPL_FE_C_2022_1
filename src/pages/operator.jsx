@@ -31,8 +31,8 @@ function Operator() {
       "Angkatan",
       "Jalur Masuk",
       "Dosen Wali",
-      "Status",
-      "Action",
+      "Status Aktif",
+      "Status Akun",
     ],
     tbody: [],
   });
@@ -299,10 +299,12 @@ function Operator() {
     let sorted = value.toLowerCase();
     if (sorted === "nama mahasiswa" || sorted === "nama dosen") {
       sorted = "nama";
-    } else if (sorted === "status") {
+    } else if (sorted === "status aktif") {
       sorted = "statusAktif";
     } else if (sorted === "jalur masuk") {
       sorted = "jalurMasuk";
+    } else if (sorted === "status akun") {
+      sorted = "status";
     }
 
     if (sorted === orderBy) {
