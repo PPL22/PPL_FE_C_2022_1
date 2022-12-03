@@ -25,12 +25,12 @@ function App() {
   const toast = useToast();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
-  const firstTime = secureLocalStorage.getItem("firstTime");
 
   // verify token
   React.useEffect(() => {
     const verifyToken = () => {
       setLoading(true);
+      const firstTime = secureLocalStorage.getItem("firstTime");
       const token = secureLocalStorage.getItem("accessToken");
       const pathname = window.location.pathname;
       if (!token) {
@@ -47,6 +47,8 @@ function App() {
               firstTime === "false"
             ) {
               navigate("/dashboard");
+            } else if (firstTime === "true" && pathname !== "/register") {
+              navigate("/register");
             }
           }
         } catch (error) {

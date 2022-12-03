@@ -52,7 +52,6 @@ const Registration = () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
-      setLoading(true);
       let url;
       if (auth.currentRole === "Mahasiswa") {
         url = `${apiUrl}/mahasiswa/register`;
@@ -80,8 +79,6 @@ const Registration = () => {
       }
     } catch (error) {
       throw error;
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -106,8 +103,10 @@ const Registration = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getDataRegistration();
     getDataKabupaten();
+    setLoading(false);
   }, []);
 
   const formSubmit = async (e) => {
@@ -171,7 +170,7 @@ const Registration = () => {
           <Spinner />
         </div>
       ) : (
-        <motion.section
+        <section
           className="h-screen grid grid-cols-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -217,7 +216,7 @@ const Registration = () => {
                         type="email"
                         id="nama-lengkap"
                         className="block p-4 w-full text-sm text-gray-600 bg-gray-200 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={data.nama}
+                        defaultValue={data.nama}
                         required
                         disabled
                       />
@@ -234,7 +233,7 @@ const Registration = () => {
                         type="text"
                         id="id"
                         className="block p-4 w-full text-sm text-gray-600 bg-gray-200 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
-                        value={
+                        defaultValue={
                           auth.currentRole === "Mahasiswa" ? data.nim : data.nip
                         }
                         disabled
@@ -456,7 +455,7 @@ const Registration = () => {
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
       )}
     </>
   );

@@ -71,7 +71,6 @@ function useAuthProvider() {
   // update role
   const updateRole = (data) => {
     let role = data.role;
-    const firstTime = secureLocalStorage.getItem("firstTime");
     if (Array.isArray(data.role)) {
       role = role.join(" ");
     }
@@ -81,10 +80,7 @@ function useAuthProvider() {
     setFoto(secureLocalStorage.getItem("foto"));
     setId(secureLocalStorage.getItem("id"));
     setName(secureLocalStorage.getItem("name"));
-    setFirstTime(firstTime);
-    if (firstTime === "true") {
-      navigate("/register");
-    }
+    setFirstTime(secureLocalStorage.getItem("firstTime"));
   };
 
   // update current role
