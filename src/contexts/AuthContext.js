@@ -65,7 +65,7 @@ function useAuthProvider() {
     setRole(null);
     setCurrentRole(null);
     setFoto(null);
-    window.location.href = "/";
+    navigate("/");
   };
 
   // update role

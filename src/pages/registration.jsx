@@ -434,6 +434,7 @@ const Registration = () => {
                             type="file"
                             onChange={onSelectFile}
                             required={foto === null}
+                            accept="image/*"
                           />
                         </div>
                       </div>
