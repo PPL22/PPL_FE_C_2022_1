@@ -83,7 +83,7 @@ function useAuthProvider() {
     setName(secureLocalStorage.getItem("name"));
     setFirstTime(firstTime);
     if (firstTime === "true") {
-      window.location.href = "/register";
+      navigate("/register");
     }
   };
 
