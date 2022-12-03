@@ -305,6 +305,8 @@ function Operator() {
       sorted = "jalurMasuk";
     } else if (sorted === "status akun") {
       sorted = "status";
+    } else if (sorted === "dosen wali") {
+      sorted = "doswal";
     }
 
     if (sorted === orderBy) {
