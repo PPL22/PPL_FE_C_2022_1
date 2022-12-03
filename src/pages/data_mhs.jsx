@@ -121,11 +121,7 @@ export default function DataMhs() {
       <DropdownSearch
         id="data-mahasiswa"
         placeholder="Cari Nama atau NIM Mahasiswa"
-        onChange={(inputValue) => {
-          setTimeout(() => {
-            handleChange(inputValue);
-          }, 500);
-        }}
+        onChange={(inputValue) => handleChange(inputValue)}
         options={dataMahasiswa}
         onSelect={(data) => {
           getDataMahasiswaByNim(data.value);
@@ -157,10 +153,34 @@ export default function DataMhs() {
                   <strong>Nim :</strong> {mahasiswa.nim}
                 </p>
                 <p className="text-lg mt-2">
+                  <strong>Email :</strong> {mahasiswa.email}
+                </p>
+                <p className="text-lg mt-2">
                   <strong>Angkatan :</strong> {mahasiswa.angkatan}
                 </p>
                 <p className="text-lg mt-2">
                   <strong>Dosen Wali :</strong> {mahasiswa.namaDoswal}
+                </p>
+                <p className="text-lg mt-2">
+                  <strong>Alamat :</strong> {mahasiswa.alamat}
+                </p>
+                <p className="text-lg mt-2 flex items-center gap-x-2">
+                  <strong>No HP :</strong> {mahasiswa.noHP}{" "}
+                  <a
+                    href={`https://api.whatsapp.com/send?phone=${
+                      mahasiswa.noHP[0] === "+"
+                        ? mahasiswa.noHP.substring(1)
+                        : mahasiswa.noHP
+                    }`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs p-1 bg-green-500 rounded font-semibold text-white"
+                  >
+                    Hubungi
+                  </a>
+                  {showStatus && (
+                    <ModalStatus closeModal={closeModal} data={mahasiswa} />
+                  )}
                 </p>
                 <p className="text-lg mt-2 flex items-center gap-x-2">
                   <strong>Status Aktif :</strong> {mahasiswa.statusAktif}{" "}
