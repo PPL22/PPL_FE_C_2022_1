@@ -10,16 +10,17 @@ function RekapSkripsiMahasiswa() {
   const auth = useAuth();
   const [rekapSkripsi, setRekapSkripsi] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const endpoint = auth?.role.includes("Departemen")
-    ? "/departemen/daftar-skripsi"
-    : "/dosen/daftar-skripsi";
+  const endpoint =
+    auth.currentRole === "Departemen"
+      ? "/departemen/daftar-skripsi"
+      : "/dosen/daftar-skripsi";
 
   const getRekapSkripsi = async () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/rekap/skripsi`;
       const response = await axios.get(url, {
         headers: {

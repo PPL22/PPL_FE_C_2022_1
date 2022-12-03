@@ -63,7 +63,7 @@ function RekapStatusMahasiswa() {
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/rekap/status`;
       const response = await axios.get(url, {
         headers: {
@@ -101,7 +101,7 @@ function RekapStatusMahasiswa() {
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/daftar-status`;
       const response = await axios.get(url, {
         params: {

@@ -10,16 +10,17 @@ function RekapPKLMahasiswa() {
   const auth = useAuth();
   const [rekapPKL, setRekapPKL] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const endpoint = auth?.role.includes("Departemen")
-    ? "/departemen/daftar-pkl"
-    : "/dosen/daftar-pkl";
+  const endpoint =
+    auth.currentRole === "Departemen"
+      ? "/departemen/daftar-pkl"
+      : "/dosen/daftar-pkl";
 
   const getRekapPKL = async () => {
     const apiUrl = config.API_URL;
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/rekap/pkl`;
       const response = await axios.get(url, {
         headers: {

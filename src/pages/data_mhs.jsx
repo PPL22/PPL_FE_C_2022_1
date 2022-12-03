@@ -39,7 +39,7 @@ export default function DataMhs() {
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/search-mhs?keyword=${keyword}`;
       const response = await axios.get(url, {
         headers: {
@@ -67,7 +67,7 @@ export default function DataMhs() {
     const token = secureLocalStorage.getItem("accessToken");
     try {
       const url = `${apiUrl}/${
-        auth?.role.includes("Departemen") ? "departemen" : "dosen"
+        auth.currentRole === "Departemen" ? "departemen" : "dosen"
       }/data-akademik-mhs?nim=${nim}`;
       const response = await axios.get(url, {
         headers: {
