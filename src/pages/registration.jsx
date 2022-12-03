@@ -110,8 +110,6 @@ const Registration = () => {
     getDataKabupaten();
   }, []);
 
-  console.log(data);
-
   const formSubmit = async (e) => {
     e.preventDefault();
 
