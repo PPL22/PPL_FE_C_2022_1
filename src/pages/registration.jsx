@@ -66,7 +66,7 @@ const Registration = () => {
       });
       setData(response.data.data);
       if (response.data.data.foto != null) {
-        if (auth.currenRole === "Mahasiswa") {
+        if (auth.currentRole === "Mahasiswa") {
           const url = `${config.API_IMAGE_URL}/foto_mhs/${response.data.data.foto}`;
           setFoto(url);
         } else {
@@ -110,6 +110,8 @@ const Registration = () => {
     getDataKabupaten();
   }, []);
 
+  console.log(data);
+
   const formSubmit = async (e) => {
     e.preventDefault();
 
@@ -129,7 +131,7 @@ const Registration = () => {
     formData.append("kodeKab", kodeKab.current.props.value.value);
     formData.append("noHP", noHP.current.value);
     formData.append("foto", selectedFile);
-    if (auth.currenRole === "Mahasiswa") {
+    if (auth.currentRole === "Mahasiswa") {
       formData.append("nim", data.nim);
     } else {
       formData.append("nip", data.nip);
@@ -235,7 +237,7 @@ const Registration = () => {
                         id="id"
                         className="block p-4 w-full text-sm text-gray-600 bg-gray-200 rounded-lg border border-gray-300 focus:ring-blue-500 focus:outline-blue-500 focus:border-blue-500 "
                         value={
-                          auth.currenRole === "Mahasiswa" ? data.nim : data.nip
+                          auth.currentRole === "Mahasiswa" ? data.nim : data.nip
                         }
                         disabled
                         required
@@ -355,7 +357,7 @@ const Registration = () => {
                       />
                     </div>
 
-                    {auth.currenRole === "Mahasiswa" && (
+                    {auth.currentRole === "Mahasiswa" && (
                       <>
                         <div className="relative">
                           <label
