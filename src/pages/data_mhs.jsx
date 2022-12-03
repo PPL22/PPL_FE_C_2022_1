@@ -166,18 +166,20 @@ export default function DataMhs() {
                 </p>
                 <p className="text-lg mt-2 flex items-center gap-x-2">
                   <strong>No HP :</strong> {mahasiswa.noHP}{" "}
-                  <a
-                    href={`https://api.whatsapp.com/send?phone=${
-                      mahasiswa.noHP[0] === "+"
-                        ? mahasiswa.noHP.substring(1)
-                        : mahasiswa.noHP
-                    }`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs p-1 bg-green-500 rounded font-semibold text-white"
-                  >
-                    Hubungi
-                  </a>
+                  {mahasiswa.noHP && (
+                    <a
+                      href={`https://api.whatsapp.com/send?phone=${
+                        mahasiswa.noHP[0] === "+"
+                          ? mahasiswa.noHP.substring(1)
+                          : mahasiswa.noHP
+                      }`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs p-1 bg-green-500 rounded font-semibold text-white"
+                    >
+                      Hubungi
+                    </a>
+                  )}
                   {showStatus && (
                     <ModalStatus closeModal={closeModal} data={mahasiswa} />
                   )}
