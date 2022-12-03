@@ -179,7 +179,32 @@ const Registration = () => {
           <div className="hidden lg:block lg:col-span-7 bg-acintya-prasada bg-no-repeat bg-cover"></div>
           <div className="col-span-12 lg:col-span-5 bg-background flex justify-center overflow-y-auto pb-60">
             <div className="w-full">
-              <div className="mr-10 flex justify-end">
+              <div className="flex justify-between items-center mx-10">
+                <button
+                  type="button"
+                  onClick={auth.logout}
+                  className="text-red-700  hover:underline focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center gap-x-2"
+                >
+                  {" "}
+                  <svg
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      opacity="0.4"
+                      d="M2 6.447C2 3.996 4.03024 2 6.52453 2H11.4856C13.9748 2 16 3.99 16 6.437V17.553C16 20.005 13.9698 22 11.4744 22H6.51537C4.02515 22 2 20.01 2 17.563V16.623V6.447Z"
+                      fill="#CC5F5F"
+                    />
+                    <path
+                      d="M21.779 11.4548L18.9332 8.5458C18.6391 8.2458 18.1657 8.2458 17.8726 8.5478C17.5804 8.8498 17.5814 9.3368 17.8745 9.6368L19.4338 11.2298H17.9388H9.5485C9.13459 11.2298 8.79858 11.5748 8.79858 11.9998C8.79858 12.4258 9.13459 12.7698 9.5485 12.7698H19.4338L17.8745 14.3628C17.5814 14.6628 17.5804 15.1498 17.8726 15.4518C18.0196 15.6028 18.2115 15.6788 18.4043 15.6788C18.5952 15.6788 18.7871 15.6028 18.9332 15.4538L21.779 12.5458C21.9202 12.4008 22 12.2048 22 11.9998C22 11.7958 21.9202 11.5998 21.779 11.4548Z"
+                      fill="#CC5F5F"
+                    />
+                  </svg>
+                  Logout
+                </button>
                 <div className="flex mt-8">
                   <h1 className="p-4 flex items-center ">
                     Universitas<br></br>Diponegoro
