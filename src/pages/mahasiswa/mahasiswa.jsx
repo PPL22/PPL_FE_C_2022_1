@@ -1,20 +1,24 @@
 import React from "react";
+import axios from "axios";
+import { Button } from "flowbite-react";
+import { motion } from "framer-motion";
+import secureLocalStorage from "react-secure-storage";
+
+import config from "../../configs/config.json";
+
 import {
   CardInfo,
   IndicatorButton,
   ProgressBarSemester,
-} from "../components/components";
-import EntryDataMhs from "./mahasiswa/EntryDataMhs";
-import config from "../configs/config.json";
-import axios from "axios";
-import Spinner from "../components/Spinner";
-import { statusAktifColor } from "../utils/statusAktifColor";
-import { Button } from "flowbite-react";
-import { motion } from "framer-motion";
-import { convertTimestampToDDMonthYYYY } from "../utils/time";
-import profile from "../assets/images/default_profile.png";
-import secureLocalStorage from "react-secure-storage";
-import { useAuth } from "../contexts/AuthContext";
+  Spinner,
+} from "../../components/components";
+import EntryDataMhs from "./EntryDataMhs";
+
+import { statusAktifColor } from "../../utils/statusAktifColor";
+import { convertTimestampToDDMonthYYYY } from "../../utils/time";
+
+import profile from "../../assets/images/default_profile.png";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Mahasiswa() {
   const auth = useAuth();

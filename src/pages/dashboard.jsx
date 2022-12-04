@@ -1,10 +1,11 @@
 import React from "react";
-import Dosen from "./dosen";
 import { useAuth } from "../contexts/AuthContext";
-import Operator from "./operator";
-import Mahasiswa from "./mahasiswa";
+import { Dropdown } from "../components/components";
+
+import Dosen from "./dosen";
 import Departemen from "./departemen";
-import Dropdown from "../components/Dropdown";
+import Operator from "./operator/operator";
+import Mahasiswa from "./mahasiswa/mahasiswa";
 
 function Dashboard() {
   const auth = useAuth();

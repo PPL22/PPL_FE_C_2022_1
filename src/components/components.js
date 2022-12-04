@@ -9,7 +9,6 @@ export { default as Dropdown } from "./Dropdown";
 export { default as DropdownSearch } from "./DropdownSearch";
 export { default as Button } from "./Button";
 export { default as OutlinedButton } from "./OutlinedButton";
-export { default as TableRekapMahasiswa } from "./TableRekapMahasiswa";
 export { default as Toast } from "./Toast";
 export { default as BtnSemester } from "./BtnSemester";
 export { default as Keterangan } from "./Keterangan";

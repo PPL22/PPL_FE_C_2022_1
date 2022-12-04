@@ -1,4 +1,4 @@
-import config from "../configs/config.json";
+import config from "../../configs/config.json";
 import React from "react";
 import {
   Charts,
@@ -7,11 +7,11 @@ import {
   PaginationPage,
   Spinner,
   Input,
-} from "../components/components";
+} from "../../components/components";
 import axios from "axios";
-import { TableAkun, EntryDataMahasiswa, EntryDataDosen } from "./pages";
-import { useToast } from "../contexts/ToastContext";
-import { useAuth } from "../contexts/AuthContext";
+import { TableAkun, EntryDataMahasiswa, EntryDataDosen } from "../pages";
+import { useToast } from "../../contexts/ToastContext";
+import { useAuth } from "../../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
 
 function Operator() {
