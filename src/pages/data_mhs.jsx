@@ -113,8 +113,6 @@ export default function DataMhs() {
     }
   };
 
-  console.log(dataMahasiswa);
-
   const closeModal = (isRefresh) => {
     setShowStatus(false);
     if (isRefresh) {
@@ -205,12 +203,14 @@ export default function DataMhs() {
                 </p>
                 <p className="text-lg mt-2 flex items-center gap-x-2">
                   <strong>Status Aktif :</strong> {mahasiswa.statusAktif}{" "}
-                  <button
-                    onClick={() => setShowStatus(true)}
-                    className="text-xs p-1 bg-orange-500 rounded font-semibold text-white"
-                  >
-                    Ubah Status
-                  </button>
+                  {auth.currentRole === "Dosen" && (
+                    <button
+                      onClick={() => setShowStatus(true)}
+                      className="text-xs p-1 bg-orange-500 rounded font-semibold text-white"
+                    >
+                      Ubah Status
+                    </button>
+                  )}
                   {showStatus && (
                     <ModalStatus closeModal={closeModal} data={mahasiswa} />
                   )}
