@@ -37,7 +37,7 @@ function Operator() {
     tbody: [],
   });
   const [dataAkunDosen, setDataAkunDosen] = React.useState({
-    thead: ["No", "Nama Dosen", "NIP", "Username", "Password", "Action"],
+    thead: ["No", "Nama Dosen", "NIP", "Username", "Password", "Status Akun"],
     tbody: [],
   });
   const [isLoading, setIsLoading] = React.useState(false);

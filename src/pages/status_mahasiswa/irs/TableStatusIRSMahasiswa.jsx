@@ -12,6 +12,7 @@ import axios from "axios";
 import config from "../../../configs/config.json";
 import { useAuth } from "../../../contexts/AuthContext";
 import secureLocalStorage from "react-secure-storage";
+import { statusAktifColor } from "../../../utils/statusAktifColor";
 
 function TableStatusIRSMahasiswa({
   data,
@@ -127,7 +128,11 @@ function TableStatusIRSMahasiswa({
                 {body.data.map((item, index) => {
                   return (
                     <td key={index} className="py-4 px-2">
-                      {item}
+                      <div
+                        className={`${index === 6 && statusAktifColor(item)}`}
+                      >
+                        {item}
+                      </div>
                     </td>
                   );
                 })}

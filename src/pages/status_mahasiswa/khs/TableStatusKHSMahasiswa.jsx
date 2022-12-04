@@ -12,6 +12,7 @@ import axios from "axios";
 import config from "../../../configs/config.json";
 import secureLocalStorage from "react-secure-storage";
 import { useAuth } from "../../../contexts/AuthContext";
+import { statusAktifColor } from "../../../utils/statusAktifColor";
 
 function TableStatusKHSMahasiswa({
   data,
@@ -133,7 +134,11 @@ function TableStatusKHSMahasiswa({
                 {body.data.map((item, index) => {
                   return (
                     <td key={index} className="py-4 px-2">
-                      {item}
+                      <div
+                        className={`${index === 9 && statusAktifColor(item)}`}
+                      >
+                        {item}
+                      </div>
                     </td>
                   );
                 })}
