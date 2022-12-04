@@ -101,7 +101,7 @@ function ModalStatus({ closeModal, data }) {
           <div className="pt-3 pb-6 px-4">
             <form className="space-y-6" onSubmit={(e) => formSubmit(e)}>
               <Input
-                label="nim"
+                label="NIM"
                 id="nim"
                 type="text"
                 innerRef={nim}
@@ -109,7 +109,7 @@ function ModalStatus({ closeModal, data }) {
                 disabled={true}
               />
               <Input
-                label="nama"
+                label="Nama"
                 id="nama"
                 type="text"
                 innerRef={nama}
