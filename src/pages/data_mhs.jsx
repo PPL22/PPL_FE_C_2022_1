@@ -48,9 +48,13 @@ export default function DataMhs() {
       });
       const result = response.data.data;
       const data = result.map((item) => {
+        const foto = item.foto
+          ? config.API_IMAGE_URL + "/foto_mhs/" + item.foto
+          : profile;
         return {
           value: item.nim,
-          label: `${item.nim} - ${item.nama}`,
+          label: item.nama,
+          foto: foto,
         };
       });
       setDataMahasiswa(data);
@@ -109,6 +113,8 @@ export default function DataMhs() {
     }
   };
 
+  console.log(dataMahasiswa);
+
   const closeModal = (isRefresh) => {
     setShowStatus(false);
     if (isRefresh) {
@@ -126,6 +132,19 @@ export default function DataMhs() {
         onSelect={(data) => {
           getDataMahasiswaByNim(data.value);
         }}
+        formatOptionLabel={(data) => (
+          <div className="flex items-center">
+            <img
+              src={data.foto}
+              alt="foto"
+              className="w-10 h-10 rounded-full mr-2 object-cover"
+            />
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold">{data.label}</span>
+              <span className="text-xs text-gray-500">{data.value}</span>
+            </div>
+          </div>
+        )}
       />
       {mahasiswa && (
         <>

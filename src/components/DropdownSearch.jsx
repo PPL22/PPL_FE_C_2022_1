@@ -8,6 +8,7 @@ function DropdownSearch({
   onChange,
   onSelect,
   placeholder,
+  formatOptionLabel,
 }) {
   const customStyles = {
     control: (provided, state) => ({
@@ -45,6 +46,7 @@ function DropdownSearch({
         onChange={onSelect}
         placeholder={placeholder}
         noOptionsMessage={() => "Tidak ada data"}
+        formatOptionLabel={formatOptionLabel}
       />
     </div>
   );
