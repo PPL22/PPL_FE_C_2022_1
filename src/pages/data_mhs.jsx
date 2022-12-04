@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "flowbite-react";
+import { Button } from "flowbite-react";
 import {
   Keterangan,
   BtnSemester,
@@ -142,7 +142,7 @@ export default function DataMhs() {
                       : config.API_IMAGE_URL + "/foto_mhs/" + mahasiswa.foto
                   }`}
                   alt="foto profil"
-                  className="rounded-full w-20 h-20 object-cover"
+                  className="rounded-full w-60 h-60 object-cover"
                 />
               </div>
               <div className="col-span-4">
@@ -248,122 +248,142 @@ export default function DataMhs() {
             {progress &&
               progress.data.map((item, index) => {
                 return item.type === "irs" && item.available ? (
-                  <Card key={index}>
-                    <div className="h-full grid grid-cols-1 content-between">
-                      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                        IRS
-                      </h5>
-                      <p className="py-4 font-semibold text-2xl tracking-tight text-gray-900 text-center">
-                        {item.jumlahSks} SKS
-                      </p>
-                      <a
-                        href={`${config.API_DOCUMENT_URL}/irs/${item.fileIrs}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button>Lihat Dokumen</Button>
-                      </a>
+                  <div
+                    className="bg-[#FEF5EA] flex rounded-lg border border-gray-200 shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col"
+                    key={index}
+                  >
+                    <div className="flex h-full flex-col justify-center gap-4 p-6">
+                      <div className="h-full grid grid-cols-1 content-between">
+                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+                          IRS
+                        </h5>
+                        <p className="py-4 font-semibold text-2xl tracking-tight text-gray-900 text-center">
+                          {item.jumlahSks} SKS
+                        </p>
+                        <a
+                          href={`${config.API_DOCUMENT_URL}/irs/${item.fileIrs}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button>Lihat Dokumen</Button>
+                        </a>
+                      </div>
                     </div>
-                  </Card>
+                  </div>
                 ) : item.type === "khs" && item.available ? (
-                  <Card key={index}>
-                    <div className="h-full grid grid-cols-1 content-between">
-                      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                        KHS
-                      </h5>
-                      <div className="text-base py-4 flex justify-center gap-x-1 text-mg tracking-tight text-gray-900">
-                        <div className="font-semibold">
-                          <div>SKS Semester</div>
-                          <div>IP Semester</div>
-                          <div>SKS Kumulatif</div>
-                          <div>IP Kumulatif</div>
-                        </div>
-                        <div className="font-semibold">
-                          <div>:</div>
-                          <div>:</div>
-                          <div>:</div>
-                          <div>:</div>
-                        </div>
-                        <div>
-                          <div>{item.jumlahSksSemester}</div>
-                          <div>{item.ips}</div>
-                          <div>{item.jumlahSksKumulatif}</div>
-                          <div>{item.ipk}</div>
-                        </div>
-                      </div>
-                      <a
-                        href={`${config.API_DOCUMENT_URL}/khs/${item.fileKhs}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button>Lihat Dokumen</Button>
-                      </a>
-                    </div>
-                  </Card>
-                ) : item.type === "pkl" && item.available ? (
-                  <Card key={index}>
-                    <div className="h-full grid grid-cols-1 content-between">
-                      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                        PKL
-                      </h5>
-                      <div className="grid grid-cols-2 space-x-4 py-4 text-2xl tracking-tight text-gray-900 text-center">
-                        <div className="col-span-1">
-                          <div className="font-bold">Nilai</div>
-                          <div className="mt-2">{item.nilai}</div>
-                        </div>
-                        <div className="col-span-1">
-                          <div className="font-bold">Semester</div>
-                          <div className="mt-2">{item.semester}</div>
-                        </div>
-                      </div>
-                      <a
-                        href={`${config.API_DOCUMENT_URL}/pkl/${item.filePkl}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button>Lihat Dokumen</Button>
-                      </a>
-                    </div>
-                  </Card>
-                ) : item.type === "skripsi" && item.available ? (
-                  <Card key={index}>
-                    <div className="h-full grid grid-cols-1 content-between">
-                      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                        Skripsi
-                      </h5>
-                      <div className="text-sm py-4 flex gap-x-1 text-mg tracking-tight text-gray-900">
-                        <div className="font-semibold">
-                          <div>Nilai</div>
-                          <div>Semester</div>
-                          <div>Lama Studi</div>
-                          <div>Tanggal sidang</div>
-                        </div>
-                        <div className="font-semibold">
-                          <div>:</div>
-                          <div>:</div>
-                          <div>:</div>
-                          <div>:</div>
-                        </div>
-                        <div>
-                          <div>{item.nilai}</div>
-                          <div>{item.semester}</div>
-                          <div>{item.lamaStudi}</div>
+                  <div
+                    className="bg-[#FEF5EA] flex rounded-lg border border-gray-200 shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col"
+                    key={index}
+                  >
+                    <div className="flex h-full flex-col justify-center gap-4 p-6">
+                      <div className="h-full grid grid-cols-1 content-between">
+                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+                          KHS
+                        </h5>
+                        <div className="text-base py-4 flex justify-center gap-x-1 text-mg tracking-tight text-gray-900">
+                          <div className="font-semibold">
+                            <div>SKS Semester</div>
+                            <div>IP Semester</div>
+                            <div>SKS Kumulatif</div>
+                            <div>IP Kumulatif</div>
+                          </div>
+                          <div className="font-semibold">
+                            <div>:</div>
+                            <div>:</div>
+                            <div>:</div>
+                            <div>:</div>
+                          </div>
                           <div>
-                            {convertTimestampToDDMonthYYYY(
-                              item.tanggalLulusSidang
-                            )}
+                            <div>{item.jumlahSksSemester}</div>
+                            <div>{item.ips}</div>
+                            <div>{item.jumlahSksKumulatif}</div>
+                            <div>{item.ipk}</div>
                           </div>
                         </div>
+                        <a
+                          href={`${config.API_DOCUMENT_URL}/khs/${item.fileKhs}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button>Lihat Dokumen</Button>
+                        </a>
                       </div>
-                      <a
-                        href={`${config.API_DOCUMENT_URL}/skripsi/${item.fileSkripsi}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button>Lihat Dokumen</Button>
-                      </a>
                     </div>
-                  </Card>
+                  </div>
+                ) : item.type === "pkl" && item.available ? (
+                  <div
+                    className="bg-[#FEF5EA] flex rounded-lg border border-gray-200 shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col"
+                    key={index}
+                  >
+                    <div className="flex h-full flex-col justify-center gap-4 p-6">
+                      <div className="h-full grid grid-cols-1 content-between">
+                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+                          PKL
+                        </h5>
+                        <div className="grid grid-cols-2 space-x-4 py-4 text-2xl tracking-tight text-gray-900 text-center">
+                          <div className="col-span-1">
+                            <div className="font-bold">Nilai</div>
+                            <div className="mt-2">{item.nilai}</div>
+                          </div>
+                          <div className="col-span-1">
+                            <div className="font-bold">Semester</div>
+                            <div className="mt-2">{item.semester}</div>
+                          </div>
+                        </div>
+                        <a
+                          href={`${config.API_DOCUMENT_URL}/pkl/${item.filePkl}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button>Lihat Dokumen</Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ) : item.type === "skripsi" && item.available ? (
+                  <div
+                    className="bg-[#FEF5EA] flex rounded-lg border border-gray-200 shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col"
+                    key={index}
+                  >
+                    <div className="flex h-full flex-col justify-center gap-4 p-6">
+                      <div className="h-full grid grid-cols-1 content-between">
+                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+                          Skripsi
+                        </h5>
+                        <div className="text-sm py-4 flex gap-x-1 text-mg tracking-tight text-gray-900">
+                          <div className="font-semibold">
+                            <div>Nilai</div>
+                            <div>Semester</div>
+                            <div>Lama Studi</div>
+                            <div>Tanggal sidang</div>
+                          </div>
+                          <div className="font-semibold">
+                            <div>:</div>
+                            <div>:</div>
+                            <div>:</div>
+                            <div>:</div>
+                          </div>
+                          <div>
+                            <div>{item.nilai}</div>
+                            <div>{item.semester}</div>
+                            <div>{item.lamaStudi}</div>
+                            <div>
+                              {convertTimestampToDDMonthYYYY(
+                                item.tanggalLulusSidang
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <a
+                          href={`${config.API_DOCUMENT_URL}/skripsi/${item.fileSkripsi}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button>Lihat Dokumen</Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 ) : null;
               })}
           </section>
