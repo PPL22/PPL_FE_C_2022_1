@@ -65,7 +65,7 @@ function TableAkun({
       </div>
       {children}
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-6">
-        <table className="w-full text-sm text-gray-500 text-center table-fixed">
+        <table className="w-full text-sm text-gray-500 text-center table-auto">
           <thead className="text-xs text-gray-700  bg-gray-50">
             <tr>
               {dataAkun.thead.map((item, index) => {

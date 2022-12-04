@@ -55,8 +55,8 @@ function RekapSkripsiMahasiswa() {
         </div>
       ) : (
         <div className="w-full overflow-auto px-8">
-          <table className="w-full text-sm text-gray-500 dark:text-gray-400 px-4 text-center table-fixed">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-sm text-gray-500 dark:text-gray-400 px-4 text-center table-auto">
+            <thead className="text-xs text-gray-700  bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 {rekapSkripsi.map((data) => {
                   return (

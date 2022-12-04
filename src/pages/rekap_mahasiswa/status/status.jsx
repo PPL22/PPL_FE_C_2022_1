@@ -199,8 +199,8 @@ function RekapStatusMahasiswa() {
       ) : (
         <div className="px-4">
           <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
-            <table className="w-full text-sm text-gray-500 text-center table-fixed">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <table className="w-full text-sm text-gray-500 text-center table-auto">
+              <thead className="text-xs text-gray-700  bg-gray-50">
                 <tr>
                   {rekapStatus.thead.map((item, index) => {
                     return (
@@ -243,7 +243,7 @@ function RekapStatusMahasiswa() {
             </div>
 
             <table className="w-full text-sm text-gray-500 text-center">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <thead className="text-xs text-gray-700  bg-gray-50">
                 <tr>
                   {daftarStatus.thead.map((item, index) => {
                     return (

@@ -81,7 +81,7 @@ function TableStatusPKLMahasiswa({
     <>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-6">
         <table className="w-full text-sm text-gray-500 text-center ">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <thead className="text-xs text-gray-700  bg-gray-50">
             <tr>
               {data.thead.map((item, index) => {
                 return (
