@@ -28,6 +28,7 @@ function Mahasiswa() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [documentName, setDocumentName] = React.useState("IRS");
   const [showMore, setShowMore] = React.useState(false);
+  const statusCanEntry = ["Aktif", "Cuti", "Lulus", "Mangkir"];
 
   const showModal = (entry) => {
     setModal(true);
@@ -367,7 +368,7 @@ function Mahasiswa() {
                       })}
                   </div>
                   {currentData &&
-                  data.statusAktif === "Aktif" &&
+                  statusCanEntry.includes(data.statusAktif) &&
                   !currentData.available ? (
                     <button
                       type="button"
@@ -387,7 +388,7 @@ function Mahasiswa() {
                         Lihat Dokumen
                       </a>
                       {currentData.statusValidasi === false &&
-                        data.statusAktif === "Aktif" && (
+                        statusCanEntry.includes(data.statusAktif) && (
                           <button
                             type="button"
                             onClick={() =>
