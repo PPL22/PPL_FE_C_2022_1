@@ -188,6 +188,7 @@ function Khs({ closeModal, currentSemester, currentData }) {
                 }
                 moreProps={{
                   min: 0,
+                  max: 160,
                 }}
               />
               <Input
