@@ -133,7 +133,7 @@ export default function DataMhs() {
             Data Mahasiswa
           </h1>
           <section className="flex justify-center">
-            <div className="grid grid-cols-6 mt-6 ">
+            <div className="grid grid-cols-6 mt-6 gap-x-8">
               <div className="col-span-2 flex m-auto">
                 <img
                   src={`${
