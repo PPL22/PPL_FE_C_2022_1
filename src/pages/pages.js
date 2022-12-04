@@ -1,4 +1,4 @@
-export { default as Home } from "./home";
+export { default as NotFoundPage } from "./404";
 export { default as Login } from "./login";
 export { default as Registration } from "./registration";
 export { default as Dashboard } from "./dashboard";

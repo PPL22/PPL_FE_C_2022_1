@@ -12,6 +12,7 @@ import {
   DataMhs,
   Profile,
   Registration,
+  NotFoundPage,
 } from "./pages/pages";
 import jwt_decode from "jwt-decode";
 import { Header, Sidebar, Spinner, Toast } from "./components/components";
@@ -131,7 +132,7 @@ function App() {
                   />
                 </>
               )}
-              <Route path="*" element={<Dashboard />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
         </section>
