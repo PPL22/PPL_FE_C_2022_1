@@ -19,19 +19,12 @@ export const convertTimestampToDDMonthYYYY = (timestamp) => {
   const dd = date.getDate();
   const mm = date.getMonth();
   const yyyy = date.getFullYear();
-  return dd + " " + months[mm - 1] + " " + yyyy;
+  return dd + " " + months[mm] + " " + yyyy;
 };
 
 export const convertTimestampToYYYYMMDD = (timestamp) => {
   const date = new Date(timestamp);
-  //   convert dd + ' ' + month + ' ' + yyyy;
-  const dd = date.getDate();
-  let mm = date.getMonth();
-  if (mm < 10) {
-    mm = "0" + mm;
-  }
-  const yyyy = date.getFullYear();
-  return yyyy + "-" + mm + "-" + dd;
+  return date.toISOString().split("T")[0];
 };
 
 export const getCurrentYear = () => {
